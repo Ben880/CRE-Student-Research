@@ -1,0 +1,23 @@
+Affective Go/Nogo task 
+
+The data for subject sj should be contained in D(sj) in the following format:
+this needs to contain the following fields:
+
+ Data(sj).a 		vector of choices, 1 is go, 2 nogo 
+ Data(sj).r 		vector of rewards (1), losses (-1), nothing (0)
+ Data(sj).s 		vector of stimuli presented
+						1 = go to win 
+						2 = nogo to win 
+						3 = go to avoid loss
+						4 = nogo to avoid loss 
+ Data(sj).ID 		subject ID 
+ Data(sj).Nch 	= length(Data(sj).a);
+
+An example file is can be generated with generateExampleDataset.m in the folder
+mTwostep. 
+
+See also: Guitart-Masip M, Huys QJM, Fuentemilla L, Dayan P, Duezel E and Dolan
+RJ (2012): Go and nogo learning in reward and punishment: Interactions between
+affect and effect.  Neuroimage 62(1):154-66 
+
+Quentin Huys, 2018 qhuys@cantab.net
