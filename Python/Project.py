@@ -1,14 +1,5 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-This experiment was created using PsychoPy3 Experiment Builder (v2020.2.5),
-    on November 05, 2020, at 15:24
-If you publish work using this script the most relevant publication is:
-    Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
-        PsychoPy2: Experiments in behavior made easy Behav Res 51: 195. 
-        https://doi.org/10.3758/s13428-018-01193-y
-"""
-
 from __future__ import absolute_import, division
 from psychopy import locale_setup
 from psychopy import prefs
@@ -55,17 +46,15 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 # ============================= Config =====================================
 # ==========================================================================
 from Config import Config as config
-cfg = config
+cfg = config()
 cfg.load()
+diaDir = os.path.join(cfg.getVal("assetDir"), "Diagrams//ArrowsNumbered.png")
 # ==========================================================================
 # ============================= Window =====================================
 # ==========================================================================
-win = visual.Window(
-    size=cfg.getVal("winRes"), fullscr=True, screen=0,
-    winType='pyglet', allowGUI=False, allowStencil=False,
-    monitor='testMonitor', color=[0,0,0], colorSpace='rgb',
-    blendMode='avg', useFBO=True, 
-    units='height')
+win = visual.Window(size=cfg.getVal("winRes"), fullscr=True, screen=0, winType='pyglet', allowGUI=False,
+                    allowStencil=False,monitor='testMonitor', color=[0,0,0], colorSpace='rgb', blendMode='avg',
+                    useFBO=True, units='height')
 # store frame rate of monitor if we can measure it
 expInfo['frameRate'] = win.getActualFrameRate()
 if expInfo['frameRate'] != None:
@@ -76,126 +65,52 @@ else:
 # create a default keyboard (e.g. to check for escape)
 defaultKeyboard = keyboard.Keyboard()
 # ==========================================================================
-# =========================== Instructions =================================
+# =========================== Instruction Objs =============================
 # ==========================================================================
-# Initialize components for Routine "Instructions"
 InstructionsClock = core.Clock()
 itext = visual.TextStim(win=win, name='itext', text='Instructions', font='Arial', pos=(0, 0), height=0.1,
                         wrapWidth=None, ori=0, color='white', colorSpace='rgb', opacity=1, languageStyle='LTR',
                         depth=0.0);
 iconfirm = keyboard.Keyboard()
-# Initialize components for Routine "Practice"
+# ==========================================================================
+# ============================== Practice Objs =============================
+# ==========================================================================
 PracticeClock = core.Clock()
-pbox0 = visual.Rect(win=win, name='pbox0', width=(0.5, 0.5)[0], height=(0.5, 0.5)[1], ori=0, pos=(0, 0),
+pnumBoxes = 6
+pboxes = []
+for i in range(pnumBoxes):
+    pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), width=(0.5, 0.5)[0], height=(0.5, 0.5)[1], ori=0, pos=(0, 0),
                     lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[1,1,1], fillColorSpace='rgb',
-                    opacity=1, depth=0.0, interpolate=True)
-pbox1 = visual.Rect(
-    win=win, name='pbox1',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-1.0, interpolate=True)
-pbox2 = visual.Rect(
-    win=win, name='pbox2',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-2.0, interpolate=True)
-pbox3 = visual.Rect(
-    win=win, name='pbox3',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-3.0, interpolate=True)
-pbox4 = visual.Rect(
-    win=win, name='pbox4',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-4.0, interpolate=True)
-pbox5 = visual.Rect(
-    win=win, name='pbox5',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-5.0, interpolate=True)
+                    opacity=1, depth=0.0, interpolate=True))
+
 pmouse = event.Mouse(win=win)
 x, y = [None, None]
 pmouse.mouseClock = core.Clock()
-pdiagram = visual.ImageStim(
-    win=win,
-    name='pdiagram', 
-    image=None, mask=None,
-    ori=0, pos=(0, 0), size=(0.5, 0.5),
-    color=[1,1,1], colorSpace='rgb', opacity=1,
-    flipHoriz=False, flipVert=False,
-    texRes=128, interpolate=True, depth=-7.0)
-
-# Initialize components for Routine "Trial"
+pdiagram = visual.ImageStim(win=win,name='pdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(0.5, 0.5),
+                            color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
+                            interpolate=True, depth=-7.0)
+# ==========================================================================
+# ================================ Trial Objs ==============================
+# ==========================================================================
 TrialClock = core.Clock()
-tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True,
-    name='tsound')
+tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
 tsound.setVolume(1)
-tdiagram = visual.ImageStim(
-    win=win,
-    name='tdiagram', 
-    image=None, mask=None,
-    ori=0, pos=(0, 0), size=(0.5, 0.5),
-    color=[1,1,1], colorSpace='rgb', opacity=1,
-    flipHoriz=False, flipVert=False,
-    texRes=128, interpolate=True, depth=-1.0)
-box0 = visual.Rect(
-    win=win, name='box0',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-2.0, interpolate=True)
-box1 = visual.Rect(
-    win=win, name='box1',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-3.0, interpolate=True)
-box2 = visual.Rect(
-    win=win, name='box2',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-4.0, interpolate=True)
-box3 = visual.Rect(
-    win=win, name='box3',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-5.0, interpolate=True)
-box4 = visual.Rect(
-    win=win, name='box4',
-    width=(0.5, 0.5)[0], height=(0.5, 0.5)[1],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-6.0, interpolate=True)
-box5 = visual.ShapeStim(
-    win=win, name='box5',
-    vertices=[[-(0.5, 0.5)[0]/2.0,-(0.5, 0.5)[1]/2.0], [+(0.5, 0.5)[0]/2.0,-(0.5, 0.5)[1]/2.0], [0,(0.5, 0.5)[1]/2.0]],
-    ori=0, pos=(0, 0),
-    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb',
-    fillColor=[1,1,1], fillColorSpace='rgb',
-    opacity=1, depth=-7.0, interpolate=True)
+tdiagram = visual.ImageStim(win=win,name='tdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(0.5, 0.5),
+                            color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
+                            interpolate=True, depth=-7.0)
+
+tnumBoxes = 6
+tboxes = []
+for i in range(tnumBoxes):
+    tboxes.append(visual.Rect(win=win, name=('box' + str(i)), width=(0.5, 0.5)[0], height=(0.5, 0.5)[1], ori=0, pos=(0, 0),
+                    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[1,1,1], fillColorSpace='rgb',
+                    opacity=1, depth=0.0, interpolate=True))
 tmouse = event.Mouse(win=win)
 x, y = [None, None]
 tmouse.mouseClock = core.Clock()
-
-# Initialize components for Routine "Exit"
+# ==========================================================================
+# ================================ Exit Objs ===============================
+# ==========================================================================
 ExitClock = core.Clock()
 etext = visual.TextStim(win=win, name='etext',
     text='Any text\n\nincluding line breaks',
@@ -205,12 +120,14 @@ etext = visual.TextStim(win=win, name='etext',
     languageStyle='LTR',
     depth=0.0);
 econfirm = keyboard.Keyboard()
-
-# Create some handy timers
+# ==========================================================================
+# =======================Create some handy timers==========================
+# ==========================================================================
 globalClock = core.Clock()  # to track the time since experiment started
-routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine 
-
-# ------Prepare to start Routine "Instructions"-------
+routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
+# ==========================================================================
+# ===================== Prepare Instructions ===============================
+# ==========================================================================
 continueRoutine = True
 # update component parameters for each repeat
 iconfirm.keys = []
@@ -230,8 +147,9 @@ t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
 InstructionsClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
-
-# -------Run Routine "Instructions"-------
+# ==========================================================================
+# ========================= Run Instructions ===============================
+# ==========================================================================
 while continueRoutine:
     # get current time
     t = InstructionsClock.getTime()
@@ -296,7 +214,9 @@ while continueRoutine:
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
 
-# -------Ending Routine "Instructions"-------
+# ==========================================================================
+# ========================= End Instructions ===============================
+# ==========================================================================
 for thisComponent in InstructionsComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
@@ -332,15 +252,17 @@ for thisPractice in practices:
     if thisPractice != None:
         for paramName in thisPractice:
             exec('{} = thisPractice[paramName]'.format(paramName))
-    
-    # ------Prepare to start Routine "Practice"-------
+
+    # ==========================================================================
+    # ===================== Prepare Practice ===================================
+    # ==========================================================================
     continueRoutine = True
     # update component parameters for each repeat
     # setup some python lists for storing info about the pmouse
     pmouse.clicked_pclicked = []
     gotValidClick = False  # until a click is received
     # keep track of which components have finished
-    PracticeComponents = [pbox0, pbox1, pbox2, pbox3, pbox4, pbox5, pmouse, pdiagram]
+    PracticeComponents = [pboxes[0], pboxes[1], pboxes[2], pboxes[3], pboxes[4], pboxes[5], pmouse, pdiagram]
     for thisComponent in PracticeComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -353,8 +275,9 @@ for thisPractice in practices:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
-    
-    # -------Run Routine "Practice"-------
+    # ==========================================================================
+    # ===================== Run Practice =======================================
+    # ==========================================================================
     while continueRoutine:
         # get current time
         t = PracticeClock.getTime()
@@ -364,58 +287,14 @@ for thisPractice in practices:
         # update/draw components on each frame
         
         # *pbox0* updates
-        if pbox0.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pbox0.frameNStart = frameN  # exact frame index
-            pbox0.tStart = t  # local t and not account for scr refresh
-            pbox0.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pbox0, 'tStartRefresh')  # time at next scr refresh
-            pbox0.setAutoDraw(True)
-        
-        # *pbox1* updates
-        if pbox1.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pbox1.frameNStart = frameN  # exact frame index
-            pbox1.tStart = t  # local t and not account for scr refresh
-            pbox1.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pbox1, 'tStartRefresh')  # time at next scr refresh
-            pbox1.setAutoDraw(True)
-        
-        # *pbox2* updates
-        if pbox2.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pbox2.frameNStart = frameN  # exact frame index
-            pbox2.tStart = t  # local t and not account for scr refresh
-            pbox2.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pbox2, 'tStartRefresh')  # time at next scr refresh
-            pbox2.setAutoDraw(True)
-        
-        # *pbox3* updates
-        if pbox3.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pbox3.frameNStart = frameN  # exact frame index
-            pbox3.tStart = t  # local t and not account for scr refresh
-            pbox3.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pbox3, 'tStartRefresh')  # time at next scr refresh
-            pbox3.setAutoDraw(True)
-        
-        # *pbox4* updates
-        if pbox4.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pbox4.frameNStart = frameN  # exact frame index
-            pbox4.tStart = t  # local t and not account for scr refresh
-            pbox4.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pbox4, 'tStartRefresh')  # time at next scr refresh
-            pbox4.setAutoDraw(True)
-        
-        # *pbox5* updates
-        if pbox5.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pbox5.frameNStart = frameN  # exact frame index
-            pbox5.tStart = t  # local t and not account for scr refresh
-            pbox5.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pbox5, 'tStartRefresh')  # time at next scr refresh
-            pbox5.setAutoDraw(True)
+        for box in pboxes:
+            if box.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+                # keep track of start time/frame for later
+                box.frameNStart = frameN  # exact frame index
+                box.tStart = t  # local t and not account for scr refresh
+                box.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(box, 'tStartRefresh')  # time at next scr refresh
+                box.setAutoDraw(True)
         
         # *pdiagram* updates
         if pdiagram.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -442,30 +321,32 @@ for thisPractice in practices:
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
-    # -------Ending Routine "Practice"-------
+
+    # ==========================================================================
+    # ========================== End Practice ==================================
+    # ==========================================================================
     for thisComponent in PracticeComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    practices.addData('pbox0.started', pbox0.tStartRefresh)
-    practices.addData('pbox0.stopped', pbox0.tStopRefresh)
-    practices.addData('pbox1.started', pbox1.tStartRefresh)
-    practices.addData('pbox1.stopped', pbox1.tStopRefresh)
-    practices.addData('pbox2.started', pbox2.tStartRefresh)
-    practices.addData('pbox2.stopped', pbox2.tStopRefresh)
-    practices.addData('pbox3.started', pbox3.tStartRefresh)
-    practices.addData('pbox3.stopped', pbox3.tStopRefresh)
-    practices.addData('pbox4.started', pbox4.tStartRefresh)
-    practices.addData('pbox4.stopped', pbox4.tStopRefresh)
-    practices.addData('pbox5.started', pbox5.tStartRefresh)
-    practices.addData('pbox5.stopped', pbox5.tStopRefresh)
+    practices.addData('pbox0.started', pboxes[0].tStartRefresh)
+    practices.addData('pbox0.stopped', pboxes[0].tStopRefresh)
+    practices.addData('pbox1.started', pboxes[1].tStartRefresh)
+    practices.addData('pbox1.stopped', pboxes[1].tStopRefresh)
+    practices.addData('pbox2.started', pboxes[2].tStartRefresh)
+    practices.addData('pbox2.stopped', pboxes[2].tStopRefresh)
+    practices.addData('pbox3.started', pboxes[3].tStartRefresh)
+    practices.addData('pbox3.stopped', pboxes[3].tStopRefresh)
+    practices.addData('pbox4.started', pboxes[4].tStartRefresh)
+    practices.addData('pbox4.stopped', pboxes[4].tStopRefresh)
+    practices.addData('pbox5.started', pboxes[5].tStartRefresh)
+    practices.addData('pbox5.stopped', pboxes[5].tStopRefresh)
     # store data for practices (TrialHandler)
     x, y = pmouse.getPos()
     buttons = pmouse.getPressed()
     if sum(buttons):
         # check if the mouse was inside our 'clickable' objects
         gotValidClick = False
-        for obj in [pbox0,pbox1,pbox2,pbox3,pbox4,pbox5]:
+        for obj in pboxes:
             if obj.contains(pmouse):
                 gotValidClick = True
                 pmouse.clicked_pclicked.append(obj.pclicked)
@@ -505,8 +386,10 @@ for thisTrial in trials:
     if thisTrial != None:
         for paramName in thisTrial:
             exec('{} = thisTrial[paramName]'.format(paramName))
-    
-    # ------Prepare to start Routine "Trial"-------
+
+    # ==========================================================================
+    # ============================ Prepare Trial ===============================
+    # ==========================================================================
     continueRoutine = True
     # update component parameters for each repeat
     tsound.setSound('A', hamming=True)
@@ -517,7 +400,7 @@ for thisTrial in trials:
     gotValidClick = False  # until a click is received
     tmouse.mouseClock.reset()
     # keep track of which components have finished
-    TrialComponents = [tsound, tdiagram, box0, box1, box2, box3, box4, box5, tmouse]
+    TrialComponents = [tsound, tdiagram, tboxes[0], tboxes[1], tboxes[2], tboxes[3], tboxes[4], tboxes[5], tmouse]
     for thisComponent in TrialComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -530,8 +413,10 @@ for thisTrial in trials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     TrialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
-    
-    # -------Run Routine "Trial"-------
+
+    # ==========================================================================
+    # ============================= Run Trial ==================================
+    # ==========================================================================
     while continueRoutine:
         # get current time
         t = TrialClock.getTime()
@@ -555,60 +440,16 @@ for thisTrial in trials:
             tdiagram.tStartRefresh = tThisFlipGlobal  # on global time
             win.timeOnFlip(tdiagram, 'tStartRefresh')  # time at next scr refresh
             tdiagram.setAutoDraw(True)
-        
-        # *box0* updates
-        if box0.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            box0.frameNStart = frameN  # exact frame index
-            box0.tStart = t  # local t and not account for scr refresh
-            box0.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(box0, 'tStartRefresh')  # time at next scr refresh
-            box0.setAutoDraw(True)
-        
-        # *box1* updates
-        if box1.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            box1.frameNStart = frameN  # exact frame index
-            box1.tStart = t  # local t and not account for scr refresh
-            box1.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(box1, 'tStartRefresh')  # time at next scr refresh
-            box1.setAutoDraw(True)
-        
-        # *box2* updates
-        if box2.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            box2.frameNStart = frameN  # exact frame index
-            box2.tStart = t  # local t and not account for scr refresh
-            box2.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(box2, 'tStartRefresh')  # time at next scr refresh
-            box2.setAutoDraw(True)
-        
-        # *box3* updates
-        if box3.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            box3.frameNStart = frameN  # exact frame index
-            box3.tStart = t  # local t and not account for scr refresh
-            box3.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(box3, 'tStartRefresh')  # time at next scr refresh
-            box3.setAutoDraw(True)
-        
-        # *box4* updates
-        if box4.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            box4.frameNStart = frameN  # exact frame index
-            box4.tStart = t  # local t and not account for scr refresh
-            box4.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(box4, 'tStartRefresh')  # time at next scr refresh
-            box4.setAutoDraw(True)
-        
-        # *box5* updates
-        if box5.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            box5.frameNStart = frameN  # exact frame index
-            box5.tStart = t  # local t and not account for scr refresh
-            box5.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(box5, 'tStartRefresh')  # time at next scr refresh
-            box5.setAutoDraw(True)
+
+
+        for box in tboxes:
+            if box.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+                # keep track of start time/frame for later
+                box.frameNStart = frameN  # exact frame index
+                box.tStart = t  # local t and not account for scr refresh
+                box.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(box, 'tStartRefresh')  # time at next scr refresh
+                box.setAutoDraw(True)
         # *tmouse* updates
         if tmouse.status == NOT_STARTED and t >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -625,7 +466,7 @@ for thisTrial in trials:
                 if sum(buttons) > 0:  # state changed to a new click
                     # check if the mouse was inside our 'clickable' objects
                     gotValidClick = False
-                    for obj in [box0,box1,box2,box3,box4,box5]:
+                    for obj in tboxes:
                         if obj.contains(tmouse):
                             gotValidClick = True
                             tmouse.clicked_tclicked.append(obj.tclicked)
@@ -648,8 +489,10 @@ for thisTrial in trials:
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    
-    # -------Ending Routine "Trial"-------
+
+    # ==========================================================================
+    # ============================= End Trial ==================================
+    # ==========================================================================
     for thisComponent in TrialComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
@@ -658,25 +501,25 @@ for thisTrial in trials:
     trials.addData('tsound.stopped', tsound.tStopRefresh)
     trials.addData('tdiagram.started', tdiagram.tStartRefresh)
     trials.addData('tdiagram.stopped', tdiagram.tStopRefresh)
-    trials.addData('box0.started', box0.tStartRefresh)
-    trials.addData('box0.stopped', box0.tStopRefresh)
-    trials.addData('box1.started', box1.tStartRefresh)
-    trials.addData('box1.stopped', box1.tStopRefresh)
-    trials.addData('box2.started', box2.tStartRefresh)
-    trials.addData('box2.stopped', box2.tStopRefresh)
-    trials.addData('box3.started', box3.tStartRefresh)
-    trials.addData('box3.stopped', box3.tStopRefresh)
-    trials.addData('box4.started', box4.tStartRefresh)
-    trials.addData('box4.stopped', box4.tStopRefresh)
-    trials.addData('box5.started', box5.tStartRefresh)
-    trials.addData('box5.stopped', box5.tStopRefresh)
+    trials.addData('box0.started', tboxes[0].tStartRefresh)
+    trials.addData('box0.stopped', tboxes[0].tStopRefresh)
+    trials.addData('box1.started', tboxes[1].tStartRefresh)
+    trials.addData('box1.stopped', tboxes[1].tStopRefresh)
+    trials.addData('box2.started', tboxes[2].tStartRefresh)
+    trials.addData('box2.stopped', tboxes[2].tStopRefresh)
+    trials.addData('box3.started', tboxes[3].tStartRefresh)
+    trials.addData('box3.stopped', tboxes[3].tStopRefresh)
+    trials.addData('box4.started', tboxes[4].tStartRefresh)
+    trials.addData('box4.stopped', tboxes[4].tStopRefresh)
+    trials.addData('box5.started', tboxes[5].tStartRefresh)
+    trials.addData('box5.stopped', tboxes[5].tStopRefresh)
     # store data for trials (TrialHandler)
     x, y = tmouse.getPos()
     buttons = tmouse.getPressed()
     if sum(buttons):
         # check if the mouse was inside our 'clickable' objects
         gotValidClick = False
-        for obj in [box0,box1,box2,box3,box4,box5]:
+        for obj in pboxes:
             if obj.contains(tmouse):
                 gotValidClick = True
                 tmouse.clicked_tclicked.append(obj.tclicked)
@@ -696,7 +539,9 @@ for thisTrial in trials:
 # completed 5 repeats of 'trials'
 
 
-# ------Prepare to start Routine "Exit"-------
+# ==========================================================================
+# =========================== Prepare Exit =================================
+# ==========================================================================
 continueRoutine = True
 # update component parameters for each repeat
 econfirm.keys = []
@@ -717,7 +562,9 @@ _timeToFirstFrame = win.getFutureFlipTime(clock="now")
 ExitClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
 
-# -------Run Routine "Exit"-------
+# ==========================================================================
+# ============================== Run Exit ==================================
+# ==========================================================================
 while continueRoutine:
     # get current time
     t = ExitClock.getTime()
@@ -782,7 +629,9 @@ while continueRoutine:
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
 
-# -------Ending Routine "Exit"-------
+# ==========================================================================
+# ============================= End Exit ===================================
+# ==========================================================================
 for thisComponent in ExitComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
@@ -799,7 +648,9 @@ thisExp.addData('econfirm.stopped', econfirm.tStopRefresh)
 thisExp.nextEntry()
 # the Routine "Exit" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
-
+# ==========================================================================
+# ============================ End Program =================================
+# ==========================================================================
 # Flip one final time so any remaining win.callOnFlip() 
 # and win.timeOnFlip() tasks get executed before quitting
 win.flip()
