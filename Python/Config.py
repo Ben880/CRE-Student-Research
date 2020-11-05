@@ -7,9 +7,12 @@ class Config:
     appFolder = os.path.join(appData, "config")
     cfgName = "cfg.json"
     data = {
-        "val1": "1",
-        "val2": "2"
+
     }
+
+    def genConfig(self):
+        self.addVal(self, "stimuli_folder", "directory")
+        self.write(self)
 
     def load(self):
         if not os.path.isdir(self.appFolder):
@@ -17,6 +20,7 @@ class Config:
             os.mkdir(self.appFolder)
         if not os.path.isfile(os.path.join(self.appFolder, self.cfgName)):
             print("No app cfg: Making one {}".format(os.path.join(self.appFolder, self.cfgName)))
+            self.genConfig(self)
             self.write(self)
         cfg = open(os.path.join(self.appFolder, self.cfgName), "r")
         lines = cfg.readline()
@@ -42,9 +46,5 @@ class Config:
 
 x = Config
 x.load(x)
-print(x.data)
-print(x.contains(x,"val1"))
-print(x.contains(x,"val5"))
-x.addVal(x, "hia", "test")
+
 x.write(x)
-print(x.data)
