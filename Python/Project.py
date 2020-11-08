@@ -68,7 +68,10 @@ defaultKeyboard = keyboard.Keyboard()
 # =========================== Instruction Objs =============================
 # ==========================================================================
 InstructionsClock = core.Clock()
-itext = visual.TextStim(win=win, name='itext', text='Instructions', font='Arial', pos=(0, 0), height=0.1,
+itext = visual.TextStim(win=win, name='itext', text='press space to continue', font='Arial', pos=(0, 0), height=0.05,
+                        wrapWidth=None, ori=0, color='white', colorSpace='rgb', opacity=1, languageStyle='LTR',
+                        depth=0.0);
+iheader = visual.TextStim(win=win, name='iheader', text='Instructions', font='Arial', pos=(0, .1), height=0.1,
                         wrapWidth=None, ori=0, color='white', colorSpace='rgb', opacity=1, languageStyle='LTR',
                         depth=0.0);
 iconfirm = keyboard.Keyboard()
@@ -79,16 +82,16 @@ PracticeClock = core.Clock()
 pnumBoxes = 6
 pboxes = []
 for i in range(pnumBoxes):
-    pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), width=(0.5, 0.5)[0], height=(0.5, 0.5)[1], ori=0, pos=(0, 0),
-                    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[1,1,1], fillColorSpace='rgb',
-                    opacity=1, depth=0.0, interpolate=True))
+    pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size= [100,100], ori=0, pos=((110*i)-330, 0),
+                    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[255,1,1], fillColorSpace='rgb255',
+                    opacity=.2, depth=0.0, interpolate=True, units= 'pix'))
 
 pmouse = event.Mouse(win=win)
 x, y = [None, None]
 pmouse.mouseClock = core.Clock()
-pdiagram = visual.ImageStim(win=win,name='pdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(0.5, 0.5),
+pdiagram = visual.ImageStim(win=win,name='pdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(1136, 536),
                             color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
-                            interpolate=True, depth=-7.0)
+                            interpolate=True, depth=-7.0, units='pix')
 # ==========================================================================
 # ================================ Trial Objs ==============================
 # ==========================================================================
@@ -134,7 +137,7 @@ iconfirm.keys = []
 iconfirm.rt = []
 _iconfirm_allKeys = []
 # keep track of which components have finished
-InstructionsComponents = [itext, iconfirm]
+InstructionsComponents = [itext, iconfirm, iheader]
 for thisComponent in InstructionsComponents:
     thisComponent.tStart = None
     thisComponent.tStop = None
@@ -157,7 +160,16 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
+
+    # *iheader* updates
+    if iheader.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+        # keep track of start time/frame for later
+        iheader.frameNStart = frameN  # exact frame index
+        iheader.tStart = t  # local t and not account for scr refresh
+        iheader.tStartRefresh = tThisFlipGlobal  # on global time
+        win.timeOnFlip(iheader, 'tStartRefresh')  # time at next scr refresh
+        iheader.setAutoDraw(True)
+
     # *itext* updates
     if itext.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -166,14 +178,6 @@ while continueRoutine:
         itext.tStartRefresh = tThisFlipGlobal  # on global time
         win.timeOnFlip(itext, 'tStartRefresh')  # time at next scr refresh
         itext.setAutoDraw(True)
-    if itext.status == STARTED:
-        # is it time to stop? (based on global clock, using actual start)
-        if tThisFlipGlobal > itext.tStartRefresh + 1.0-frameTolerance:
-            # keep track of stop time/frame for later
-            itext.tStop = t  # not accounting for scr refresh
-            itext.frameNStop = frameN  # exact frame index
-            win.timeOnFlip(itext, 'tStopRefresh')  # time at next scr refresh
-            itext.setAutoDraw(False)
     
     # *iconfirm* updates
     waitOnFlip = False
@@ -285,7 +289,17 @@ for thisPractice in practices:
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
-        
+
+
+        # *pdiagram* updates
+        if pdiagram.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+            # keep track of start time/frame for later
+            pdiagram.frameNStart = frameN  # exact frame index
+            pdiagram.tStart = t  # local t and not account for scr refresh
+            pdiagram.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(pdiagram, 'tStartRefresh')  # time at next scr refresh
+            pdiagram.setAutoDraw(False)
+            pdiagram.draw()
         # *pbox0* updates
         for box in pboxes:
             if box.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -294,17 +308,10 @@ for thisPractice in practices:
                 box.tStart = t  # local t and not account for scr refresh
                 box.tStartRefresh = tThisFlipGlobal  # on global time
                 win.timeOnFlip(box, 'tStartRefresh')  # time at next scr refresh
-                box.setAutoDraw(True)
-        
-        # *pdiagram* updates
-        if pdiagram.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pdiagram.frameNStart = frameN  # exact frame index
-            pdiagram.tStart = t  # local t and not account for scr refresh
-            pdiagram.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pdiagram, 'tStartRefresh')  # time at next scr refresh
-            pdiagram.setAutoDraw(True)
-        
+                box.setAutoDraw(False)
+                box.draw()
+
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
