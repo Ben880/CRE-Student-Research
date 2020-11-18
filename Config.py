@@ -46,5 +46,5 @@ class Config:
 
 x = Config
 x.load(x)
-x.addVal(x, "assetDir", "D://Dev//Python//CRE Student Research//Python//Assets")
+x.addVal(x, "assetDir", "D://Dev//Python//CRE Student Research//Assets")
 x.write(x)

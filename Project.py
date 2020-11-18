@@ -43,6 +43,12 @@ from Config import Config as config
 cfg = config()
 cfg.load()
 diaDir = os.path.join(cfg.getVal("assetDir"), "Diagrams//ArrowsNumbered.png")
+
+from StateMachine import StateMachine as StateMachine
+from UISettings import StateMachineDraw as StateMachineDraw
+sm = StateMachine()
+smd = StateMachineDraw()
+smd.setResolution(cfg.getVal("winRes"))
 # ==========================================================================
 # ============================= Window =====================================
 # ==========================================================================
@@ -76,9 +82,9 @@ PracticeClock = core.Clock()
 pnumBoxes = 6
 pboxes = []
 for i in range(pnumBoxes):
-    pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size= [100,100], ori=0, pos=((110*i)-330, 0),
-                    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[255,1,1], fillColorSpace='rgb255',
-                    opacity=.2, depth=0.0, interpolate=True, units= 'pix'))
+    pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size= smd.getBoxSize(), ori=0, pos=smd.getBoxPos(i),
+                    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[100,100,100], fillColorSpace='rgb255',
+                    opacity=1, depth=0.0, interpolate=True, units= 'pix'))
 
 pmouse = event.Mouse(win=win)
 x, y = [None, None]
@@ -284,7 +290,7 @@ for thisPractice in practices:
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
 
-
+        '''
         # *pdiagram* updates
         if pdiagram.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
@@ -294,6 +300,7 @@ for thisPractice in practices:
             win.timeOnFlip(pdiagram, 'tStartRefresh')  # time at next scr refresh
             pdiagram.setAutoDraw(False)
             pdiagram.draw()
+        '''
         # *pbox0* updates
         for box in pboxes:
             if box.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -305,6 +312,7 @@ for thisPractice in practices:
                 box.setAutoDraw(False)
                 box.draw()
 
+        smState = sm.getCurrentState()
 
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):

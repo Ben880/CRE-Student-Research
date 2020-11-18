@@ -10,6 +10,10 @@ def getSong(cfg: config, index):
     songIndex = LatinSquareGenerator(len(stim), index)
     return stim[songIndex]
 
+
+###  https://spotipy.readthedocs.io/en/2.16.1/
+
+################## https://pypi.org/project/pyspotify/
 """
 # test code
 cfg = config()

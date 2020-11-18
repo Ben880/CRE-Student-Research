@@ -11,6 +11,9 @@ class StateMachine:
     states = 6
     baseAmount = 20
     baseDeviant = 10
+    ### big - 70 100 140
+    # wins and small losses fixed
+    #
     stateDeffinition = [[7, 1],
                         [-1, -7],
                         [-1, -7],
