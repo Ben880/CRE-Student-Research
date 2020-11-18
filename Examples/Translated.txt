@@ -1,0 +1,129 @@
+no_response|wrong_key
+Too slow!
+You have %d moves
+Please enter all moves first to see the result.
+Enter trains now
+You have a total of %d
+Points won.
+Points lost.
+Please enter participant number
+Enter location
+Please enter session
+
+You have not entered enough moves.
+You lost 200 points.
+times up
+
+
+Psychochess
+Welcome to the first part of the training
+please press a key to continue
+You will see 6 rectangles on the screen. You can
+move back and forth between the rectangles by pressing the
+Press the' 'J' 'or' 'K' 'keys. You can be from anyone
+Press keys'' 1 '' or '' 2 ''. You can be from anyone
+press the blue or yellow button. You can be from anyone
+
+
+'Move rectangle to one of two other rectangles.'
+'One key goes through the middle, the other around the circle. '
+'You now have some time to try this out. Imprint yourself quite well '
+'Which key you have to press in order to get away from each'
+'Move rectangle through the center or in a circle. '
+'Please press any key to continue.'
+'Well done! The first part of the training is now over. '
+'Please press SPACE to end the training!'
+'You are the WHITE rectangle! Please move ', 0.100 * params.scaling)
+'around for a while so you can get a feel for it', 0.75 * params.scaling)
+'how you can move.', 0.50 * params.scaling)
+'Please press a button to start training.'
+'You have% d% s.'
+'Reach the red destination on the last train.'
+'Very well!'
+'Please try'
+'it all over again.'
+'For the following tasks you only have'
+'one more chance at a time to reach the red goal'
+'Please press a key to continue.'
+'Reach the red destination by train.'
+'Very well!'
+'Unfortunately it is false.'
+'You correctly solved% d of% d problems.'
+'We're continuing to train now.'
+
+
+
+'Welcome to the second part of the training,'
+'please press a button to start training.'
+'From now on you will receive a certain number of points for every move.'
+'Certain moves result in a profit of 140 or 20 points,'
+'Others lose -20 or -70 points.'
+'Your goal now is to memorize how many points'
+'every train delivers.'
+'Please press a key.'
+
+
+'We're getting closer to the goal.'
+'In this part you can freely choose a sequence of moves of a'
+'Choose a certain length. Try to choose them like this'
+'that you get as many points as possible.'
+'Please press a key.'
+
+
+'Now we only show you after entering the entire'
+'Turn order, how you move and how much you'
+'won or lost.'
+'Please press a key.'
+
+
+'Well, let's try a few exercises under time pressure!'
+'From now on you only have 9 seconds to think about it.'
+'You then have about 2.5 seconds to enter the moves.'
+'The thinking time can be interrupted by entering the first move'
+'will. Do not enter the turn order until you have '
+'Have the entire sequence of moves clearly in front of your eyes. You need to'
+'but hurry up a little to achieve this within 9s.'
+'Please press a key.'
+
+
+
+'We are now testing how well you have learned the points so far.'
+'Please use the keyboard for input here!'
+'Please press a key.'
+
+
+
+
+'How much is the next move worth?'
+'1: 140, 2:20, 3: -20, 4: -70'
+
+'Correctly!'
+'This move is worth% i points.'
+
+
+'Unfortunately it is false.'
+'This move is worth% i points.'
+'Well done. You got% i of% i right. ',
+'Please press a key.'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

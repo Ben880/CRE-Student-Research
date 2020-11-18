@@ -23,28 +23,25 @@ times up
 'Tasten ''J'' oder ''K'' drücken. Sie können sich von jedem'
 'Tasten ''1'' oder ''2'' drücken. Sie können sich von jedem'
 'blaue oder gelbe Taste drücken. Sie können sich von jedem'
-	 cgtext('Rechteck zu einem von zwei anderen Rechtecken bewegen.',0,25*params.scaling);
-	 cgtext('Eine Taste geht jeweils durch die Mitte, die andere um den Kreis. ',0,0*params.scaling);
-	 cgtext('Sie haben jetzt etwas Zeit, um dies auszuprobieren. Prägen Sie sich ganz gut',0,-50*params.scaling);
-	 cgtext('ein, welche Taste sie jeweils drücken müssen, um sich von jedem',0,-75*params.scaling);
-	 cgtext('Rechteck durch die Mitte oder im Kreis zu bewegen. ',0,-100*params.scaling);
-    cgtext('Bitte drücken Sie irgendeine Taste zum Fortfahren.',0,-150*params.scaling)
-
-    cgtext('Gut gemacht! Der erste Teil des Trainings ist nun vorbei.', 0, 50*params.scaling)
-    cgtext('Bitte SPACE betätigen, um das Training zu beenden!', 0, -100*params.scaling)
-
-    cgtext('Sie sind das WEISSE Rechteck! Bitte bewegen Sie sich',0,100*params.scaling)
-    cgtext('eine Weile umher, damit Sie ein  Gefühl dafür bekommen,',0,75*params.scaling)
-    cgtext('wie Sie sich bewegen können.',0,50*params.scaling)
-    cgtext('Bitte drücken Sie eine Taste, um das Training zu starten.',0,-150*params.scaling)
-
+'Rechteck zu einem von zwei anderen Rechtecken bewegen.'
+'Eine Taste geht jeweils durch die Mitte, die andere um den Kreis. '
+'Sie haben jetzt etwas Zeit, um dies auszuprobieren. Prägen Sie sich ganz gut'
+'ein, welche Taste sie jeweils drücken müssen, um sich von jedem'
+'Rechteck durch die Mitte oder im Kreis zu bewegen. '
+'Bitte drücken Sie irgendeine Taste zum Fortfahren.'
+'Gut gemacht! Der erste Teil des Trainings ist nun vorbei.'
+'Bitte SPACE betätigen, um das Training zu beenden!'
+'Sie sind das WEISSE Rechteck! Bitte bewegen Sie sich',0,100*params.scaling)
+'eine Weile umher, damit Sie ein  Gefühl dafür bekommen,',0,75*params.scaling)
+'wie Sie sich bewegen können.',0,50*params.scaling)
+'Bitte drücken Sie eine Taste, um das Training zu starten.'
 'Sie haben %d %s.'
 'Erreichen Sie das rote Ziel mit dem letzten Zug.'
 'Sehr gut!'
 'Bitte versuchen Sie'
 'es noch einmal.'
 'Bei den folgenden Aufgaben haben Sie nur'
-noch jeweils eine Chance, um zum roten Ziel zu kommen'
+'noch jeweils eine Chance, um zum roten Ziel zu kommen'
 'Bitte drücken Sie eine Taste, um fortzufahren.'
 'Erreichen Sie das rote Ziel mit einem Zug.'
 'Sehr gut!'
@@ -55,60 +52,55 @@ noch jeweils eine Chance, um zum roten Ziel zu kommen'
 
 'Willkommen zum zweiten Teil des Trainings,'
 'bitte drücken Sie eine Taste, um das Training zu starten.'
-
-    cgtext('Ab jetzt erhalten Sie für jeden Zug eine gewisse Anzahl Punkte.',0,150*params.scaling)
-    cgtext('Gewisse Züge ergeben einen Gewinn von 140 oder 20 Punkten,',0,125*params.scaling)
-    cgtext('andere einen Verlust von -20  oder -70 Punkten.',0,100*params.scaling)
-    cgtext('Ihr Ziel ist jetzt, sich einzuprägen, wie viele Punkte',0,25*params.scaling)
-    cgtext('jeder Zug liefert.',0,0*params.scaling)
-    cgtext('Bitte drücken Sie eine Taste.',0,-150*params.scaling)
-
+'Ab jetzt erhalten Sie für jeden Zug eine gewisse Anzahl Punkte.'
+'Gewisse Züge ergeben einen Gewinn von 140 oder 20 Punkten,'
+'andere einen Verlust von -20  oder -70 Punkten.'
+'Ihr Ziel ist jetzt, sich einzuprägen, wie viele Punkte'
+'jeder Zug liefert.'
+'Bitte drücken Sie eine Taste.'
 
 
-    cgtext('Gut gemacht! Das Training ist nun vorbei.', 0, 50*params.scaling)
-    cgtext('Bitte SPACE betätigen, um das Training zu beenden!', 0, -100*params.scaling)
+'Gut gemacht! Das Training ist nun vorbei.'
+'Bitte SPACE betätigen, um das Training zu beenden!'
+'Sie können sich nun zunächst wieder frei bewegen, um sich'
+'die Punktzahlen in Ruhe anzuschauen.'
+'Bitte drücken Sie eine Taste.'
 
-    cgtext('Sie können sich nun zunächst wieder frei bewegen, um sich',0,100*params.scaling)
-    cgtext('die Punktzahlen in Ruhe anzuschauen.',0,75*params.scaling)
-    cgtext('Bitte drücken Sie eine Taste.',0,-150*params.scaling)
+'Wir kommen dem Ziel näher.'
+'In diesem Teil können Sie ganz frei eine Zugfolge einer'
+'gewissen Länge wählen. Versuchen Sie sie so zu wählen,'
+'dass Sie so viele Punkte wie möglich ergattern.'
+'Bitte drücken Sie eine Taste.'
 
-    cgtext('Wir kommen dem Ziel näher.',0,75*params.scaling);
-    cgtext('In diesem Teil können Sie ganz frei eine Zugfolge einer',0,50*params.scaling);
-    cgtext('gewissen Länge wählen. Versuchen Sie sie so zu wählen,',0,25*params.scaling);
-    cgtext('dass Sie so viele Punkte wie möglich ergattern.',0,0);
-    cgtext('Bitte drücken Sie eine Taste.',0,-150*params.scaling);
+'Jetzt zeigen wir Ihnen erst nach Eingabe der gesamten'
+'Zugreihenfolge, wie Sie sich bewegt und wie viel Sie'
+'gewonnen oder verloren haben.'
+'Bitte drücken Sie eine Taste.'
 
-    cgtext('Jetzt zeigen wir Ihnen erst nach Eingabe der gesamten',0,75*params.scaling);
-    cgtext('Zugreihenfolge, wie Sie sich bewegt und wie viel Sie',0,50*params.scaling);
-    cgtext('gewonnen oder verloren haben.',0,25*params.scaling);
-    cgtext('Bitte drücken Sie eine Taste.',0,-150*params.scaling);
+'Gut, nun versuchen wir ein paar Übungen unter Zeitdruck!'
+'Sie haben ab jetzt nur noch 9s Denkzeit.'
+'Danach haben Sie ca. 2.5s Zeit, die Züge einzugeben.'
+'Die Denkzeit kann mit der Eingabe des ersten Zugs abgebrochen'
+'werden. Geben Sie die Zugreihenfolge also erst dann ein, wenn Sie'
+'die gesamte Zugfolge klar vor Ihren Augen haben. Sie müssen'
+'sich aber etwas beeilen, dies innerhalb von 9s zu erreichen.'
+'Bitte drücken Sie eine Taste.'
 
-    cgtext('Gut, nun versuchen wir ein paar Übungen unter Zeitdruck!',0,100*params.scaling);
-    cgtext('Sie haben ab jetzt nur noch 9s Denkzeit.',0,75*params.scaling);
-    cgtext('Danach haben Sie ca. 2.5s Zeit, die Züge einzugeben.',0,25*params.scaling);
-    cgtext('Die Denkzeit kann mit der Eingabe des ersten Zugs abgebrochen',0,0*params.scaling);
-    cgtext('werden. Geben Sie die Zugreihenfolge also erst dann ein, wenn Sie',0,-25*params.scaling);
-    cgtext('die gesamte Zugfolge klar vor Ihren Augen haben. Sie müssen',0,-50*params.scaling);
-    cgtext('sich aber etwas beeilen, dies innerhalb von 9s zu erreichen.',0,-75*params.scaling);
-    cgtext('Bitte drücken Sie eine Taste.',0,-150*params.scaling);
+'Wir testen nun, wie gut Sie bisher die Punkte gelernt haben.'
+'Bitte benutzen Sie hier die Tastatur zur Eingabe!'
+'Bitte drücken Sie eine Taste.'
 
-    cgtext('Wir testen nun, wie gut Sie bisher die Punkte gelernt haben.',0,75*params.scaling)
-    cgtext('Bitte benutzen Sie hier die Tastatur zur Eingabe!',0,-50*params.scaling)
-    cgtext('Bitte drücken Sie eine Taste.',0,-150*params.scaling)
+'Wie viel ist der folgende Zug wert?'
+'1: 140, 2: 20, 3: -20, 4: -70'
 
-        cgtext('Wie viel ist der folgende Zug wert?',0,220*params.scaling);
-        cgtext('1: 140, 2: 20, 3: -20, 4: -70',0,190*params.scaling);
-
-            cgtext(sprintf('Korrekt!'),0,220*params.scaling);
-            cgtext(sprintf('Dieser Zug ist %i Punkte wert.', money(solutions(idx(i)))),0,190*params.scaling);
-
-
-            cgtext(sprintf('Leider falsch.'),0,220*params.scaling);
-            cgtext(sprintf('Dieser Zug ist %i Punkte wert.', money(solutions(idx(i)))),0,190*params.scaling);
+'Korrekt!'
+'Dieser Zug ist %i Punkte wert.'
 
 
-    cgtext(sprintf('Gut gemacht. Sie hatten %i von %i richtig.', 12-sum(stats.errors),12),0,0);
-    cgtext('Bitte drücken Sie eine Taste.',0,-150*params.scaling)
+'Leider falsch.'
+'Dieser Zug ist %i Punkte wert.'
+'Gut gemacht. Sie hatten %i von %i richtig.',
+'Bitte drücken Sie eine Taste.'
 
 
 
