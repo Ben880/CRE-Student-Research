@@ -1,8 +1,8 @@
 import json
 import os
 
-
 class Config:
+
     appData = os.getcwd()
     appFolder = os.path.join(appData, "config")
     cfgName = "cfg.json"
