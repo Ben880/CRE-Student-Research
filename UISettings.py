@@ -36,3 +36,17 @@ class GUIDraw:
 
     debugTextColor = [255, 0, 0]
     debugTextPos = (-.4, .4)
+
+    instructionsHeaderPos = (0, .4)
+    instructionsBodyPos = (0, 0)
+    instructionsBodyText = ("intruction set 1, intruction set 2, intruction set 3")
+    instructionsContinuePos = (0, -.4)
+    instructionsContinueText = "press space to continue"
+
+    def getTextPos(self, textName):
+        if textName == "instructionsHeader":
+            return self.instructionsHeaderPos
+        if textName == "instructionsBody":
+            return self.instructionsBodyPos
+        if textName == "instructionsContinue":
+            return self.instructionsContinueText

@@ -1,5 +1,8 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# ==========================================================================
+# ============================= Imports ====================================
+# ==========================================================================
 from __future__ import absolute_import, division
 from psychopy import sound, gui, visual, core, data, event, logging
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
@@ -85,10 +88,6 @@ for i in range(pnumBoxes):
     pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size= smd.getBoxSize(), ori=0, pos=smd.getBoxPos(i),
                     lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[100,100,100], fillColorSpace='rgb255',
                     opacity=1, depth=0.0, interpolate=True, units= 'pix'))
-
-pmouse = event.Mouse(win=win)
-x, y = [None, None]
-pmouse.mouseClock = core.Clock()
 pdiagram = visual.ImageStim(win=win,name='pdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(1136, 536),
                             color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
                             interpolate=True, depth=-7.0, units='pix')
@@ -101,16 +100,12 @@ tsound.setVolume(1)
 tdiagram = visual.ImageStim(win=win,name='tdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(0.5, 0.5),
                             color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
                             interpolate=True, depth=-7.0)
-
 tnumBoxes = 6
 tboxes = []
 for i in range(tnumBoxes):
     tboxes.append(visual.Rect(win=win, name=('box' + str(i)), width=(0.5, 0.5)[0], height=(0.5, 0.5)[1], ori=0, pos=(0, 0),
                     lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[1,1,1], fillColorSpace='rgb',
                     opacity=1, depth=0.0, interpolate=True))
-tmouse = event.Mouse(win=win)
-x, y = [None, None]
-tmouse.mouseClock = core.Clock()
 # ==========================================================================
 # ================================ Exit Objs ===============================
 # ==========================================================================
@@ -263,10 +258,9 @@ for thisPractice in practices:
     continueRoutine = True
     # update component parameters for each repeat
     # setup some python lists for storing info about the pmouse
-    pmouse.clicked_pclicked = []
     gotValidClick = False  # until a click is received
     # keep track of which components have finished
-    PracticeComponents = [pboxes[0], pboxes[1], pboxes[2], pboxes[3], pboxes[4], pboxes[5], pmouse, pdiagram]
+    PracticeComponents = [pboxes[0], pboxes[1], pboxes[2], pboxes[3], pboxes[4], pboxes[5], pdiagram]
     for thisComponent in PracticeComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -350,24 +344,6 @@ for thisPractice in practices:
     practices.addData('pbox5.started', pboxes[5].tStartRefresh)
     practices.addData('pbox5.stopped', pboxes[5].tStopRefresh)
     # store data for practices (TrialHandler)
-    x, y = pmouse.getPos()
-    buttons = pmouse.getPressed()
-    if sum(buttons):
-        # check if the mouse was inside our 'clickable' objects
-        gotValidClick = False
-        for obj in pboxes:
-            if obj.contains(pmouse):
-                gotValidClick = True
-                pmouse.clicked_pclicked.append(obj.pclicked)
-    practices.addData('pmouse.x', x)
-    practices.addData('pmouse.y', y)
-    practices.addData('pmouse.leftButton', buttons[0])
-    practices.addData('pmouse.midButton', buttons[1])
-    practices.addData('pmouse.rightButton', buttons[2])
-    if len(pmouse.clicked_pclicked):
-        practices.addData('pmouse.clicked_pclicked', pmouse.clicked_pclicked[0])
-    practices.addData('pmouse.started', pmouse.tStart)
-    practices.addData('pmouse.stopped', pmouse.tStop)
     practices.addData('pdiagram.started', pdiagram.tStartRefresh)
     practices.addData('pdiagram.stopped', pdiagram.tStopRefresh)
     # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
@@ -404,12 +380,7 @@ for thisTrial in trials:
     tsound.setSound('A', hamming=True)
     tsound.setVolume(1, log=False)
     tdiagram.setImage('None')
-    # setup some python lists for storing info about the tmouse
-    tmouse.clicked_tclicked = []
-    gotValidClick = False  # until a click is received
-    tmouse.mouseClock.reset()
-    # keep track of which components have finished
-    TrialComponents = [tsound, tdiagram, tboxes[0], tboxes[1], tboxes[2], tboxes[3], tboxes[4], tboxes[5], tmouse]
+    TrialComponents = [tsound, tdiagram, tboxes[0], tboxes[1], tboxes[2], tboxes[3], tboxes[4], tboxes[5]]
     for thisComponent in TrialComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -422,7 +393,6 @@ for thisTrial in trials:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     TrialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
-
     # ==========================================================================
     # ============================= Run Trial ==================================
     # ==========================================================================
@@ -460,27 +430,7 @@ for thisTrial in trials:
                 win.timeOnFlip(box, 'tStartRefresh')  # time at next scr refresh
                 box.setAutoDraw(True)
         # *tmouse* updates
-        if tmouse.status == NOT_STARTED and t >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            tmouse.frameNStart = frameN  # exact frame index
-            tmouse.tStart = t  # local t and not account for scr refresh
-            tmouse.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(tmouse, 'tStartRefresh')  # time at next scr refresh
-            tmouse.status = STARTED
-            prevButtonState = tmouse.getPressed()  # if button is down already this ISN'T a new click
-        if tmouse.status == STARTED:  # only update if started and not finished!
-            buttons = tmouse.getPressed()
-            if buttons != prevButtonState:  # button state changed?
-                prevButtonState = buttons
-                if sum(buttons) > 0:  # state changed to a new click
-                    # check if the mouse was inside our 'clickable' objects
-                    gotValidClick = False
-                    for obj in tboxes:
-                        if obj.contains(tmouse):
-                            gotValidClick = True
-                            tmouse.clicked_tclicked.append(obj.tclicked)
-                    if gotValidClick:  # abort routine on response
-                        continueRoutine = False
+
         
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -523,24 +473,7 @@ for thisTrial in trials:
     trials.addData('box5.started', tboxes[5].tStartRefresh)
     trials.addData('box5.stopped', tboxes[5].tStopRefresh)
     # store data for trials (TrialHandler)
-    x, y = tmouse.getPos()
-    buttons = tmouse.getPressed()
-    if sum(buttons):
-        # check if the mouse was inside our 'clickable' objects
-        gotValidClick = False
-        for obj in pboxes:
-            if obj.contains(tmouse):
-                gotValidClick = True
-                tmouse.clicked_tclicked.append(obj.tclicked)
-    trials.addData('tmouse.x', x)
-    trials.addData('tmouse.y', y)
-    trials.addData('tmouse.leftButton', buttons[0])
-    trials.addData('tmouse.midButton', buttons[1])
-    trials.addData('tmouse.rightButton', buttons[2])
-    if len(tmouse.clicked_tclicked):
-        trials.addData('tmouse.clicked_tclicked', tmouse.clicked_tclicked[0])
-    trials.addData('tmouse.started', tmouse.tStart)
-    trials.addData('tmouse.stopped', tmouse.tStop)
+
     # the Routine "Trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
