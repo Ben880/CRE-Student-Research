@@ -39,14 +39,23 @@ class GUIDraw:
 
     instructionsHeaderPos = (0, .4)
     instructionsBodyPos = (0, 0)
-    instructionsBodyText = ("intruction set 1, intruction set 2, intruction set 3")
+    instructionsBodyText = ("intruction set 1", "intruction set 2", "intruction set 3")
     instructionsContinuePos = (0, -.4)
     instructionsContinueText = "press space to continue"
 
     def getTextPos(self, textName):
         if textName == "instructionsHeader":
-            return self.instructionsHeaderPos
+            return self.instructionsHeaderPos[0] * self.resolution[0],self.instructionsHeaderPos[1] * self.resolution[1]
         if textName == "instructionsBody":
-            return self.instructionsBodyPos
+            return self.instructionsBodyPos[0] * self.resolution[0],self.instructionsBodyPos[1] * self.resolution[1]
         if textName == "instructionsContinue":
-            return self.instructionsContinueText
+            return self.instructionsContinuePos[0] * self.resolution[0],self.instructionsContinuePos[1] * self.resolution[1]
+
+    def getContinueText(self):
+        return self.instructionsContinueText
+
+    def getBodyText(self, index):
+        return self.instructionsBodyText[index]
+
+    def lenBodyText(self):
+        return len(self.instructionsBodyText)

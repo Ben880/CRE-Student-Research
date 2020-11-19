@@ -49,8 +49,10 @@ diaDir = os.path.join(cfg.getVal("assetDir"), "Diagrams//ArrowsNumbered.png")
 
 from StateMachine import StateMachine as StateMachine
 from UISettings import StateMachineDraw as StateMachineDraw
+from UISettings import GUIDraw as GUIDraw
 sm = StateMachine()
 smd = StateMachineDraw()
+guid = GUIDraw()
 smd.setResolution(cfg.getVal("winRes"))
 # ==========================================================================
 # ============================= Window =====================================
@@ -71,12 +73,15 @@ defaultKeyboard = keyboard.Keyboard()
 # =========================== Instruction Objs =============================
 # ==========================================================================
 InstructionsClock = core.Clock()
-itext = visual.TextStim(win=win, name='itext', text='press space to continue', font='Arial', pos=(0, 0), height=0.05,
-                        wrapWidth=None, ori=0, color='white', colorSpace='rgb', opacity=1, languageStyle='LTR',
-                        depth=0.0);
-iheader = visual.TextStim(win=win, name='iheader', text='Instructions', font='Arial', pos=(0, .1), height=0.1,
-                        wrapWidth=None, ori=0, color='white', colorSpace='rgb', opacity=1, languageStyle='LTR',
-                        depth=0.0);
+ibody = visual.TextStim(win=win, name='ibody', text=guid.instructionsBodyText[0], font='Arial',
+                        pos=guid.getTextPos("instructionsBody"), height=50, wrapWidth=None, ori=0, color='white',
+                        colorSpace='rgb', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+icontinue = visual.TextStim(win=win, name='icontinue', text=guid.instructionsContinueText, font='Arial',
+                            pos=guid.getTextPos("instructionsContinue"), height=50, wrapWidth=None, ori=0, color='white',
+                            colorSpace='rgb', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+iheader = visual.TextStim(win=win, name='iheader', text='Instructions', font='Arial',
+                          pos=guid.getTextPos("instructionsHeader"), height=100, wrapWidth=None, ori=0, color='white',
+                          colorSpace='rgb', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
 iconfirm = keyboard.Keyboard()
 # ==========================================================================
 # ============================== Practice Objs =============================
@@ -126,13 +131,15 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 # ==========================================================================
 # ===================== Prepare Instructions ===============================
 # ==========================================================================
+instructionsIndex = 0
+
 continueRoutine = True
 # update component parameters for each repeat
 iconfirm.keys = []
 iconfirm.rt = []
 _iconfirm_allKeys = []
 # keep track of which components have finished
-InstructionsComponents = [itext, iconfirm, iheader]
+InstructionsComponents = [ibody, icontinue, iconfirm, iheader]
 for thisComponent in InstructionsComponents:
     thisComponent.tStart = None
     thisComponent.tStop = None
@@ -165,14 +172,24 @@ while continueRoutine:
         win.timeOnFlip(iheader, 'tStartRefresh')  # time at next scr refresh
         iheader.setAutoDraw(True)
 
+    ibody.setText(guid.getBodyText(instructionsIndex))
     # *itext* updates
-    if itext.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+    if ibody.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
-        itext.frameNStart = frameN  # exact frame index
-        itext.tStart = t  # local t and not account for scr refresh
-        itext.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(itext, 'tStartRefresh')  # time at next scr refresh
-        itext.setAutoDraw(True)
+        ibody.frameNStart = frameN  # exact frame index
+        ibody.tStart = t  # local t and not account for scr refresh
+        ibody.tStartRefresh = tThisFlipGlobal  # on global time
+        win.timeOnFlip(ibody, 'tStartRefresh')  # time at next scr refresh
+        ibody.setAutoDraw(True)
+
+    # *itext* updates
+    if icontinue.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+        # keep track of start time/frame for later
+        icontinue.frameNStart = frameN  # exact frame index
+        icontinue.tStart = t  # local t and not account for scr refresh
+        icontinue.tStartRefresh = tThisFlipGlobal  # on global time
+        win.timeOnFlip(icontinue, 'tStartRefresh')  # time at next scr refresh
+        icontinue.setAutoDraw(True)
     
     # *iconfirm* updates
     waitOnFlip = False
@@ -188,13 +205,15 @@ while continueRoutine:
         win.callOnFlip(iconfirm.clock.reset)  # t=0 on next screen flip
         win.callOnFlip(iconfirm.clearEvents, eventType='keyboard')  # clear events on next screen flip
     if iconfirm.status == STARTED and not waitOnFlip:
-        theseKeys = iconfirm.getKeys(keyList=['y', 'n', 'left', 'right', 'space'], waitRelease=False)
+        theseKeys = iconfirm.getKeys(keyList=['space'], waitRelease=True)
         _iconfirm_allKeys.extend(theseKeys)
         if len(_iconfirm_allKeys):
             iconfirm.keys = _iconfirm_allKeys[-1].name  # just the last key pressed
             iconfirm.rt = _iconfirm_allKeys[-1].rt
             # a response ends the routine
-            continueRoutine = False
+            instructionsIndex += 1
+            if instructionsIndex >= guid.lenBodyText():
+                continueRoutine = False
     
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -219,8 +238,11 @@ while continueRoutine:
 for thisComponent in InstructionsComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
-thisExp.addData('itext.started', itext.tStartRefresh)
-thisExp.addData('itext.stopped', itext.tStopRefresh)
+thisExp.addData('itext.started', ibody.tStartRefresh)
+thisExp.addData('itext.stopped', ibody.tStopRefresh)
+
+thisExp.addData('itext.started', icontinue.tStartRefresh)
+thisExp.addData('itext.stopped', icontinue.tStopRefresh)
 # check responses
 if iconfirm.keys in ['', [], None]:  # No response was made
     iconfirm.keys = None
