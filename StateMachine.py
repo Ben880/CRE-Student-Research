@@ -26,12 +26,14 @@ class StateMachine:
         self.targetState = self.currentState + 1
         self.modCheck()
         self.generateScore(0)
+        self.currentState = int(self.targetState)
 
     # move type is 1
     def moveAcross(self):
-        self.targetState = self.currentState + (self.states /2)
+        self.targetState = self.currentState + 3
         self.modCheck()
         self.generateScore(1)
+        self.currentState = int(self.targetState)
 
     def modCheck(self):
         if self.targetState > self.states - 1:

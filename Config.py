@@ -6,9 +6,7 @@ class Config:
     appData = os.getcwd()
     appFolder = os.path.join(appData, "config")
     cfgName = "cfg.json"
-    data = {
-
-    }
+    data = {}
 
     def genConfig(self):
         self.addVal(self, "stimuli_folder", "directory")
@@ -44,7 +42,9 @@ class Config:
         self.data[key] = value
 
 
+'''
 x = Config
 x.load(x)
 x.addVal(x, "assetDir", "D://Dev//Python//CRE Student Research//Assets")
 x.write(x)
+'''

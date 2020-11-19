@@ -90,8 +90,30 @@ pnumBoxes = 6
 pboxes = []
 for i in range(pnumBoxes):
     pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size= smd.getBoxSize(), ori=0, pos=smd.getBoxPos(i),
-                    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[100,100,100], fillColorSpace='rgb255',
-                    opacity=1, depth=0.0, interpolate=True, units= 'pix'))
+                              lineWidth=1, lineColor=smd.boxLineColor, lineColorSpace='rgb255', fillColor=smd.boxColor,
+                              fillColorSpace='rgb255',opacity=1, depth=0.0, interpolate=True, units='pix'))
+pUBox = visual.Rect(win=win, name='pubox', size= guid.getControllBoxSize(), ori=0, pos=guid.getControllButtonPos(-1),
+                              lineWidth=1, lineColor=guid.controllBoxLineColor, lineColorSpace='rgb255',
+                              fillColor=guid.controllBoxColor,fillColorSpace='rgb255',opacity=1, depth=0.0,
+                              interpolate=True, units='pix')
+pIBox = visual.Rect(win=win, name='iubox', size= guid.getControllBoxSize(), ori=0, pos=guid.getControllButtonPos(1),
+                              lineWidth=1, lineColor=guid.controllBoxLineColor, lineColorSpace='rgb255',
+                              fillColor=guid.controllBoxColor,fillColorSpace='rgb255',opacity=1, depth=0.0,
+                              interpolate=True, units='pix')
+pUtext = visual.TextStim(win=win, name='putext', text='U', font='Arial',
+                          pos=guid.getControllButtonPos(-1), height=50, wrapWidth=None, ori=0, color=guid.controllTextColor,
+                          colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+pItext = visual.TextStim(win=win, name='pitext', text='I', font='Arial',
+                          pos=guid.getControllButtonPos(1), height=50, wrapWidth=None, ori=0, color=guid.controllTextColor,
+                          colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+
+
+pheader = visual.TextStim(win=win, name='pheader', text='Practice', font='Arial',
+                          pos=guid.getTextPos("practiceHeader"), height=100, wrapWidth=None, ori=0, color=guid.generalTextColor,
+                          colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+pbody = visual.TextStim(win=win, name='pbody', text="body text", font='Arial',
+                        pos=guid.getTextPos("practiceBody"), height=50, wrapWidth=None, ori=0, color=guid.generalTextColor,
+                        colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
 pdiagram = visual.ImageStim(win=win,name='pdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(1136, 536),
                             color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
                             interpolate=True, depth=-7.0, units='pix')
@@ -108,8 +130,8 @@ tnumBoxes = 6
 tboxes = []
 for i in range(tnumBoxes):
     tboxes.append(visual.Rect(win=win, name=('box' + str(i)), width=(0.5, 0.5)[0], height=(0.5, 0.5)[1], ori=0, pos=(0, 0),
-                    lineWidth=1, lineColor=[1,1,1], lineColorSpace='rgb', fillColor=[1,1,1], fillColorSpace='rgb',
-                    opacity=1, depth=0.0, interpolate=True))
+                              lineWidth=1, lineColor=smd.boxLineColor, lineColorSpace='rgb255', fillColor=smd.boxColor,
+                              fillColorSpace='rgb255', opacity=1, depth=0.0, interpolate=True))
 # ==========================================================================
 # ================================ Exit Objs ===============================
 # ==========================================================================
@@ -168,7 +190,7 @@ while continueRoutine:
         win.timeOnFlip(iheader, 'tStartRefresh')  # time at next scr refresh
         iheader.setAutoDraw(True)
 
-    ibody.setText(guid.getBodyText(instructionsIndex))
+
     # *itext* updates
     if ibody.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
         # keep track of start time/frame for later
@@ -195,9 +217,10 @@ while continueRoutine:
         instructionsIndex += 1
         if instructionsIndex >= guid.lenBodyText():
             continueRoutine = False
+        else:
+            ibody.setText(guid.getBodyText(instructionsIndex))
     # check if space is down
-    if spaceIsDown:
-        spacePressed = True
+    spacePressed = spaceIsDown
     # ================== Wrap Up =================================
     waitOnFlip = False
     # check for quit (typically the Esc key)
@@ -252,6 +275,15 @@ for thisPractice in practices:
     # ==========================================================================
     # ===================== Prepare Practice ===================================
     # ==========================================================================
+    uPressed = False
+    iPressed = False
+    pItext.setAutoDraw(False)
+    pUtext.setAutoDraw(False)
+    pIBox.setAutoDraw(False)
+    pUBox.setAutoDraw(False)
+    pheader.setAutoDraw(False)
+    pbody.setAutoDraw(False)
+
     continueRoutine = True
     # update component parameters for each repeat
     # setup some python lists for storing info about the pmouse
@@ -270,6 +302,9 @@ for thisPractice in practices:
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
+
+    smState = sm.getCurrentState()
+    pboxes[smState].setFillColor((smd.boxSelectedColor), colorSpace='rgb255')
     # ==========================================================================
     # ===================== Run Practice =======================================
     # ==========================================================================
@@ -292,6 +327,14 @@ for thisPractice in practices:
             pdiagram.setAutoDraw(False)
             pdiagram.draw()
         '''
+
+        pUBox.draw()
+        pIBox.draw()
+        pItext.draw()
+        pUtext.draw()
+        pbody.draw()
+        pheader.draw()
+
         # *pbox0* updates
         for box in pboxes:
             if box.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -303,7 +346,25 @@ for thisPractice in practices:
                 box.setAutoDraw(False)
                 box.draw()
 
-        smState = sm.getCurrentState()
+        # =================== key checks ===================
+        uIsDown = defaultKeyboard.getKeys(keyList=["u"])
+        iIsDown = defaultKeyboard.getKeys(keyList=["i"])
+        # check U was released
+        if not uIsDown and uPressed:
+            pboxes[sm.getCurrentState()].setFillColor(smd.boxColor, colorSpace='rgb255')
+            uPressed = False
+            sm.moveCircle()
+            pboxes[sm.getCurrentState()].setFillColor(smd.boxSelectedColor, colorSpace='rgb255')
+            print(f"sm move now in state {sm.getCurrentState()}")
+        # check I was released
+        if not iIsDown and iPressed:
+            iPressed = False
+            pboxes[sm.getCurrentState()].setFillColor(smd.boxColor, colorSpace='rgb255')
+            sm.moveAcross()
+            pboxes[sm.getCurrentState()].setFillColor(smd.boxSelectedColor, colorSpace='rgb255')
+            print(f"sm move now in state {sm.getCurrentState()}")
+        uPressed = uIsDown
+        iPressed = iIsDown
 
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -372,6 +433,8 @@ for thisTrial in trials:
     # ==========================================================================
     # ============================ Prepare Trial ===============================
     # ==========================================================================
+
+
     continueRoutine = True
     # update component parameters for each repeat
     tsound.setSound('A', hamming=True)
@@ -426,9 +489,8 @@ for thisTrial in trials:
                 box.tStartRefresh = tThisFlipGlobal  # on global time
                 win.timeOnFlip(box, 'tStartRefresh')  # time at next scr refresh
                 box.setAutoDraw(True)
-        # *tmouse* updates
 
-        
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
