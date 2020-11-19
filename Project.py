@@ -82,7 +82,6 @@ icontinue = visual.TextStim(win=win, name='icontinue', text=guid.instructionsCon
 iheader = visual.TextStim(win=win, name='iheader', text='Instructions', font='Arial',
                           pos=guid.getTextPos("instructionsHeader"), height=100, wrapWidth=None, ori=0, color='white',
                           colorSpace='rgb', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
-iconfirm = keyboard.Keyboard()
 # ==========================================================================
 # ============================== Practice Objs =============================
 # ==========================================================================
@@ -132,14 +131,11 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 # ===================== Prepare Instructions ===============================
 # ==========================================================================
 instructionsIndex = 0
+spacePressed = False
 
 continueRoutine = True
-# update component parameters for each repeat
-iconfirm.keys = []
-iconfirm.rt = []
-_iconfirm_allKeys = []
 # keep track of which components have finished
-InstructionsComponents = [ibody, icontinue, iconfirm, iheader]
+InstructionsComponents = [ibody, icontinue, iheader]
 for thisComponent in InstructionsComponents:
     thisComponent.tStart = None
     thisComponent.tStop = None
@@ -190,35 +186,23 @@ while continueRoutine:
         icontinue.tStartRefresh = tThisFlipGlobal  # on global time
         win.timeOnFlip(icontinue, 'tStartRefresh')  # time at next scr refresh
         icontinue.setAutoDraw(True)
-    
-    # *iconfirm* updates
+
+    # ================= key checks ==============================
+    spaceIsDown = defaultKeyboard.getKeys(keyList=["space"])
+    # check if space bar was released
+    if not spaceIsDown and spacePressed:
+        spacePressed = False
+        instructionsIndex += 1
+        if instructionsIndex >= guid.lenBodyText():
+            continueRoutine = False
+    # check if space is down
+    if spaceIsDown:
+        spacePressed = True
+    # ================== Wrap Up =================================
     waitOnFlip = False
-    if iconfirm.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-        # keep track of start time/frame for later
-        iconfirm.frameNStart = frameN  # exact frame index
-        iconfirm.tStart = t  # local t and not account for scr refresh
-        iconfirm.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(iconfirm, 'tStartRefresh')  # time at next scr refresh
-        iconfirm.status = STARTED
-        # keyboard checking is just starting
-        waitOnFlip = True
-        win.callOnFlip(iconfirm.clock.reset)  # t=0 on next screen flip
-        win.callOnFlip(iconfirm.clearEvents, eventType='keyboard')  # clear events on next screen flip
-    if iconfirm.status == STARTED and not waitOnFlip:
-        theseKeys = iconfirm.getKeys(keyList=['space'], waitRelease=True)
-        _iconfirm_allKeys.extend(theseKeys)
-        if len(_iconfirm_allKeys):
-            iconfirm.keys = _iconfirm_allKeys[-1].name  # just the last key pressed
-            iconfirm.rt = _iconfirm_allKeys[-1].rt
-            # a response ends the routine
-            instructionsIndex += 1
-            if instructionsIndex >= guid.lenBodyText():
-                continueRoutine = False
-    
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         break
@@ -227,11 +211,9 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
-
 # ==========================================================================
 # ========================= End Instructions ===============================
 # ==========================================================================
@@ -244,13 +226,6 @@ thisExp.addData('itext.stopped', ibody.tStopRefresh)
 thisExp.addData('itext.started', icontinue.tStartRefresh)
 thisExp.addData('itext.stopped', icontinue.tStopRefresh)
 # check responses
-if iconfirm.keys in ['', [], None]:  # No response was made
-    iconfirm.keys = None
-thisExp.addData('iconfirm.keys',iconfirm.keys)
-if iconfirm.keys != None:  # we had a response
-    thisExp.addData('iconfirm.rt', iconfirm.rt)
-thisExp.addData('iconfirm.started', iconfirm.tStartRefresh)
-thisExp.addData('iconfirm.stopped', iconfirm.tStopRefresh)
 thisExp.nextEntry()
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
