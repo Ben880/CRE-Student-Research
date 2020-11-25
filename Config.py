@@ -8,8 +8,10 @@ class Config:
     cfgName = "cfg.json"
     data = {}
 
+    def setFile(self, filename):
+        self.cfgName = filename
+
     def genConfig(self):
-        self.addVal(self, "stimuli_folder", "directory")
         self.write(self)
 
     def load(self):
@@ -27,7 +29,7 @@ class Config:
 
     def write(self):
         with open(os.path.join(self.appFolder, self.cfgName), 'w+') as fp:
-            fp.write(json.dumps(self.data))
+            fp.write(json.dumps(self.data, sort_keys=True, indent=4))
 
     def setVal(self, key, val):
         self.data[key] = val
@@ -45,6 +47,6 @@ class Config:
 '''
 x = Config
 x.load(x)
-x.addVal(x, "assetDir", "D://Dev//Python//CRE Student Research//Assets")
+x.addVal(x, "tval", "D://Dev//Python//CRE Student Research//Assets")
 x.write(x)
 '''
