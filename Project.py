@@ -88,10 +88,16 @@ iheader = visual.TextStim(win=win, name='iheader', text='Instructions', font='Ar
 PracticeClock = core.Clock()
 pnumBoxes = 6
 pboxes = []
+pBoxText = []
 for i in range(pnumBoxes):
     pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size= smd.getBoxSize(), ori=0, pos=smd.getBoxPos(i),
                               lineWidth=1, lineColor=smd.boxLineColor, lineColorSpace='rgb255', fillColor=smd.boxColor,
                               fillColorSpace='rgb255',opacity=1, depth=0.0, interpolate=True, units='pix'))
+    pBoxText.append(visual.TextStim(win=win, name='pBoxText', text=guid.stateMoves[i], font='Arial',
+                                    pos=guid.getMoveTextPos(smd.getBoxPos(i)),
+                                    height=25, wrapWidth=None, ori=0, color=guid.controllTextColor,
+                                    colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix'))
+
 pUBox = visual.Rect(win=win, name='pubox', size= guid.getControllBoxSize(), ori=0, pos=guid.getControllButtonPos(-1),
                               lineWidth=1, lineColor=guid.controllBoxLineColor, lineColorSpace='rgb255',
                               fillColor=guid.controllBoxColor,fillColorSpace='rgb255',opacity=1, depth=0.0,
@@ -152,6 +158,10 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 # ==========================================================================
 # ===================== Prepare Instructions ===============================
 # ==========================================================================
+iheader.setAutoDraw(False)
+ibody.setAutoDraw(False)
+icontinue.setAutoDraw(False)
+
 instructionsIndex = 0
 spacePressed = False
 
@@ -179,37 +189,11 @@ while continueRoutine:
     tThisFlip = win.getFutureFlipTime(clock=InstructionsClock)
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-    # update/draw components on each frame
-
-    # *iheader* updates
-    if iheader.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-        # keep track of start time/frame for later
-        iheader.frameNStart = frameN  # exact frame index
-        iheader.tStart = t  # local t and not account for scr refresh
-        iheader.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(iheader, 'tStartRefresh')  # time at next scr refresh
-        iheader.setAutoDraw(True)
-
-
-    # *itext* updates
-    if ibody.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-        # keep track of start time/frame for later
-        ibody.frameNStart = frameN  # exact frame index
-        ibody.tStart = t  # local t and not account for scr refresh
-        ibody.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(ibody, 'tStartRefresh')  # time at next scr refresh
-        ibody.setAutoDraw(True)
-
-    # *itext* updates
-    if icontinue.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-        # keep track of start time/frame for later
-        icontinue.frameNStart = frameN  # exact frame index
-        icontinue.tStart = t  # local t and not account for scr refresh
-        icontinue.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(icontinue, 'tStartRefresh')  # time at next scr refresh
-        icontinue.setAutoDraw(True)
-
-    # ================= key checks ==============================
+    # ------------------draw----------------------
+    iheader.draw()
+    ibody.draw()
+    icontinue.draw()
+    # -------------- key checks ------------------
     spaceIsDown = defaultKeyboard.getKeys(keyList=["space"])
     # check if space bar was released
     if not spaceIsDown and spacePressed:
@@ -243,11 +227,8 @@ while continueRoutine:
 for thisComponent in InstructionsComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
-thisExp.addData('itext.started', ibody.tStartRefresh)
-thisExp.addData('itext.stopped', ibody.tStopRefresh)
+thisExp.addData('Iphase end', globalClock.getTime())
 
-thisExp.addData('itext.started', icontinue.tStartRefresh)
-thisExp.addData('itext.stopped', icontinue.tStopRefresh)
 # check responses
 thisExp.nextEntry()
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
@@ -283,6 +264,9 @@ for thisPractice in practices:
     pUBox.setAutoDraw(False)
     pheader.setAutoDraw(False)
     pbody.setAutoDraw(False)
+    for t in pBoxText:
+        t.setAutoDraw(False)
+
 
     continueRoutine = True
     # update component parameters for each repeat
@@ -314,38 +298,18 @@ for thisPractice in practices:
         tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-        # update/draw components on each frame
 
-        '''
-        # *pdiagram* updates
-        if pdiagram.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            pdiagram.frameNStart = frameN  # exact frame index
-            pdiagram.tStart = t  # local t and not account for scr refresh
-            pdiagram.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(pdiagram, 'tStartRefresh')  # time at next scr refresh
-            pdiagram.setAutoDraw(False)
-            pdiagram.draw()
-        '''
-
+        # -------draw-----
         pUBox.draw()
         pIBox.draw()
         pItext.draw()
         pUtext.draw()
         pbody.draw()
         pheader.draw()
-
-        # *pbox0* updates
         for box in pboxes:
-            if box.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-                # keep track of start time/frame for later
-                box.frameNStart = frameN  # exact frame index
-                box.tStart = t  # local t and not account for scr refresh
-                box.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(box, 'tStartRefresh')  # time at next scr refresh
-                box.setAutoDraw(False)
-                box.draw()
-
+            box.draw()
+        for t in pBoxText:
+            t.draw()
         # =================== key checks ===================
         uIsDown = defaultKeyboard.getKeys(keyList=["u"])
         iIsDown = defaultKeyboard.getKeys(keyList=["i"])
@@ -355,14 +319,14 @@ for thisPractice in practices:
             uPressed = False
             sm.moveCircle()
             pboxes[sm.getCurrentState()].setFillColor(smd.boxSelectedColor, colorSpace='rgb255')
-            print(f"sm move now in state {sm.getCurrentState()}")
+            pbody.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
         # check I was released
         if not iIsDown and iPressed:
             iPressed = False
             pboxes[sm.getCurrentState()].setFillColor(smd.boxColor, colorSpace='rgb255')
             sm.moveAcross()
             pboxes[sm.getCurrentState()].setFillColor(smd.boxSelectedColor, colorSpace='rgb255')
-            print(f"sm move now in state {sm.getCurrentState()}")
+            pbody.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
         uPressed = uIsDown
         iPressed = iIsDown
 
@@ -401,9 +365,7 @@ for thisPractice in practices:
     practices.addData('pbox4.stopped', pboxes[4].tStopRefresh)
     practices.addData('pbox5.started', pboxes[5].tStartRefresh)
     practices.addData('pbox5.stopped', pboxes[5].tStopRefresh)
-    # store data for practices (TrialHandler)
-    practices.addData('pdiagram.started', pdiagram.tStartRefresh)
-    practices.addData('pdiagram.stopped', pdiagram.tStopRefresh)
+
     # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()

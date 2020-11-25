@@ -9,39 +9,31 @@ class StateMachine:
     totalScore = 0
     # static
     states = 6
-    baseAmount = 20
-    baseDeviant = 10
-    ### big - 70 100 140
-    # wins and small losses fixed
-    #
-    stateDeffinition = [[7, 1],
-                        [-1, -7],
-                        [-1, -7],
-                        [+1, -1],
-                        [-1, -7],
-                        [+1, -1]]
+    negativeScores= (-70, -100, -140)
+    stateMachineDeffinition = [[(1, 140), (3, 20)],
+                               [(2, -20), (4, 0)],
+                               [(3, -20), (5, 0)],
+                               [(4, -20), (1, 20)],
+                               [(5, -20), (0, 0)],
+                               [(0, -20), (2, 20)]]
 
     # move type is 0
     def moveCircle(self):
-        self.targetState = self.currentState + 1
-        self.modCheck()
-        self.generateScore(0)
+        self.targetState = self.stateMachineDeffinition[self.currentState][0][0]
+        self.scoreMove(0)
         self.currentState = int(self.targetState)
 
     # move type is 1
     def moveAcross(self):
-        self.targetState = self.currentState + 3
-        self.modCheck()
-        self.generateScore(1)
+        self.targetState = self.stateMachineDeffinition[self.currentState][1][0]
+        self.scoreMove(1)
         self.currentState = int(self.targetState)
 
-    def modCheck(self):
-        if self.targetState > self.states - 1:
-            self.targetState = self.targetState % 6
-
-    def generateScore(self, moveType):
-        rnum = random.randrange(self.baseAmount - self.baseDeviant, self.baseAmount + self.baseDeviant)
-        self.lastScore = rnum * self.stateDeffinition[self.currentState][moveType]
+    def scoreMove(self, moveType):
+        if self.stateMachineDeffinition[self.currentState][moveType][1] == 0:
+            self.lastScore = self.negativeScores[random.randrange(0, 3)]
+        else:
+            self.lastScore = self.stateMachineDeffinition[self.currentState][moveType][1]
         self.totalScore += self.lastScore
 
     def reset(self):

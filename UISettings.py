@@ -28,6 +28,13 @@ class GUIDraw:
     resolution = (1920, 1080)
     bgColor = [150, 150, 150]
 
+    stateMoves = ["++/+",
+                  "-/--",
+                  "-/--",
+                  "+/-",
+                  "+/-",
+                  "-/--"]
+
     controllBoxColor = [230, 150, 5]
     controllTextColor = [0, 0, 0]
     controllPosition = (0, -.4)
@@ -38,7 +45,7 @@ class GUIDraw:
 
     generalTextColor = [125, 200, 230]
     generalTextPosition = (0,0)
-    moveTextOffset = (0, -.01)
+    moveTextOffset = (0, -.06)
     moveTextColor = (180, 180, 180)
 
 
@@ -69,6 +76,9 @@ class GUIDraw:
             return self.practiceHeaderPos[0] * self.resolution[0],self.practiceHeaderPos[1] * self.resolution[1]
         if textName == "practiceBody":
             return self.practiceBodyPos[0] * self.resolution[0],self.practiceBodyPos[1] * self.resolution[1]
+
+    def getMoveTextPos(self, pos):
+        return pos[0] + (self.moveTextOffset[0]*self.resolution[0]), pos[1] + (self.moveTextOffset[1]*self.resolution[1])
 
     def getControllBoxSize(self):
         return self.resolution[0] * self.controllBoxSize[0], self.resolution[1] * self.controllBoxSize[1]
