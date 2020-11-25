@@ -353,18 +353,7 @@ for thisPractice in practices:
     for thisComponent in PracticeComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    practices.addData('pbox0.started', pboxes[0].tStartRefresh)
-    practices.addData('pbox0.stopped', pboxes[0].tStopRefresh)
-    practices.addData('pbox1.started', pboxes[1].tStartRefresh)
-    practices.addData('pbox1.stopped', pboxes[1].tStopRefresh)
-    practices.addData('pbox2.started', pboxes[2].tStartRefresh)
-    practices.addData('pbox2.stopped', pboxes[2].tStopRefresh)
-    practices.addData('pbox3.started', pboxes[3].tStartRefresh)
-    practices.addData('pbox3.stopped', pboxes[3].tStopRefresh)
-    practices.addData('pbox4.started', pboxes[4].tStartRefresh)
-    practices.addData('pbox4.stopped', pboxes[4].tStopRefresh)
-    practices.addData('pbox5.started', pboxes[5].tStartRefresh)
-    practices.addData('pbox5.stopped', pboxes[5].tStopRefresh)
+
 
     # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
@@ -395,8 +384,6 @@ for thisTrial in trials:
     # ==========================================================================
     # ============================ Prepare Trial ===============================
     # ==========================================================================
-
-
     continueRoutine = True
     # update component parameters for each repeat
     tsound.setSound('A', hamming=True)
@@ -432,26 +419,6 @@ for thisTrial in trials:
             tsound.tStart = t  # local t and not account for scr refresh
             tsound.tStartRefresh = tThisFlipGlobal  # on global time
             tsound.play(when=win)  # sync with win flip
-        
-        # *tdiagram* updates
-        if tdiagram.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            tdiagram.frameNStart = frameN  # exact frame index
-            tdiagram.tStart = t  # local t and not account for scr refresh
-            tdiagram.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(tdiagram, 'tStartRefresh')  # time at next scr refresh
-            tdiagram.setAutoDraw(True)
-
-
-        for box in tboxes:
-            if box.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-                # keep track of start time/frame for later
-                box.frameNStart = frameN  # exact frame index
-                box.tStart = t  # local t and not account for scr refresh
-                box.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(box, 'tStartRefresh')  # time at next scr refresh
-                box.setAutoDraw(True)
-
 
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -477,22 +444,6 @@ for thisTrial in trials:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     tsound.stop()  # ensure sound has stopped at end of routine
-    trials.addData('tsound.started', tsound.tStartRefresh)
-    trials.addData('tsound.stopped', tsound.tStopRefresh)
-    trials.addData('tdiagram.started', tdiagram.tStartRefresh)
-    trials.addData('tdiagram.stopped', tdiagram.tStopRefresh)
-    trials.addData('box0.started', tboxes[0].tStartRefresh)
-    trials.addData('box0.stopped', tboxes[0].tStopRefresh)
-    trials.addData('box1.started', tboxes[1].tStartRefresh)
-    trials.addData('box1.stopped', tboxes[1].tStopRefresh)
-    trials.addData('box2.started', tboxes[2].tStartRefresh)
-    trials.addData('box2.stopped', tboxes[2].tStopRefresh)
-    trials.addData('box3.started', tboxes[3].tStartRefresh)
-    trials.addData('box3.stopped', tboxes[3].tStopRefresh)
-    trials.addData('box4.started', tboxes[4].tStartRefresh)
-    trials.addData('box4.stopped', tboxes[4].tStopRefresh)
-    trials.addData('box5.started', tboxes[5].tStartRefresh)
-    trials.addData('box5.stopped', tboxes[5].tStopRefresh)
     # store data for trials (TrialHandler)
 
     # the Routine "Trial" was not non-slip safe, so reset the non-slip timer
@@ -500,7 +451,6 @@ for thisTrial in trials:
     thisExp.nextEntry()
     
 # completed 5 repeats of 'trials'
-
 
 # ==========================================================================
 # =========================== Prepare Exit =================================
@@ -536,22 +486,7 @@ while continueRoutine:
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
     
-    # *etext* updates
-    if etext.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-        # keep track of start time/frame for later
-        etext.frameNStart = frameN  # exact frame index
-        etext.tStart = t  # local t and not account for scr refresh
-        etext.tStartRefresh = tThisFlipGlobal  # on global time
-        win.timeOnFlip(etext, 'tStartRefresh')  # time at next scr refresh
-        etext.setAutoDraw(True)
-    if etext.status == STARTED:
-        # is it time to stop? (based on global clock, using actual start)
-        if tThisFlipGlobal > etext.tStartRefresh + 1.0-frameTolerance:
-            # keep track of stop time/frame for later
-            etext.tStop = t  # not accounting for scr refresh
-            etext.frameNStop = frameN  # exact frame index
-            win.timeOnFlip(etext, 'tStopRefresh')  # time at next scr refresh
-            etext.setAutoDraw(False)
+
     
     # *econfirm* updates
     waitOnFlip = False
@@ -574,11 +509,9 @@ while continueRoutine:
             econfirm.rt = _econfirm_allKeys[-1].rt
             # a response ends the routine
             continueRoutine = False
-    
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-    
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         break
@@ -587,27 +520,21 @@ while continueRoutine:
         if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
             continueRoutine = True
             break  # at least one component has not yet finished
-    
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
-
 # ==========================================================================
 # ============================= End Exit ===================================
 # ==========================================================================
 for thisComponent in ExitComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
-thisExp.addData('etext.started', etext.tStartRefresh)
-thisExp.addData('etext.stopped', etext.tStopRefresh)
 # check responses
 if econfirm.keys in ['', [], None]:  # No response was made
     econfirm.keys = None
 thisExp.addData('econfirm.keys',econfirm.keys)
 if econfirm.keys != None:  # we had a response
     thisExp.addData('econfirm.rt', econfirm.rt)
-thisExp.addData('econfirm.started', econfirm.tStartRefresh)
-thisExp.addData('econfirm.stopped', econfirm.tStopRefresh)
 thisExp.nextEntry()
 # the Routine "Exit" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
