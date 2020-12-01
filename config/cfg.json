@@ -1,1 +1,9 @@
-{"assetDir": "D://Dev//Python//CRE Student Research//Assets", "devMode": 0, "winRes": [1920, 1080]}
+{
+    "assetDir": "D://Dev//Python//CRE Student Research//Assets",
+    "devMode": 0,
+    "tval": "D://Dev//Python//CRE Student Research//Assets",
+    "winRes": [
+        1920,
+        1080
+    ]
+}

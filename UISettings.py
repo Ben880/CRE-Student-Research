@@ -1,3 +1,6 @@
+from psychopy import visual
+from Config import Config as Config
+
 
 class StateMachineDraw:
     resolution = (1920, 1080)
@@ -91,3 +94,22 @@ class GUIDraw:
 
     def lenBodyText(self):
         return len(self.instructionsBodyText)
+
+
+class UIComponents:
+
+    font = 'Arial'
+    win = None
+    colors = None
+    resolution = (1920, 1080)
+    colorSpace = 'rgb255'
+
+    def __init__(self, win, resolution, colors: Config):
+        self.win = win
+        self.resolution = resolution
+        self.colors = colors
+
+    def createText(self, name, text="default text", pos=(0, 0), color=[255, 255, 255], height=50):
+        return visual.TextStim(win=self.win, name=name, text=text, font=self.font,
+                               pos=pos, height=height, wrapWidth=None, ori=0, color=color,
+                               colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')

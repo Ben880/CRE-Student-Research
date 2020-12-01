@@ -1,5 +1,13 @@
 {
-  "winRes": [1920, 1080],
-  "assetDir": "D://Dev//Python//CRE Student Research//Assets",
-  "devMode": 0
+  "box_selected": [255, 255, 255],
+  "box": [100, 100, 100],
+  "box_line": [100, 100, 100],
+  "box_target": [255, 50, 50],
+  "background": [150, 150, 150],
+  "control_box": [230, 150, 5],
+  "control_text": [0, 0, 0],
+  "general_text": [125, 200, 230],
+  "move_text": [180, 180, 180],
+  "debug_text": [255, 0, 0],
+  "i_text": [255, 255, 255]
 }

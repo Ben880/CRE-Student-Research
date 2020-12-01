@@ -1,5 +1,6 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+## https://run.pavlovia.org/fdelogu/covid_game/html/?fbclid=IwAR0NzZPE0JAG2ROZsL8yE1dIFH2Glm7-sMfZWgmVRpgUdDxirExBeZQ-Y_c
 # ==========================================================================
 # ============================= Imports ====================================
 # ==========================================================================
@@ -42,14 +43,17 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 # ==========================================================================
 # ============================= Config =====================================
 # ==========================================================================
-from Config import Config as config
-cfg = config()
+from Config import Config as Config
+cfg = Config()
 cfg.load()
 diaDir = os.path.join(cfg.getVal("assetDir"), "Diagrams//ArrowsNumbered.png")
 
+colors = Config(configFile="colors.json")
+colors.load()
 from StateMachine import StateMachine as StateMachine
 from UISettings import StateMachineDraw as StateMachineDraw
 from UISettings import GUIDraw as GUIDraw
+from UISettings import UIComponents as UIComponents
 sm = StateMachine()
 smd = StateMachineDraw()
 guid = GUIDraw()
@@ -70,18 +74,17 @@ else:
 # create a default keyboard (e.g. to check for escape)
 defaultKeyboard = keyboard.Keyboard()
 # ==========================================================================
+# =============================== Config 2 =================================
+# ==========================================================================
+comp = UIComponents(win, cfg.getVal("winRes"), colors)
+# ==========================================================================
 # =========================== Instruction Objs =============================
 # ==========================================================================
+
 InstructionsClock = core.Clock()
-ibody = visual.TextStim(win=win, name='ibody', text=guid.instructionsBodyText[0], font='Arial',
-                        pos=guid.getTextPos("instructionsBody"), height=50, wrapWidth=None, ori=0, color='white',
-                        colorSpace='rgb', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
-icontinue = visual.TextStim(win=win, name='icontinue', text=guid.instructionsContinueText, font='Arial',
-                            pos=guid.getTextPos("instructionsContinue"), height=50, wrapWidth=None, ori=0, color='white',
-                            colorSpace='rgb', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
-iheader = visual.TextStim(win=win, name='iheader', text='Instructions', font='Arial',
-                          pos=guid.getTextPos("instructionsHeader"), height=100, wrapWidth=None, ori=0, color='white',
-                          colorSpace='rgb', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+iheader = comp.createText('iheader', text='Instructions', pos=guid.getTextPos("instructionsHeader"), height=100, color=colors.getVal("i_text"))
+ibody = comp.createText('ibody', text=guid.instructionsBodyText[0], pos=guid.getTextPos("instructionsBody"), color=colors.getVal("i_text"))
+icontinue = comp.createText('icontinue', text=guid.instructionsContinueText, pos=guid.getTextPos("instructionsContinue"), color=colors.getVal("i_text"))
 # ==========================================================================
 # ============================== Practice Objs =============================
 # ==========================================================================

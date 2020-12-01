@@ -1,0 +1,102 @@
+no_response|wrong_key
+Too slow!
+You have %d moves
+Please enter all moves first to see the result.
+Enter trains now
+You have a total of %d
+Points won.
+Points lost.
+Please enter participant number
+Enter location
+Please enter session
+
+You have not entered enough moves.
+You lost 200 points.
+times up
+
+
+Welcome to the first part of the training
+Press SPACE to continue.
+
+You will see 6 rectangles on the screen. You can
+move back and forth between any of the rectangles
+by pressing the 'U' 'or' 'I' 'keys.
+
+One key goes through the middle, the other around the circle.
+You now have some time to try this out. Imprint yourself quite well
+Which key you have to press in order to get away from each
+Move rectangle through the center or in a circle.
+Press SPACE to continue.
+
+Well done! The first part of the training is now over.
+Press SPACE to continue.
+
+
+You are the WHITE rectangle! Please move
+around for a while so you can get a feel for
+how you can move.
+Press SPACE to continue.
+
+You have x moves
+Reach the red destination on the last train.
+Very good!
+Please try it again.
+
+For the following tasks you only have
+one more try to reach the red goal
+Press SPACE to continue.
+
+Reach the red destination
+Very good!
+Unfortunately that was incorrect.
+
+
+
+
+
+Welcome to the second part of the training,
+Press SPACE to continue.
+
+From now on you will receive a certain number of points for every move.
+Certain moves result in a profit of 140 or 20 points,
+Others lose -20 or -70 points.
+Your goal now is to memorize how many points
+every train delivers.
+Press SPACE to continue.
+
+
+We're getting closer to the goal.
+In this part you can freely choose a sequence of moves of a
+certain length. Try to choose them so you get as many points as possible.
+Press SPACE to continue.
+
+
+Now we will only show you how you move and how much you
+won or lost after entering the entire turn.
+Press SPACE to continue.
+
+
+Let's try a few exercises under time pressure!
+From now on you only have 9 seconds to think about it.
+You then have about 2.5 seconds to enter the moves.
+The thinking time can be interrupted by entering the first move
+Do not enter the turn order until you have
+the entire sequence of moves clearly in front of your eyes.
+You need to hurry up a little to achieve this within 9s.
+Press SPACE to continue.
+
+
+
+We are now testing how well you have learned the points so far.
+Please use the keyboard for input here!
+How much is the next move worth?
+1: 140, 2:20, 3: -20, 4: -70
+
+Correct, this move is worth i points.
+
+
+Unfortunately it is not correct.
+This move is worth i points.
+
+Well done. You got% i of% i right.
+Press SPACE to continue.

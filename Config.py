@@ -8,6 +8,9 @@ class Config:
     cfgName = "cfg.json"
     data = {}
 
+    def __init__(self, configFile = "cfg.json"):
+        self.setFile(configFile)
+
     def setFile(self, filename):
         self.cfgName = filename
 
@@ -23,9 +26,8 @@ class Config:
             self.genConfig(self)
             self.write(self)
         cfg = open(os.path.join(self.appFolder, self.cfgName), "r")
-        lines = cfg.readline()
+        self.data = json.load(cfg)
         cfg.close()
-        self.data = json.loads(lines)
 
     def write(self):
         with open(os.path.join(self.appFolder, self.cfgName), 'w+') as fp:
@@ -50,3 +52,4 @@ x.load(x)
 x.addVal(x, "tval", "D://Dev//Python//CRE Student Research//Assets")
 x.write(x)
 '''
+
