@@ -78,9 +78,8 @@ Press SPACE to continue.
 Let's try a few exercises under time pressure!
 From now on you only have 9 seconds to think about it.
 You then have about 2.5 seconds to enter the moves.
-The thinking time can be interrupted by entering the first move
-Do not enter the turn order until you have
-the entire sequence of moves clearly in front of your eyes.
+The thinking time can be interrupted by entering the first move.
+Do not enter the turn order until you have the entire sequence of moves planned out.
 You need to hurry up a little to achieve this within 9s.
 Press SPACE to continue.
 
