@@ -15,5 +15,6 @@
     "p_body_pos": [0, 0],
     "i_header_pos": [0, 0.4],
     "i_body_pos": [0, 0],
-    "i_continue_pos": [0, -0.4]
+    "i_continue_pos": [0, -0.4],
+    "i_wrap": [0.7, 0]
 }

@@ -15,17 +15,16 @@ You lost 200 points.
 times up
 
 
-Welcome to the first part of the training
+Welcome to the first part of the training!
 Press SPACE to continue.
 
 You will see 6 rectangles on the screen. You can
 move back and forth between any of the rectangles
-by pressing the 'U' 'or' 'I' 'keys.
+by pressing the 'U' or 'I' keys.
 
 One key goes through the middle, the other around the circle.
-You now have some time to try this out. Imprint yourself quite well
-Which key you have to press in order to get away from each
-Move rectangle through the center or in a circle.
+You will have some time to try this out. Familiarize yourself with
+which key you have to press in order to get away from other rectangles.
 Press SPACE to continue.
 
 Well done! The first part of the training is now over.

@@ -80,9 +80,17 @@ comp = UIComponents(win, cfg.getVal("winRes"))
 # =========================== Instruction Objs =============================
 # ==========================================================================
 InstructionsClock = core.Clock()
+# create components
 header = comp.createText(name='header', text='Instructions', pos=guid.cfgTRes("i_header_pos"), height=100, color=colors.getVal("i_text"))
 body = comp.createText(name='body', text=guid.instructionsText[0], pos=guid.cfgTRes("i_body_pos"), color=colors.getVal("i_text"))
 continueText = comp.createText(name='continueText', text=guid.continueText, pos=guid.cfgTRes("i_continue_pos"), color=colors.getVal("i_text"))
+# set word wrap width
+body.wrapWidth = guid.cfgTRes("i_wrap")[0]
+continueText.wrapWidth = guid.cfgTRes("i_wrap")[0]
+# turn off auto draw
+header.setAutoDraw(False)
+body.setAutoDraw(False)
+continueText.setAutoDraw(False)
 # ==========================================================================
 # ============================== Practice Objs =============================
 # ==========================================================================
@@ -90,32 +98,31 @@ PracticeClock = core.Clock()
 numBoxes = 6
 boxes = []
 pBoxText = []
+# create ui components
 for i in range(numBoxes):
-    boxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size=guid.cfgTRes("box_size"), ori=0, pos=guid.getBoxPos(i),
-                             lineWidth=1, lineColor=guid.c("box_line"), lineColorSpace='rgb255', fillColor=guid.c("box"),
-                             fillColorSpace='rgb255', opacity=1, depth=0.0, interpolate=True, units='pix'))
+    boxes.append(comp.createBox(name="pbox" + str(i), size=guid.cfgTRes("box_size"), pos=guid.getBoxPos(i),
+                                lcolor=guid.c("box_line"), fcolor=guid.c("box")))
     pBoxText.append(comp.createText(name='pBoxText', text=guid.stateMoves[i], pos=guid.getMovePos(guid.getBoxPos(i)),
                                     color=guid.c("control_text"), height=25))
-
+    boxes[i].setAutoDraw(False)
+    pBoxText[i].setAutoDraw(False)
 uBox = comp.createBox(name='ubox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(-1),
                       lcolor=guid.c("control_line"), fcolor=guid.c("control_box"))
-iBox = comp.createBox(name='ibox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(1),
+iBox = comp.createBox(name='ibox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(+1),
                       lcolor=guid.c("control_line"), fcolor=guid.c("control_box"))
-
-
-uText = visual.TextStim(win=win, name='utext', text='U', font='Arial',
-                        pos=guid.getControlPos(-1), height=50, wrapWidth=None, ori=0, color=guid.c("control_text"),
-                        colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
-iText = visual.TextStim(win=win, name='itext', text='I', font='Arial',
-                        pos=guid.getControlPos(1), height=50, wrapWidth=None, ori=0, color=guid.c("control_text"),
-                        colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+uText = comp.createText(name='utext', text='U', pos=guid.getControlPos(-1), height=50,color=guid.c("control_text"))
+iText = comp.createText(name='itext', text='I', pos=guid.getControlPos(+1), height=50,color=guid.c("control_text"))
+# set auto draw to false
+uBox.setAutoDraw(False)
+iBox.setAutoDraw(False)
+uText.setAutoDraw(False)
+iText.setAutoDraw(False)
 # ==========================================================================
 # ================================ Trial Objs ==============================
 # ==========================================================================
 TrialClock = core.Clock()
 tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
 tsound.setVolume(1)
-
 # ==========================================================================
 # ================================ Exit Objs ===============================
 # ==========================================================================
@@ -136,23 +143,11 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 # ==========================================================================
 # ===================== Prepare Instructions ===============================
 # ==========================================================================
-header.setAutoDraw(False)
-body.setAutoDraw(False)
-continueText.setAutoDraw(False)
-
 instructionsIndex = 0
 spacePressed = False
-
 continueRoutine = True
 # keep track of which components have finished
 InstructionsComponents = [body, continueText, header]
-for thisComponent in InstructionsComponents:
-    thisComponent.tStart = None
-    thisComponent.tStop = None
-    thisComponent.tStartRefresh = None
-    thisComponent.tStopRefresh = None
-    if hasattr(thisComponent, 'status'):
-        thisComponent.status = NOT_STARTED
 # reset timers
 t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
@@ -162,7 +157,7 @@ frameN = -1
 # ========================= Run Instructions ===============================
 # ==========================================================================
 while continueRoutine:
-    # get current time
+    # -------------get current time---------------
     t = InstructionsClock.getTime()
     tThisFlip = win.getFutureFlipTime(clock=InstructionsClock)
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
@@ -183,7 +178,7 @@ while continueRoutine:
             body.setText(guid.instructionsText[instructionsIndex])
     # check if space is down
     spacePressed = spaceIsDown
-    # ================== Wrap Up =================================
+    # -------------- Wrap Up -------------------------
     waitOnFlip = False
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -202,16 +197,11 @@ while continueRoutine:
 # ==========================================================================
 # ========================= End Instructions ===============================
 # ==========================================================================
-for thisComponent in InstructionsComponents:
-    if hasattr(thisComponent, "setAutoDraw"):
-        thisComponent.setAutoDraw(False)
 thisExp.addData('Iphase end', globalClock.getTime())
-
 # check responses
 thisExp.nextEntry()
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
-
 # set up handler to look after randomisation of conditions etc
 practices = data.TrialHandler(nReps=5, method='random', 
     extraInfo=expInfo, originPath=-1,
@@ -236,54 +226,33 @@ for thisPractice in practices:
     # ==========================================================================
     uPressed = False
     iPressed = False
-    iText.setAutoDraw(False)
-    uText.setAutoDraw(False)
-    iBox.setAutoDraw(False)
-    uBox.setAutoDraw(False)
-    header.setAutoDraw(False)
-    body.setAutoDraw(False)
-    for t in pBoxText:
-        t.setAutoDraw(False)
-
-
     continueRoutine = True
     # update component parameters for each repeat
     # setup some python lists for storing info about the pmouse
     gotValidClick = False  # until a click is received
-    # keep track of which components have finished
-    PracticeComponents = [boxes[0], boxes[1], boxes[2], boxes[3], boxes[4], boxes[5]]
-    for thisComponent in PracticeComponents:
-        thisComponent.tStart = None
-        thisComponent.tStop = None
-        thisComponent.tStartRefresh = None
-        thisComponent.tStopRefresh = None
-        if hasattr(thisComponent, 'status'):
-            thisComponent.status = NOT_STARTED
     # reset timers
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
-
+    # set up state machine
     smState = sm.getCurrentState()
     boxes[smState].setFillColor((guid.c("box_selected")))
-
+    # set up text
     header.setText('Practice')
     body.setText("press u or i to move")
     header.setColor(guid.c("general_text"))
     body.setColor(guid.c("general_text"))
-
     # ==========================================================================
     # ===================== Run Practice =======================================
     # ==========================================================================
     while continueRoutine:
-        # get current time
+        # -----------get current time------------
         t = PracticeClock.getTime()
         tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-
-        # -------draw-----
+        # ----------------draw------------------
         uBox.draw()
         iBox.draw()
         iText.draw()
@@ -321,11 +290,7 @@ for thisPractice in practices:
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
-        continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in PracticeComponents:
-            if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-                continueRoutine = True
-                break  # at least one component has not yet finished
+
         
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
@@ -334,18 +299,10 @@ for thisPractice in practices:
     # ==========================================================================
     # ========================== End Practice ==================================
     # ==========================================================================
-    for thisComponent in PracticeComponents:
-        if hasattr(thisComponent, "setAutoDraw"):
-            thisComponent.setAutoDraw(False)
-
-
     # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
-    
 # completed 5 repeats of 'practices'
-
-
 # set up handler to look after randomisation of conditions etc
 trials = data.TrialHandler(nReps=5, method='random', 
     extraInfo=expInfo, originPath=-1,

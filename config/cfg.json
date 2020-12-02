@@ -7,8 +7,8 @@
         1080
     ],
     "state_moves": ["++/+", "-/--", "-/--", "+/-", "+/-", "-/--"],
-    "instructions_text": ["intruction set 1",
-        "intruction set 2",
-        "intruction set 3"],
+    "instructions_text": ["Welcome to the first part of the training!",
+        "You will see 6 rectangles on the screen. You can move back and forth between any of the rectangles by pressing the 'U' or 'I' keys.",
+        "One key goes through the middle, the other around the circle. You will have some time to try this out. Familiarize yourself with which key you have to press in order to get away from other rectangles."],
     "continue_text": "press space to continue"
 }
