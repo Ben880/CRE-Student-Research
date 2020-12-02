@@ -203,131 +203,114 @@ thisExp.nextEntry()
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 # set up handler to look after randomisation of conditions etc
-practices = data.TrialHandler(nReps=5, method='random', 
-    extraInfo=expInfo, originPath=-1,
-    trialList=[None],
-    seed=None, name='practices')
-thisExp.addLoop(practices)  # add the loop to the experiment
-thisPractice = practices.trialList[0]  # so we can initialise stimuli with some values
-# abbreviate parameter names if possible (e.g. rgb = thisPractice.rgb)
-if thisPractice != None:
-    for paramName in thisPractice:
-        exec('{} = thisPractice[paramName]'.format(paramName))
 
-for thisPractice in practices:
-    currentLoop = practices
-    # abbreviate parameter names if possible (e.g. rgb = thisPractice.rgb)
-    if thisPractice != None:
-        for paramName in thisPractice:
-            exec('{} = thisPractice[paramName]'.format(paramName))
+# ==========================================================================
+# ===================== Prepare Practice ===================================
+# ==========================================================================
+uPressed = False
+iPressed = False
+# phase variables
+practicePhase = 0
+pressUPhase = 1
+pressIPhase = 2
+timedPhase = 3
+buttonPresses = [0, 0]
+phaseTimer = core.CountdownTimer(cfg.getVal("practice_time"))
+# end phase variables
+continueRoutine = True
+# update component parameters for each repeat
+# setup some python lists for storing info about the pmouse
+gotValidClick = False  # until a click is received
+# reset timers
+t = 0
+_timeToFirstFrame = win.getFutureFlipTime(clock="now")
+PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
+frameN = -1
+# set up state machine
+smState = sm.getCurrentState()
+boxes[smState].setFillColor((guid.c("box_selected")))
+# set up text
+header.setText('Practice')
+body.setText(cfg.getVal("practice_text")[0])
+header.setColor(guid.c("general_text"))
+body.setColor(guid.c("general_text"))
+# ==========================================================================
+# ===================== Run Practice =======================================
+# ==========================================================================
+while continueRoutine:
+    # -----------get current time------------
+    t = PracticeClock.getTime()
+    tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
+    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
+    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+    # ------------- phase check ------------
+    if practicePhase == 0 and buttonPresses[0] >0:
+        practicePhase = pressIPhase
+    if practicePhase == 0 and buttonPresses[1] > 0:
+        practicePhase = pressUPhase
+    if practicePhase > 0 and practicePhase <= pressIPhase and buttonPresses[0] > 0 and buttonPresses[1] > 0:
+        practicePhase = timedPhase
+        phaseTimer.reset()
+    if practicePhase == timedPhase:
+        if phaseTimer.getTime() <= 0:
+            continueRoutine = False
+    # --------------body text --------------------
+    if practicePhase == timedPhase:
+        body.setText(f"move around for {round(phaseTimer.getTime()*10)/10}s\nyou scored: {sm.lastScore}")
+    else:
+        body.setText(cfg.getVal("practice_text")[practicePhase])
+    # ----------------draw------------------
+    uBox.draw()
+    iBox.draw()
+    iText.draw()
+    uText.draw()
+    body.draw()
+    header.draw()
+    for box in boxes:
+        box.draw()
+    for t in pBoxText:
+        t.draw()
+    # =================== key checks ===================
+    uIsDown = defaultKeyboard.getKeys(keyList=["u"])
+    iIsDown = defaultKeyboard.getKeys(keyList=["i"])
+    # check U was released
+    if not uIsDown and uPressed:
+        boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
+        uPressed = False
+        sm.moveCircle()
+        boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+        body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
+        buttonPresses[0] +=1
+    # check I was released
+    if not iIsDown and iPressed:
+        iPressed = False
+        boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
+        sm.moveAcross()
+        boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+        body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
+        buttonPresses[1] += 1
+    uPressed = uIsDown
+    iPressed = iIsDown
 
-    # ==========================================================================
-    # ===================== Prepare Practice ===================================
-    # ==========================================================================
-    uPressed = False
-    iPressed = False
-    # phase variables
-    practicePhase = 0
-    pressUPhase = 1
-    pressIPhase = 2
-    timedPhase = 3
-    buttonPresses = [0, 0]
-    phaseTimer = core.CountdownTimer(cfg.getVal("practice_time"))
-    # end phase variables
-    continueRoutine = True
-    # update component parameters for each repeat
-    # setup some python lists for storing info about the pmouse
-    gotValidClick = False  # until a click is received
-    # reset timers
-    t = 0
-    _timeToFirstFrame = win.getFutureFlipTime(clock="now")
-    PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
-    frameN = -1
-    # set up state machine
-    smState = sm.getCurrentState()
-    boxes[smState].setFillColor((guid.c("box_selected")))
-    # set up text
-    header.setText('Practice')
-    body.setText(cfg.getVal("practice_text")[0])
-    header.setColor(guid.c("general_text"))
-    body.setColor(guid.c("general_text"))
-    # ==========================================================================
-    # ===================== Run Practice =======================================
-    # ==========================================================================
-    while continueRoutine:
-        # -----------get current time------------
-        t = PracticeClock.getTime()
-        tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
-        tThisFlipGlobal = win.getFutureFlipTime(clock=None)
-        frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-        # ------------- phase check ------------
-        if practicePhase == 0 and buttonPresses[0] >0:
-            practicePhase = pressIPhase
-        if practicePhase == 0 and buttonPresses[1] > 0:
-            practicePhase = pressUPhase
-        if practicePhase > 0 and practicePhase <= pressIPhase and buttonPresses[0] > 0 and buttonPresses[1] > 0:
-            practicePhase = timedPhase
-            phaseTimer.reset()
-        if practicePhase == timedPhase:
-            if phaseTimer.getTime() <= 0:
-                continueRoutine = False
-        # --------------body text --------------------
-        if practicePhase == timedPhase:
-            body.setText(f"move around for {round(phaseTimer.getTime()*10)/10}s\nyou scored: {sm.lastScore}")
-        else:
-            body.setText(cfg.getVal("practice_text")[practicePhase])
-        # ----------------draw------------------
-        uBox.draw()
-        iBox.draw()
-        iText.draw()
-        uText.draw()
-        body.draw()
-        header.draw()
-        for box in boxes:
-            box.draw()
-        for t in pBoxText:
-            t.draw()
-        # =================== key checks ===================
-        uIsDown = defaultKeyboard.getKeys(keyList=["u"])
-        iIsDown = defaultKeyboard.getKeys(keyList=["i"])
-        # check U was released
-        if not uIsDown and uPressed:
-            boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
-            uPressed = False
-            sm.moveCircle()
-            boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
-            body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
-            buttonPresses[0] +=1
-        # check I was released
-        if not iIsDown and iPressed:
-            iPressed = False
-            boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
-            sm.moveAcross()
-            boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
-            body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
-            buttonPresses[1] += 1
-        uPressed = uIsDown
-        iPressed = iIsDown
+    # check for quit (typically the Esc key)
+    if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+        core.quit()
 
-        # check for quit (typically the Esc key)
-        if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-            core.quit()
-        
-        # check if all components have finished
-        if not continueRoutine:  # a component has requested a forced-end of Routine
-            break
+    # check if all components have finished
+    if not continueRoutine:  # a component has requested a forced-end of Routine
+        break
 
-        
-        # refresh the screen
-        if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-            win.flip()
 
-    # ==========================================================================
-    # ========================== End Practice ==================================
-    # ==========================================================================
-    # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset()
-    thisExp.nextEntry()
+    # refresh the screen
+    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
+        win.flip()
+
+# ==========================================================================
+# ========================== End Practice ==================================
+# ==========================================================================
+# the Routine "Practice" was not non-slip safe, so reset the non-slip timer
+routineTimer.reset()
+thisExp.nextEntry()
 # completed 5 repeats of 'practices'
 # set up handler to look after randomisation of conditions etc
 trials = data.TrialHandler(nReps=5, method='random', 
