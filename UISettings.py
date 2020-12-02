@@ -2,114 +2,63 @@ from psychopy import visual
 from Config import Config as Config
 
 
-class StateMachineDraw:
-    resolution = (1920, 1080)
-    boxPos = [[.1, .2],
-                 [-.1, .2],
-                 [-.3, 0],
-                 [-.1, -.2],
-                 [.1, -.2],
-                 [.3, 0]]
-    boxHeight = .05
-    boxWidth = .09
-    boxSelectedColor = [255, 255, 255]
-    boxColor = [100, 100, 100]
-    boxLineColor = [0, 0, 0]
-
-    def getBoxPos(self, buttonNum):
-        return (self.resolution[0] * self.boxPos[buttonNum][0], self.resolution[1] * self.boxPos[buttonNum][1])
-
-    def setResolution(self, res):
-        self.resolution = res
-
-    def getBoxSize(self):
-        tmp = [self.resolution[0] * self.boxWidth, self.resolution[0] * self.boxHeight]
-        return tmp
-
-
 class GUIDraw:
     resolution = (1920, 1080)
-    bgColor = [150, 150, 150]
+    pos = None
+    color = None
+    stateMoves = None
+    boxPos = None
+    instructionsText = ("intruction set 1", "intruction set 2", "intruction set 3")
+    continueText = "press space to continue"
 
-    stateMoves = ["++/+",
-                  "-/--",
-                  "-/--",
-                  "+/-",
-                  "+/-",
-                  "-/--"]
+    def __init__(self, pos: Config, color: Config, cfg: Config):
+        self.pos = pos
+        self.color = color
+        self.stateMoves = cfg.getVal("state_moves")
+        self.instructionsText = cfg.getVal("instructions_text")
+        self.continueText = cfg.getVal("continue_text")
+        self.boxPos = pos.getVal("box_pos")
 
-    controllBoxColor = [230, 150, 5]
-    controllTextColor = [0, 0, 0]
-    controllPosition = (0, -.4)
-    controllPositionOffset = (.05, 0)
-    controllBoxSize = (.05,.05)
-    controllBoxLineColor = (0, 0, 0)
+    def getBoxPos(self, buttonNum):
+        return self.scaleToRes(self.boxPos[buttonNum])
 
+    def getControlPos(self, multiplier):
+        pos = self.cfgTRes("control_pos")
+        off = self.cfgTRes("control_offset")
+        return (pos[0] + (multiplier * off[0])), (pos[1] + (multiplier * off[1]))
 
-    generalTextColor = [125, 200, 230]
-    generalTextPosition = (0,0)
-    moveTextOffset = (0, -.06)
-    moveTextColor = (180, 180, 180)
+    def getMovePos(self, pos):
+        off = self.cfgTRes("move_offset")
+        return pos[0] + off[0], pos[1] + off[1]
 
+    def scaleToRes(self, vec2):
+        return vec2[0] * self.resolution[0], vec2[1] * self.resolution[1]
 
-    debugTextColor = [255, 0, 0]
-    debugTextPos = (-.4, .4)
+    def cfgTRes(self, item: str):
+        return self.scaleToRes(self.pos.getVal(item))
 
-    practiceHeaderPos = (0, .4)
-    practiceBodyPos = (0, 0)
-
-    instructionsHeaderPos = (0, .4)
-    instructionsBodyPos = (0, 0)
-    instructionsBodyText = ("intruction set 1", "intruction set 2", "intruction set 3")
-    instructionsContinuePos = (0, -.4)
-    instructionsContinueText = "press space to continue"
-
-    def getControllButtonPos(self, multiplier):
-        return (self.resolution[0] * (self.controllPosition[0] + (multiplier* self.controllPositionOffset[0])),
-                self.resolution[1] * (self.controllPosition[1] + (multiplier * self.controllPositionOffset[1])))
-
-    def getTextPos(self, textName):
-        if textName == "instructionsHeader":
-            return self.instructionsHeaderPos[0] * self.resolution[0],self.instructionsHeaderPos[1] * self.resolution[1]
-        if textName == "instructionsBody":
-            return self.instructionsBodyPos[0] * self.resolution[0],self.instructionsBodyPos[1] * self.resolution[1]
-        if textName == "instructionsContinue":
-            return self.instructionsContinuePos[0] * self.resolution[0],self.instructionsContinuePos[1] * self.resolution[1]
-        if textName == "practiceHeader":
-            return self.practiceHeaderPos[0] * self.resolution[0],self.practiceHeaderPos[1] * self.resolution[1]
-        if textName == "practiceBody":
-            return self.practiceBodyPos[0] * self.resolution[0],self.practiceBodyPos[1] * self.resolution[1]
-
-    def getMoveTextPos(self, pos):
-        return pos[0] + (self.moveTextOffset[0]*self.resolution[0]), pos[1] + (self.moveTextOffset[1]*self.resolution[1])
-
-    def getControllBoxSize(self):
-        return self.resolution[0] * self.controllBoxSize[0], self.resolution[1] * self.controllBoxSize[1]
-
-    def getContinueText(self):
-        return self.instructionsContinueText
-
-    def getBodyText(self, index):
-        return self.instructionsBodyText[index]
-
-    def lenBodyText(self):
-        return len(self.instructionsBodyText)
+    def c(self, item: str):
+        return self.color.getVal(item)
 
 
 class UIComponents:
 
     font = 'Arial'
     win = None
-    colors = None
     resolution = (1920, 1080)
     colorSpace = 'rgb255'
 
-    def __init__(self, win, resolution, colors: Config):
+    def __init__(self, win, resolution):
         self.win = win
         self.resolution = resolution
-        self.colors = colors
 
-    def createText(self, name, text="default text", pos=(0, 0), color=[255, 255, 255], height=50):
+    def createText(self, name="default", text="default text", pos=(0, 0), color=[255, 255, 255], height=50):
         return visual.TextStim(win=self.win, name=name, text=text, font=self.font,
                                pos=pos, height=height, wrapWidth=None, ori=0, color=color,
                                colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+
+    def createBox(self, name="default", size=(10,10), pos=(0,0), lcolor = [255,255,255], fcolor=[100, 100, 100]):
+        return visual.Rect(win=self.win, name=name, size=size, ori=0,pos=pos,lineWidth=1,
+                           lineColor=lcolor, lineColorSpace='rgb255',
+                           fillColor=fcolor, fillColorSpace='rgb255', opacity=1, depth=0.0,
+                           interpolate=True, units='pix')

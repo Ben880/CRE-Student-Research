@@ -44,20 +44,18 @@ frameTolerance = 0.001  # how close to onset before 'same' frame
 # ============================= Config =====================================
 # ==========================================================================
 from Config import Config as Config
-cfg = Config()
+cfg = Config(configFile="cfg.json")
 cfg.load()
-diaDir = os.path.join(cfg.getVal("assetDir"), "Diagrams//ArrowsNumbered.png")
-
+pos = Config(configFile="positions.json")
+pos.load()
 colors = Config(configFile="colors.json")
 colors.load()
+diaDir = os.path.join(cfg.getVal("assetDir"), "Diagrams//ArrowsNumbered.png")
 from StateMachine import StateMachine as StateMachine
-from UISettings import StateMachineDraw as StateMachineDraw
 from UISettings import GUIDraw as GUIDraw
-from UISettings import UIComponents as UIComponents
+
 sm = StateMachine()
-smd = StateMachineDraw()
-guid = GUIDraw()
-smd.setResolution(cfg.getVal("winRes"))
+guid = GUIDraw(pos, colors, cfg)
 # ==========================================================================
 # ============================= Window =====================================
 # ==========================================================================
@@ -76,71 +74,48 @@ defaultKeyboard = keyboard.Keyboard()
 # ==========================================================================
 # =============================== Config 2 =================================
 # ==========================================================================
-comp = UIComponents(win, cfg.getVal("winRes"), colors)
+from UISettings import UIComponents as UIComponents
+comp = UIComponents(win, cfg.getVal("winRes"))
 # ==========================================================================
 # =========================== Instruction Objs =============================
 # ==========================================================================
-
 InstructionsClock = core.Clock()
-iheader = comp.createText('iheader', text='Instructions', pos=guid.getTextPos("instructionsHeader"), height=100, color=colors.getVal("i_text"))
-ibody = comp.createText('ibody', text=guid.instructionsBodyText[0], pos=guid.getTextPos("instructionsBody"), color=colors.getVal("i_text"))
-icontinue = comp.createText('icontinue', text=guid.instructionsContinueText, pos=guid.getTextPos("instructionsContinue"), color=colors.getVal("i_text"))
+header = comp.createText(name='header', text='Instructions', pos=guid.cfgTRes("i_header_pos"), height=100, color=colors.getVal("i_text"))
+body = comp.createText(name='body', text=guid.instructionsText[0], pos=guid.cfgTRes("i_body_pos"), color=colors.getVal("i_text"))
+continueText = comp.createText(name='continueText', text=guid.continueText, pos=guid.cfgTRes("i_continue_pos"), color=colors.getVal("i_text"))
 # ==========================================================================
 # ============================== Practice Objs =============================
 # ==========================================================================
 PracticeClock = core.Clock()
-pnumBoxes = 6
-pboxes = []
+numBoxes = 6
+boxes = []
 pBoxText = []
-for i in range(pnumBoxes):
-    pboxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size= smd.getBoxSize(), ori=0, pos=smd.getBoxPos(i),
-                              lineWidth=1, lineColor=smd.boxLineColor, lineColorSpace='rgb255', fillColor=smd.boxColor,
-                              fillColorSpace='rgb255',opacity=1, depth=0.0, interpolate=True, units='pix'))
-    pBoxText.append(visual.TextStim(win=win, name='pBoxText', text=guid.stateMoves[i], font='Arial',
-                                    pos=guid.getMoveTextPos(smd.getBoxPos(i)),
-                                    height=25, wrapWidth=None, ori=0, color=guid.controllTextColor,
-                                    colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix'))
+for i in range(numBoxes):
+    boxes.append(visual.Rect(win=win, name=('pbox' + str(i)), size=guid.cfgTRes("box_size"), ori=0, pos=guid.getBoxPos(i),
+                             lineWidth=1, lineColor=guid.c("box_line"), lineColorSpace='rgb255', fillColor=guid.c("box"),
+                             fillColorSpace='rgb255', opacity=1, depth=0.0, interpolate=True, units='pix'))
+    pBoxText.append(comp.createText(name='pBoxText', text=guid.stateMoves[i], pos=guid.getMovePos(guid.getBoxPos(i)),
+                                    color=guid.c("control_text"), height=25))
 
-pUBox = visual.Rect(win=win, name='pubox', size= guid.getControllBoxSize(), ori=0, pos=guid.getControllButtonPos(-1),
-                              lineWidth=1, lineColor=guid.controllBoxLineColor, lineColorSpace='rgb255',
-                              fillColor=guid.controllBoxColor,fillColorSpace='rgb255',opacity=1, depth=0.0,
-                              interpolate=True, units='pix')
-pIBox = visual.Rect(win=win, name='iubox', size= guid.getControllBoxSize(), ori=0, pos=guid.getControllButtonPos(1),
-                              lineWidth=1, lineColor=guid.controllBoxLineColor, lineColorSpace='rgb255',
-                              fillColor=guid.controllBoxColor,fillColorSpace='rgb255',opacity=1, depth=0.0,
-                              interpolate=True, units='pix')
-pUtext = visual.TextStim(win=win, name='putext', text='U', font='Arial',
-                          pos=guid.getControllButtonPos(-1), height=50, wrapWidth=None, ori=0, color=guid.controllTextColor,
-                          colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
-pItext = visual.TextStim(win=win, name='pitext', text='I', font='Arial',
-                          pos=guid.getControllButtonPos(1), height=50, wrapWidth=None, ori=0, color=guid.controllTextColor,
-                          colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
+uBox = comp.createBox(name='ubox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(-1),
+                      lcolor=guid.c("control_line"), fcolor=guid.c("control_box"))
+iBox = comp.createBox(name='ibox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(1),
+                      lcolor=guid.c("control_line"), fcolor=guid.c("control_box"))
 
 
-pheader = visual.TextStim(win=win, name='pheader', text='Practice', font='Arial',
-                          pos=guid.getTextPos("practiceHeader"), height=100, wrapWidth=None, ori=0, color=guid.generalTextColor,
-                          colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
-pbody = visual.TextStim(win=win, name='pbody', text="body text", font='Arial',
-                        pos=guid.getTextPos("practiceBody"), height=50, wrapWidth=None, ori=0, color=guid.generalTextColor,
+uText = visual.TextStim(win=win, name='utext', text='U', font='Arial',
+                        pos=guid.getControlPos(-1), height=50, wrapWidth=None, ori=0, color=guid.c("control_text"),
                         colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
-pdiagram = visual.ImageStim(win=win,name='pdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(1136, 536),
-                            color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
-                            interpolate=True, depth=-7.0, units='pix')
+iText = visual.TextStim(win=win, name='itext', text='I', font='Arial',
+                        pos=guid.getControlPos(1), height=50, wrapWidth=None, ori=0, color=guid.c("control_text"),
+                        colorSpace='rgb255', opacity=1, languageStyle='LTR', depth=0.0, units='pix')
 # ==========================================================================
 # ================================ Trial Objs ==============================
 # ==========================================================================
 TrialClock = core.Clock()
 tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
 tsound.setVolume(1)
-tdiagram = visual.ImageStim(win=win,name='tdiagram', image=diaDir, mask=None,ori=0, pos=(0, 0), size=(0.5, 0.5),
-                            color=[1,1,1], colorSpace='rgb', opacity=1, flipHoriz=False, flipVert=False, texRes=128,
-                            interpolate=True, depth=-7.0)
-tnumBoxes = 6
-tboxes = []
-for i in range(tnumBoxes):
-    tboxes.append(visual.Rect(win=win, name=('box' + str(i)), width=(0.5, 0.5)[0], height=(0.5, 0.5)[1], ori=0, pos=(0, 0),
-                              lineWidth=1, lineColor=smd.boxLineColor, lineColorSpace='rgb255', fillColor=smd.boxColor,
-                              fillColorSpace='rgb255', opacity=1, depth=0.0, interpolate=True))
+
 # ==========================================================================
 # ================================ Exit Objs ===============================
 # ==========================================================================
@@ -161,16 +136,16 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 # ==========================================================================
 # ===================== Prepare Instructions ===============================
 # ==========================================================================
-iheader.setAutoDraw(False)
-ibody.setAutoDraw(False)
-icontinue.setAutoDraw(False)
+header.setAutoDraw(False)
+body.setAutoDraw(False)
+continueText.setAutoDraw(False)
 
 instructionsIndex = 0
 spacePressed = False
 
 continueRoutine = True
 # keep track of which components have finished
-InstructionsComponents = [ibody, icontinue, iheader]
+InstructionsComponents = [body, continueText, header]
 for thisComponent in InstructionsComponents:
     thisComponent.tStart = None
     thisComponent.tStop = None
@@ -193,19 +168,19 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # ------------------draw----------------------
-    iheader.draw()
-    ibody.draw()
-    icontinue.draw()
+    header.draw()
+    body.draw()
+    continueText.draw()
     # -------------- key checks ------------------
     spaceIsDown = defaultKeyboard.getKeys(keyList=["space"])
     # check if space bar was released
     if not spaceIsDown and spacePressed:
         spacePressed = False
         instructionsIndex += 1
-        if instructionsIndex >= guid.lenBodyText():
+        if instructionsIndex >= len(guid.instructionsText):
             continueRoutine = False
         else:
-            ibody.setText(guid.getBodyText(instructionsIndex))
+            body.setText(guid.instructionsText[instructionsIndex])
     # check if space is down
     spacePressed = spaceIsDown
     # ================== Wrap Up =================================
@@ -261,12 +236,12 @@ for thisPractice in practices:
     # ==========================================================================
     uPressed = False
     iPressed = False
-    pItext.setAutoDraw(False)
-    pUtext.setAutoDraw(False)
-    pIBox.setAutoDraw(False)
-    pUBox.setAutoDraw(False)
-    pheader.setAutoDraw(False)
-    pbody.setAutoDraw(False)
+    iText.setAutoDraw(False)
+    uText.setAutoDraw(False)
+    iBox.setAutoDraw(False)
+    uBox.setAutoDraw(False)
+    header.setAutoDraw(False)
+    body.setAutoDraw(False)
     for t in pBoxText:
         t.setAutoDraw(False)
 
@@ -276,7 +251,7 @@ for thisPractice in practices:
     # setup some python lists for storing info about the pmouse
     gotValidClick = False  # until a click is received
     # keep track of which components have finished
-    PracticeComponents = [pboxes[0], pboxes[1], pboxes[2], pboxes[3], pboxes[4], pboxes[5], pdiagram]
+    PracticeComponents = [boxes[0], boxes[1], boxes[2], boxes[3], boxes[4], boxes[5]]
     for thisComponent in PracticeComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -291,7 +266,13 @@ for thisPractice in practices:
     frameN = -1
 
     smState = sm.getCurrentState()
-    pboxes[smState].setFillColor((smd.boxSelectedColor), colorSpace='rgb255')
+    boxes[smState].setFillColor((guid.c("box_selected")))
+
+    header.setText('Practice')
+    body.setText("press u or i to move")
+    header.setColor(guid.c("general_text"))
+    body.setColor(guid.c("general_text"))
+
     # ==========================================================================
     # ===================== Run Practice =======================================
     # ==========================================================================
@@ -303,13 +284,13 @@ for thisPractice in practices:
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
 
         # -------draw-----
-        pUBox.draw()
-        pIBox.draw()
-        pItext.draw()
-        pUtext.draw()
-        pbody.draw()
-        pheader.draw()
-        for box in pboxes:
+        uBox.draw()
+        iBox.draw()
+        iText.draw()
+        uText.draw()
+        body.draw()
+        header.draw()
+        for box in boxes:
             box.draw()
         for t in pBoxText:
             t.draw()
@@ -318,18 +299,18 @@ for thisPractice in practices:
         iIsDown = defaultKeyboard.getKeys(keyList=["i"])
         # check U was released
         if not uIsDown and uPressed:
-            pboxes[sm.getCurrentState()].setFillColor(smd.boxColor, colorSpace='rgb255')
+            boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
             uPressed = False
             sm.moveCircle()
-            pboxes[sm.getCurrentState()].setFillColor(smd.boxSelectedColor, colorSpace='rgb255')
-            pbody.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
+            boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+            body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
         # check I was released
         if not iIsDown and iPressed:
             iPressed = False
-            pboxes[sm.getCurrentState()].setFillColor(smd.boxColor, colorSpace='rgb255')
+            boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
             sm.moveAcross()
-            pboxes[sm.getCurrentState()].setFillColor(smd.boxSelectedColor, colorSpace='rgb255')
-            pbody.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
+            boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+            body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
         uPressed = uIsDown
         iPressed = iIsDown
 
@@ -391,8 +372,7 @@ for thisTrial in trials:
     # update component parameters for each repeat
     tsound.setSound('A', hamming=True)
     tsound.setVolume(1, log=False)
-    tdiagram.setImage('None')
-    TrialComponents = [tsound, tdiagram, tboxes[0], tboxes[1], tboxes[2], tboxes[3], tboxes[4], tboxes[5]]
+    TrialComponents = [tsound, boxes[0], boxes[1], boxes[2], boxes[3], boxes[4], boxes[5]]
     for thisComponent in TrialComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None

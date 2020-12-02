@@ -5,5 +5,10 @@
     "winRes": [
         1920,
         1080
-    ]
+    ],
+    "state_moves": ["++/+", "-/--", "-/--", "+/-", "+/-", "-/--"],
+    "instructions_text": ["intruction set 1",
+        "intruction set 2",
+        "intruction set 3"],
+    "continue_text": "press space to continue"
 }

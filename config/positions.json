@@ -1,5 +1,19 @@
 {
-  "winRes": [1920, 1080],
-  "assetDir": "D://Dev//Python//CRE Student Research//Assets",
-  "devMode": 0
+    "box_pos": [[0.1, 0.2],
+                 [-0.1, 0.2],
+                 [-0.3, 0],
+                 [-0.1, -0.2],
+                 [0.1, -0.2],
+                 [0.3, 0]],
+    "box_size": [0.09, 0.09],
+    "control_pos": [0, -0.4],
+    "control_offset": [0.05, 0],
+    "control_size": [0.05, 0.05],
+    "move_offset": [0, -0.06],
+    "debug_pos": [-0.4, -0.4],
+    "p_header_pos": [0, 0.4],
+    "p_body_pos": [0, 0],
+    "i_header_pos": [0, 0.4],
+    "i_body_pos": [0, 0],
+    "i_continue_pos": [0, -0.4]
 }

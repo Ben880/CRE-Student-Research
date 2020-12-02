@@ -6,6 +6,7 @@
   "background": [150, 150, 150],
   "control_box": [230, 150, 5],
   "control_text": [0, 0, 0],
+  "control_line": [0, 0, 0],
   "general_text": [125, 200, 230],
   "move_text": [180, 180, 180],
   "debug_text": [255, 0, 0],
