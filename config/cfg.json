@@ -10,5 +10,10 @@
     "instructions_text": ["Welcome to the first part of the training!",
         "You will see 6 rectangles on the screen. You can move back and forth between any of the rectangles by pressing the 'U' or 'I' keys.",
         "One key goes through the middle, the other around the circle. You will have some time to try this out. Familiarize yourself with which key you have to press in order to get away from other rectangles."],
-    "continue_text": "press space to continue"
+    "continue_text": "press space to continue",
+    "practice_text": ["press U or I to move",
+        "good, now press U to move",
+        "good, now press I to move",
+        "err: timer not displayed"],
+    "practice_time": 10
 }

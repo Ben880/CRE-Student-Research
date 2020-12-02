@@ -226,6 +226,14 @@ for thisPractice in practices:
     # ==========================================================================
     uPressed = False
     iPressed = False
+    # phase variables
+    practicePhase = 0
+    pressUPhase = 1
+    pressIPhase = 2
+    timedPhase = 3
+    buttonPresses = [0, 0]
+    phaseTimer = core.CountdownTimer(cfg.getVal("practice_time"))
+    # end phase variables
     continueRoutine = True
     # update component parameters for each repeat
     # setup some python lists for storing info about the pmouse
@@ -240,7 +248,7 @@ for thisPractice in practices:
     boxes[smState].setFillColor((guid.c("box_selected")))
     # set up text
     header.setText('Practice')
-    body.setText("press u or i to move")
+    body.setText(cfg.getVal("practice_text")[0])
     header.setColor(guid.c("general_text"))
     body.setColor(guid.c("general_text"))
     # ==========================================================================
@@ -252,6 +260,22 @@ for thisPractice in practices:
         tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+        # ------------- phase check ------------
+        if practicePhase == 0 and buttonPresses[0] >0:
+            practicePhase = pressIPhase
+        if practicePhase == 0 and buttonPresses[1] > 0:
+            practicePhase = pressUPhase
+        if practicePhase > 0 and practicePhase <= pressIPhase and buttonPresses[0] > 0 and buttonPresses[1] > 0:
+            practicePhase = timedPhase
+            phaseTimer.reset()
+        if practicePhase == timedPhase:
+            if phaseTimer.getTime() <= 0:
+                continueRoutine = False
+        # --------------body text --------------------
+        if practicePhase == timedPhase:
+            body.setText(f"move around for {round(phaseTimer.getTime()*10)/10}s\nyou scored: {sm.lastScore}")
+        else:
+            body.setText(cfg.getVal("practice_text")[practicePhase])
         # ----------------draw------------------
         uBox.draw()
         iBox.draw()
@@ -273,6 +297,7 @@ for thisPractice in practices:
             sm.moveCircle()
             boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
             body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
+            buttonPresses[0] +=1
         # check I was released
         if not iIsDown and iPressed:
             iPressed = False
@@ -280,6 +305,7 @@ for thisPractice in practices:
             sm.moveAcross()
             boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
             body.setText(f"last score: {sm.lastScore}\ntotal score: {sm.totalScore}")
+            buttonPresses[1] += 1
         uPressed = uIsDown
         iPressed = iIsDown
 
