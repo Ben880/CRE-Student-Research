@@ -11,6 +11,7 @@ class Practice:
     twoMovesArr = None
     oneMovesArr = None
     displayLast = None
+    displayTotal = None
     phase = {
         "start": 0,
         "pressU": 1,
@@ -25,23 +26,35 @@ class Practice:
         "practice2": 10,
         "memoryI": 11,
         "memory": 12,
-        "grab2moves": 13,
-        "time": 14,
-        "complete": 15
+        "grab": 13,
+        "grab2movesI": 14,
+        "grab2moves": 15,
+        "timeI": 16,
+        "time": 17,
+        "complete": 18
     }
     movesPos = 0
     # count number of presses of [U,I]
     buttonPresses = [0, 0]
     targetPresses = 0
+    targetPresses2 = 0
+    pointRequirement = 0
+    successful2moves = 0
+    successfulTime = 0
 
     def __init__(self, cfg: Config, timer):
         self.cfg = cfg
-        self.targetPresses = cfg.getVal("practice_key_requierment")
+        self.targetPresses = cfg.getVal("practice_key_requirement")
         self.timer = timer
         self.practiceText = cfg.getVal("practice_text")
-        self.twoMovesArr = cfg.getVal("practice-target-2m")
-        self.oneMovesArr = cfg.getVal("practice-target-1m")
-        self.displayLast = cfg.getVal("practic-display-last")
+        self.twoMovesArr = cfg.getVal("practice_target_2m")
+        self.oneMovesArr = cfg.getVal("practice_target_1m")
+        self.displayLast = cfg.getVal("practice_display_last")
+        self.targetPresses2 = cfg.getVal("practice_key_requirement2")
+        self.pointRequirement = cfg.getVal("points_requirement")
+        self.successful2moves = cfg.getVal("successful_2moves")
+        self.successfulTime = cfg.getVal("successful_timed")
+        self.displayTotal = cfg.getVal("practice_display_total")
 
     def update(self, uKey: KeyTracker, iKey: KeyTracker, spaceKey: KeyTracker, sm: StateMachine):
         # update phases
@@ -82,11 +95,21 @@ class Practice:
             else:
                 self.resetSM(sm)
         if self.isPhase("practice2") and spaceKey.getKeyUp():
-            newPhase = phases["pointGrab"]
-        # phase changing
+            newPhase = phases["memoryI"]
+        if self.isPhase("memoryI") and spaceKey.getKeyUp():
+            newPhase = phases["memory"]
+            self.buttonPresses = [0,0]
+        if self.isPhase("memory") and (self.buttonPresses[0] + self.buttonPresses[1]) >= self.targetPresses2:
+            newPhase = phases["grab"]
+            sm.reset()
+        if self.isPhase("grab") and sm.totalScore >= self.pointRequirement:
+            newPhase = phases["grab2movesI"]
+        if self.isPhase("grab2movesI") and spaceKey.getKeyUp():
+            newPhase = phases["grab2moves"]
+        # ======================phase changing==================================
         phaseChanged = not self.currentPhase == newPhase
         self.currentPhase = newPhase
-        # conditional update checks
+        # ===================conditional update checks==========================
         if self.isPhases(["2moves", "1moves"]):
             if phaseChanged:
                 self.movesPos = 0
@@ -136,7 +159,9 @@ class Practice:
             text = text + self.cfg.getVal("practice_text")[self.currentPhase] + f"\n(moves left: {sm.movesLeft})"
         else:
             text = text +self.cfg.getVal("practice_text")[self.currentPhase]
-        if self.displayLast[self.currentPhase]:
+        if self.currentPhase in self.displayLast:
             text = text + f"\nyou scored: {sm.lastScore}"
+        if self.currentPhase in self.displayTotal:
+            text = text + f"\nyou scored: {sm.totalScore}"
         return text
 
