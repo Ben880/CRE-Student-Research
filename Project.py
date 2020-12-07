@@ -68,12 +68,17 @@ if expInfo['frameRate'] != None:
     frameDur = 1.0 / round(expInfo['frameRate'])
 else:
     frameDur = 1.0 / 60.0  # could not measure, so guess
-
-# create a default keyboard (e.g. to check for escape)
-defaultKeyboard = keyboard.Keyboard()
 # ==========================================================================
 # =============================== Config 2 =================================
 # ==========================================================================
+# create a default keyboard (e.g. to check for escape)
+defaultKeyboard = keyboard.Keyboard()
+
+from KeyTracker import KeyTracker as KeyTracker
+spaceKey = KeyTracker("space", defaultKeyboard)
+uKey = KeyTracker("u", defaultKeyboard)
+iKey = KeyTracker("i", defaultKeyboard)
+
 from UISettings import UIComponents as UIComponents
 comp = UIComponents(win, cfg.getVal("winRes"))
 # ==========================================================================
@@ -141,10 +146,13 @@ econfirm = keyboard.Keyboard()
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
 # ==========================================================================
+# ===========================Key tracking===================================
+# ==========================================================================
+
+# ==========================================================================
 # ===================== Prepare Instructions ===============================
 # ==========================================================================
 instructionsIndex = 0
-spacePressed = False
 continueRoutine = True
 # keep track of which components have finished
 InstructionsComponents = [body, continueText, header]
@@ -167,17 +175,13 @@ while continueRoutine:
     body.draw()
     continueText.draw()
     # -------------- key checks ------------------
-    spaceIsDown = defaultKeyboard.getKeys(keyList=["space"])
-    # check if space bar was released
-    if not spaceIsDown and spacePressed:
-        spacePressed = False
+    spaceKey.update()
+    if spaceKey.getKeyUp():
         instructionsIndex += 1
         if instructionsIndex >= len(guid.instructionsText):
             continueRoutine = False
         else:
             body.setText(guid.instructionsText[instructionsIndex])
-    # check if space is down
-    spacePressed = spaceIsDown
     # -------------- Wrap Up -------------------------
     waitOnFlip = False
     # check for quit (typically the Esc key)
@@ -202,16 +206,12 @@ thisExp.addData('Iphase end', globalClock.getTime())
 thisExp.nextEntry()
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
-# set up handler to look after randomisation of conditions etc
-
 # ==========================================================================
 # ===================== Prepare Practice ===================================
 # ==========================================================================
 from Phases import Practice as PracticeHandler
 phaseTimer = core.CountdownTimer(cfg.getVal("practice_time"))
 practiceHandler = PracticeHandler(cfg, phaseTimer)
-uPressed = False
-iPressed = False
 # phase variables
 practicePhase = 0
 pressUPhase = 1
@@ -287,28 +287,24 @@ while continueRoutine:
     if practicePhase == completePhase:
         continueText.draw()
     # =================== key checks ===================
-    if practicePhase == completePhase and defaultKeyboard.getKeys(keyList=["space"]):
+    uKey.update()
+    iKey.update()
+    spaceKey.update()
+    if practicePhase == completePhase and spaceKey.getKeyUp():
         continueRoutine = False
-    uIsDown = defaultKeyboard.getKeys(keyList=["u"])
-    iIsDown = defaultKeyboard.getKeys(keyList=["i"])
     # check U was released
-    if not uIsDown and uPressed:
+    if uKey.getKeyUp():
         boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
-        uPressed = False
         sm.moveCircle()
         boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
         buttonPresses[0] +=1
     # check I was released
-    if not iIsDown and iPressed:
-        iPressed = False
+    if iKey.getKeyUp():
         boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
         sm.moveAcross()
         boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
         buttonPresses[1] += 1
-    uPressed = uIsDown
-    iPressed = iIsDown
-
-    # check for quit (typically the Esc key)
+    # check for quit
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
 

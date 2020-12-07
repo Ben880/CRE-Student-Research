@@ -20,3 +20,12 @@ class KeyTracker:
 
     def getKeyState(self):
         return self.defaultKeyboard.getKeys(keyList=[self.keyCode])
+
+    def getKeyDown(self):
+        return self.keyDown
+
+    def getKeyPressed(self):
+        return self.keyPressed
+
+    def getKeyUp(self):
+        return self.keyUp
