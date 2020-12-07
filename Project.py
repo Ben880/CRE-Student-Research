@@ -146,10 +146,6 @@ econfirm = keyboard.Keyboard()
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
 # ==========================================================================
-# ===========================Key tracking===================================
-# ==========================================================================
-
-# ==========================================================================
 # ===================== Prepare Instructions ===============================
 # ==========================================================================
 instructionsIndex = 0
@@ -212,22 +208,8 @@ routineTimer.reset()
 from Phases import Practice as PracticeHandler
 phaseTimer = core.CountdownTimer(cfg.getVal("practice_time"))
 practiceHandler = PracticeHandler(cfg, phaseTimer)
-# phase variables
-practicePhase = 0
-pressUPhase = 1
-pressIPhase = 2
-timedPhase = 3
-rememberUIPhase = 4
-rememberUPhase = 5
-rememberIPhase = 6
-completePhase = 7
-buttonPresses = [0, 0]
-
 # end phase variables
 continueRoutine = True
-# update component parameters for each repeat
-# setup some python lists for storing info about the pmouse
-gotValidClick = False  # until a click is received
 # reset timers
 t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
@@ -250,30 +232,23 @@ while continueRoutine:
     tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-    # ------------- phase check ------------
-    if practicePhase == 0 and buttonPresses[0] > 0:
-        practicePhase = pressIPhase
-    if practicePhase == 0 and buttonPresses[1] > 0:
-        practicePhase = pressUPhase
-    if practicePhase > 0 and practicePhase <= pressIPhase and buttonPresses[0] > 0 and buttonPresses[1] > 0:
-        practicePhase = timedPhase
-        phaseTimer.reset()
-    if practicePhase == timedPhase and phaseTimer.getTime() <= 0 or (practicePhase >= rememberUIPhase and practicePhase<= rememberIPhase):
-        if buttonPresses[0] < cfg.getVal("practice_key_requierment") and buttonPresses[1] < cfg.getVal("practice_key_requierment"):
-            practicePhase = rememberUIPhase
-        elif buttonPresses[0] < cfg.getVal("practice_key_requierment"):
-            practicePhase = rememberUPhase
-        elif buttonPresses[1] < cfg.getVal("practice_key_requierment"):
-            practicePhase = rememberIPhase
-        else:
-            practicePhase= completePhase
-
-    # --------------phase text --------------------
-    if practicePhase == timedPhase:
-        body.setText(f"move around for {round(phaseTimer.getTime()*10)/10}s\nyou scored: {sm.lastScore}")
-    else:
-        body.setText(cfg.getVal("practice_text")[practicePhase]+ f"\nyou scored: {sm.lastScore}")
-    # ----------------draw------------------
+    # --------------updates--------------------
+    uKey.update()
+    iKey.update()
+    spaceKey.update()
+    practiceHandler.update(uKey, iKey, spaceKey, sm)
+    body.setText(practiceHandler.getPhaseText(sm))
+    if uKey.getKeyUp():
+        sm.moveCircle()
+    if iKey.getKeyUp():
+        sm.moveAcross()
+    # -------------prepare draw -----------------
+    for box in boxes:
+        box.setFillColor(guid.c("box"))
+    boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+    if practiceHandler.isPhases(["1moves", "2moves"]):
+        boxes[sm.practiceTargetState].setFillColor(guid.c("box_target"))
+    # ----------------draw-----------------------
     uBox.draw()
     iBox.draw()
     iText.draw()
@@ -284,39 +259,19 @@ while continueRoutine:
         box.draw()
     for t in pBoxText:
         t.draw()
-    if practicePhase == completePhase:
+    if practiceHandler.currentPhase == 14:
         continueText.draw()
     # =================== key checks ===================
-    uKey.update()
-    iKey.update()
-    spaceKey.update()
-    if practicePhase == completePhase and spaceKey.getKeyUp():
+    if practiceHandler.currentPhase == 14 and spaceKey.getKeyUp():
         continueRoutine = False
-    # check U was released
-    if uKey.getKeyUp():
-        boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
-        sm.moveCircle()
-        boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
-        buttonPresses[0] +=1
-    # check I was released
-    if iKey.getKeyUp():
-        boxes[sm.getCurrentState()].setFillColor(guid.c("box"))
-        sm.moveAcross()
-        boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
-        buttonPresses[1] += 1
-    # check for quit
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
-
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         break
-
-
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
-
 # ==========================================================================
 # ========================== End Practice ==================================
 # ==========================================================================

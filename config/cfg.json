@@ -25,10 +25,14 @@
         "Get to the red target in 1 moves",
         "Welcome to the second part of the training\npress space to continue",
         "Your goal now is to memorize how many points every move delivers\npress space to continue",
+        "memorize how many points every move delivers",
         "Now try to get as many points as possible",
         "Now we will only show you tour score after you complete your entire turn of 2 moves",
         "Let's try a few exercises under time pressure!\nFrom now on you only have 9 seconds to think about it.\nYou then have about 2.5 seconds to enter the moves.\nThe thinking time can be interrupted by entering the first move.\nDo not enter the turn order until you have the entire sequence of moves planned out.",
         "you have completed the practice!"],
     "practice_time": 10,
-    "practice_key_requierment": 10
+    "practice_key_requierment": 10,
+    "practice-target-2m": [[0,2], [0,4], [3,4], [2,2], [4,3]],
+    "practice-target-1m": [[1,4], [5,2]],
+    "practic-display-last": [0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0]
 }

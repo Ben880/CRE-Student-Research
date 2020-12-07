@@ -4,9 +4,11 @@ import random
 class StateMachine:
     # dynamic
     currentState = 0
-    targetState = 0
+    newState = 0
+    practiceTargetState = 0
     lastScore = 0
     totalScore = 0
+    movesLeft = 0
     # static
     states = 6
     negativeScores= (-70, -100, -140)
@@ -19,15 +21,17 @@ class StateMachine:
 
     # move type is 0
     def moveCircle(self):
-        self.targetState = self.stateMachineDeffinition[self.currentState][0][0]
+        self.newState = self.stateMachineDeffinition[self.currentState][0][0]
         self.scoreMove(0)
-        self.currentState = int(self.targetState)
+        self.currentState = int(self.newState)
+        self.movesLeft -= 1
 
     # move type is 1
     def moveAcross(self):
-        self.targetState = self.stateMachineDeffinition[self.currentState][1][0]
+        self.newState = self.stateMachineDeffinition[self.currentState][1][0]
         self.scoreMove(1)
-        self.currentState = int(self.targetState)
+        self.currentState = int(self.newState)
+        self.movesLeft -= 1
 
     def scoreMove(self, moveType):
         if self.stateMachineDeffinition[self.currentState][moveType][1] == 0:
@@ -37,10 +41,12 @@ class StateMachine:
         self.totalScore += self.lastScore
 
     def reset(self):
-        self.currentState = 0
-        self.targetState =0
+        self.currentState = random.randrange(0,6)
+        self.newState = 0
         self.lastScore = 0
         self.totalScore = 0
+        self.movesLeft = 2
+        self.practiceTargetState = 0
 
     def getCurrentState(self):
         return self.currentState
@@ -50,3 +56,6 @@ class StateMachine:
 
     def getLastScore(self):
         return self.lastScore
+
+    def inCorrectState(self):
+        return self.currentState == self.practiceTargetState
