@@ -1,7 +1,15 @@
 {
     "assetDir": "D://Dev//Python//CRE Student Research//Assets",
     "devMode": 0,
-    "tval": "D://Dev//Python//CRE Student Research//Assets",
+    "music": [
+        ["None", "SoundStim//None"],
+        ["Relax", "SoundStim//Relax"],
+        ["Stress", "SoundStim//Stress"]
+    ],
+    "trainingMoves": [1, 4],
+    "trainingTrials": 40,
+    "trainingRequirementSize": 10,
+    "trainingRequirementCorrect": 9,
     "winRes": [
         1920,
         1080

@@ -127,6 +127,7 @@ iText.setAutoDraw(False)
 # ==========================================================================
 TrialClock = core.Clock()
 tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
+tbeep = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
 tsound.setVolume(1)
 # ==========================================================================
 # ================================ Exit Objs ===============================
