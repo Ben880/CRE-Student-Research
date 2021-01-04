@@ -1,4 +1,5 @@
 {
+    "projectName": "Pruning Strategies",
     "assetDir": "D://Dev//Python//CRE Student Research//Assets",
     "devMode": 0,
     "music": [
@@ -6,6 +7,7 @@
         ["Relax", "SoundStim//Relax"],
         ["Stress", "SoundStim//Stress"]
     ],
+    "beep": "SoundStim//beep-08b.mp3",
     "trainingMoves": [1, 4],
     "trainingTrials": 40,
     "trainingRequirementSize": 10,

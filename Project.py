@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-## https://run.pavlovia.org/fdelogu/covid_game/html/?fbclid=IwAR0NzZPE0JAG2ROZsL8yE1dIFH2Glm7-sMfZWgmVRpgUdDxirExBeZQ-Y_c
+# https://run.pavlovia.org/fdelogu/covid_game/html/?fbclid=IwAR0NzZPE0JAG2ROZsL8yE1dIFH2Glm7-sMfZWgmVRpgUdDxirExBeZQ-Y_c
 # ==========================================================================
 # ============================= Imports ====================================
 # ==========================================================================
@@ -9,39 +9,8 @@ from psychopy import sound, gui, visual, core, data, event, logging
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 import os  # handy system and path functions
 from psychopy.hardware import keyboard
-# Ensure that relative paths start from the same directory as this script
-_thisDir = os.path.dirname(os.path.abspath(__file__))
-os.chdir(_thisDir)
-# Store info about the experiment session
-psychopyVersion = '2020.2.5'
-expName = 'Project'  # from the Builder filename that created this script
-expInfo = {'participant': '', 'session': '001'}
-dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
-if dlg.OK == False:
-    core.quit()  # user pressed cancel
-expInfo['date'] = data.getDateStr()  # add a simple timestamp
-expInfo['expName'] = expName
-expInfo['psychopyVersion'] = psychopyVersion
 # ==========================================================================
-# ============================= Data =======================================
-# ==========================================================================
-# Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
-
-# An ExperimentHandler isn't essential but helps with data saving
-thisExp = data.ExperimentHandler(name=expName, version='',
-    extraInfo=expInfo, runtimeInfo=None,
-    originPath='D:\\Dev\\Python\\CRE Student Research\\Python\\Editor\\Project.py',
-    savePickle=True, saveWideText=True,
-    dataFileName=filename)
-# save a log file for detail verbose info
-logFile = logging.LogFile(filename+'.log', level=logging.EXP)
-logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
-
-endExpNow = False  # flag for 'escape' or other condition => quit the exp
-frameTolerance = 0.001  # how close to onset before 'same' frame
-# ==========================================================================
-# ============================= Config =====================================
+# ============================= Config File ================================
 # ==========================================================================
 from Config import Config as Config
 cfg = Config(configFile="cfg.json")
@@ -56,6 +25,38 @@ from UISettings import GUIDraw as GUIDraw
 
 sm = StateMachine()
 guid = GUIDraw(pos, colors, cfg)
+# ==========================================================================
+# ==========================Project Config =================================
+# ==========================================================================
+# Ensure that relative paths start from the same directory as this script
+_thisDir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(_thisDir)
+# Store info about the experiment session
+psychopyVersion = '2020.2.5'
+expName = cfg.getVal("projectName")
+expInfo = {'participant': '', 'session': '001'}
+dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
+if dlg.OK == False:
+    core.quit()  # user pressed cancel
+expInfo['date'] = data.getDateStr()  # add a simple timestamp
+expInfo['expName'] = expName
+expInfo['psychopyVersion'] = psychopyVersion
+# ==========================================================================
+# ============================= Data =======================================
+# ==========================================================================
+# Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
+filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
+# An ExperimentHandler isn't essential but helps with data saving
+thisExp = data.ExperimentHandler(name=expName, version='',
+    extraInfo=expInfo, runtimeInfo=None,
+    originPath='D:\\Dev\\Python\\CRE Student Research\\Python\\Editor\\Project.py',
+    savePickle=True, saveWideText=True,
+    dataFileName=filename)
+# save a log file for detail verbose info
+logFile = logging.LogFile(filename+'.log', level=logging.EXP)
+logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
+endExpNow = False  # flag for 'escape' or other condition => quit the exp
+frameTolerance = 0.001  # how close to onset before 'same' frame
 # ==========================================================================
 # ============================= Window =====================================
 # ==========================================================================
@@ -127,8 +128,9 @@ iText.setAutoDraw(False)
 # ==========================================================================
 TrialClock = core.Clock()
 tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
-tbeep = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
+tbeep = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tbeep')
 tsound.setVolume(1)
+tbeep.setVolume(1)
 # ==========================================================================
 # ================================ Exit Objs ===============================
 # ==========================================================================
