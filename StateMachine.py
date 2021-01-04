@@ -1,5 +1,5 @@
 import random
-
+from psychopy import logging
 
 class StateMachine:
     # dynamic
@@ -19,19 +19,19 @@ class StateMachine:
                                [(5, -20), (0, 0)],
                                [(0, -20), (2, 20)]]
 
-    # move type is 0
     def moveCircle(self):
         self.newState = self.stateMachineDeffinition[self.currentState][0][0]
         self.scoreMove(0)
         self.currentState = int(self.newState)
         self.movesLeft -= 1
+        logging.exp(f"SM New State:{self.currentState}, Last Score:{self.lastScore}, Total Score:{self.totalScore}")
 
-    # move type is 1
     def moveAcross(self):
         self.newState = self.stateMachineDeffinition[self.currentState][1][0]
         self.scoreMove(1)
         self.currentState = int(self.newState)
         self.movesLeft -= 1
+        logging.exp(f"SM New State:{self.currentState}, Last Score:{self.lastScore}, Total Score:{self.totalScore}")
 
     def scoreMove(self, moveType):
         if self.stateMachineDeffinition[self.currentState][moveType][1] == 0:
@@ -40,13 +40,14 @@ class StateMachine:
             self.lastScore = self.stateMachineDeffinition[self.currentState][moveType][1]
         self.totalScore += self.lastScore
 
-    def reset(self):
+    def reset(self, moves = 2):
         self.currentState = random.randrange(0,6)
         self.newState = 0
         self.lastScore = 0
         self.totalScore = 0
-        self.movesLeft = 2
+        self.movesLeft = moves
         self.practiceTargetState = 0
+        logging.exp(f"SM Reset State:{self.currentState}, Moves:{moves}")
 
     def getCurrentState(self):
         return self.currentState
