@@ -1,4 +1,5 @@
 from psychopy.hardware import keyboard
+from psychopy import logging
 
 
 class KeyTracker:
@@ -17,6 +18,8 @@ class KeyTracker:
         self.keyDown = not self.keyPressed and current
         self.keyUp = self.keyPressed and not current
         self.keyPressed = current
+        if self.getKeyDown():
+            logging.data(f"Key down: {self.keyCode}")
 
     def getKeyState(self):
         return self.defaultKeyboard.getKeys(self.keyCode)

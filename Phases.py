@@ -1,7 +1,7 @@
 import Config as Config
 import KeyTracker
 from StateMachine import StateMachine as StateMachine
-
+from psychopy import logging
 
 class Practice:
     cfg = None
@@ -108,6 +108,8 @@ class Practice:
             newPhase = phases["grab2moves"]
         # ======================phase changing==================================
         phaseChanged = not self.currentPhase == newPhase
+        if phaseChanged:
+            logging.exp(f"New Practice Phase: {newPhase}")
         self.currentPhase = newPhase
         # ===================conditional update checks==========================
         if self.isPhases(["2moves", "1moves"]):

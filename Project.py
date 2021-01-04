@@ -96,6 +96,7 @@ continueText.wrapWidth = guid.cfgTRes("i_wrap")[0]
 # turn off auto draw
 header.setAutoDraw(False)
 body.setAutoDraw(False)
+body.setAutoLog(False)
 continueText.setAutoDraw(False)
 # ==========================================================================
 # ============================== Practice Objs =============================
@@ -112,6 +113,7 @@ for i in range(numBoxes):
                                     color=guid.c("control_text"), height=25))
     boxes[i].setAutoDraw(False)
     pBoxText[i].setAutoDraw(False)
+    boxes[i].setAutoLog(False)
 uBox = comp.createBox(name='ubox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(-1),
                       lcolor=guid.c("control_line"), fcolor=guid.c("control_box"))
 iBox = comp.createBox(name='ibox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(+1),
@@ -127,6 +129,7 @@ iText.setAutoDraw(False)
 # ================================ Trial Objs ==============================
 # ==========================================================================
 TrialClock = core.Clock()
+# temporary sound 'A'
 tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
 tbeep = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tbeep')
 tsound.setVolume(1)
@@ -226,6 +229,7 @@ header.setText('Practice')
 body.setText(cfg.getVal("practice_text")[0])
 header.setColor(guid.c("general_text"))
 body.setColor(guid.c("general_text"))
+
 # ==========================================================================
 # ===================== Run Practice =======================================
 # ==========================================================================
@@ -294,13 +298,12 @@ if thisTrial != None:
     for paramName in thisTrial:
         exec('{} = thisTrial[paramName]'.format(paramName))
 
-for thisTrial in trials:
+for thisTrial in range(2):
     currentLoop = trials
     # abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
     if thisTrial != None:
         for paramName in thisTrial:
             exec('{} = thisTrial[paramName]'.format(paramName))
-
     # ==========================================================================
     # ============================ Prepare Trial ===============================
     # ==========================================================================
@@ -308,7 +311,9 @@ for thisTrial in trials:
     # update component parameters for each repeat
     tsound.setSound('A', hamming=True)
     tsound.setVolume(1, log=False)
-    TrialComponents = [tsound, boxes[0], boxes[1], boxes[2], boxes[3], boxes[4], boxes[5]]
+    tbeep.setSound('A', hamming=True)
+    tbeep.setVolume(1, log=False)
+    TrialComponents = [tbeep, tsound, boxes[0], boxes[1], boxes[2], boxes[3], boxes[4], boxes[5]]
     for thisComponent in TrialComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -339,6 +344,14 @@ for thisTrial in trials:
             tsound.tStartRefresh = tThisFlipGlobal  # on global time
             tsound.play(when=win)  # sync with win flip
 
+        if tbeep.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+            # keep track of start time/frame for later
+            tbeep.frameNStart = frameN  # exact frame index
+            tbeep.tStart = t  # local t and not account for scr refresh
+            tbeep.tStartRefresh = tThisFlipGlobal  # on global time
+            tbeep.play(when=win)  # sync with win flip
+
+
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
@@ -363,14 +376,12 @@ for thisTrial in trials:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
     tsound.stop()  # ensure sound has stopped at end of routine
+    tbeep.stop()
     # store data for trials (TrialHandler)
 
     # the Routine "Trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
-    
-# completed 5 repeats of 'trials'
-
 # ==========================================================================
 # =========================== Prepare Exit =================================
 # ==========================================================================

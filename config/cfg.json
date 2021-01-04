@@ -7,7 +7,7 @@
         ["Relax", "SoundStim//Relax"],
         ["Stress", "SoundStim//Stress"]
     ],
-    "beep": "SoundStim//beep-08b.mp3",
+    "beepSound": "SoundStim//beep.mp3",
     "trainingMoves": [1, 4],
     "trainingTrials": 40,
     "trainingRequirementSize": 10,
@@ -37,7 +37,7 @@
         "Your goal now is to memorize how many points every move delivers\npress space to continue",
         "memorize how many points every move delivers",
         "Now try to get as many points as possible",
-        "Now we will only show you tour score after you\n complete your entire turn of 2 moves\npress space to continue",
+        "Now we will only show you your score after you\n complete your entire turn of 2 moves\npress space to continue",
         "moves left",
         "Let's try a few exercises under time pressure!\nFrom now on you only have 9 seconds to think about it.\nYou then have about 2.5 seconds to enter the moves.\nThe thinking time can be interrupted by entering the first move.\nDo not enter the turn order until you have the entire sequence of moves planned out.",
         "moves left, time left",
