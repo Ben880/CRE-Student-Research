@@ -9,6 +9,7 @@ class StateMachine:
     lastScore = 0
     totalScore = 0
     movesLeft = 0
+    canMove = True
     # static
     states = 6
     negativeScores= (-70, -100, -140)
@@ -20,18 +21,20 @@ class StateMachine:
                                [(0, -20), (2, 20)]]
 
     def moveCircle(self):
-        self.newState = self.stateMachineDeffinition[self.currentState][0][0]
-        self.scoreMove(0)
-        self.currentState = int(self.newState)
-        self.movesLeft -= 1
-        logging.exp(f"SM New State:{self.currentState}, Last Score:{self.lastScore}, Total Score:{self.totalScore}")
+        if self.canMove:
+            self.newState = self.stateMachineDeffinition[self.currentState][0][0]
+            self.scoreMove(0)
+            self.currentState = int(self.newState)
+            self.movesLeft -= 1
+            logging.exp(f"SM-Circle (State:{self.currentState}, Last Score:{self.lastScore}, Total Score:{self.totalScore})")
 
     def moveAcross(self):
-        self.newState = self.stateMachineDeffinition[self.currentState][1][0]
-        self.scoreMove(1)
-        self.currentState = int(self.newState)
-        self.movesLeft -= 1
-        logging.exp(f"SM New State:{self.currentState}, Last Score:{self.lastScore}, Total Score:{self.totalScore}")
+        if self.canMove:
+            self.newState = self.stateMachineDeffinition[self.currentState][1][0]
+            self.scoreMove(1)
+            self.currentState = int(self.newState)
+            self.movesLeft -= 1
+            logging.exp(f"SM-Across (State:{self.currentState}, Last Score:{self.lastScore}, Total Score:{self.totalScore})")
 
     def scoreMove(self, moveType):
         if self.stateMachineDeffinition[self.currentState][moveType][1] == 0:
@@ -40,14 +43,21 @@ class StateMachine:
             self.lastScore = self.stateMachineDeffinition[self.currentState][moveType][1]
         self.totalScore += self.lastScore
 
-    def reset(self, moves = 2):
-        self.currentState = random.randrange(0,6)
+    def reset(self, moves = 2, canMove = True):
+        self.canMove = canMove
+        self.currentState = random.randrange(0, 6)
         self.newState = 0
         self.lastScore = 0
         self.totalScore = 0
         self.movesLeft = moves
         self.practiceTargetState = 0
-        logging.exp(f"SM Reset State:{self.currentState}, Moves:{moves}")
+        logging.exp(f"SM-Reset (State:{self.currentState}, Moves:{moves})")
+
+    def lock(self):
+        self.canMove = False
+
+    def unlock(self):
+        self.canMove = True
 
     def getCurrentState(self):
         return self.currentState

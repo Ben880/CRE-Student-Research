@@ -88,7 +88,8 @@ comp = UIComponents(win, cfg.getVal("winRes"))
 InstructionsClock = core.Clock()
 # create components
 header = comp.createText(name='header', text='Instructions', pos=guid.cfgTRes("i_header_pos"), height=100, color=colors.getVal("i_text"))
-body = comp.createText(name='body', text=guid.instructionsText[0], pos=guid.cfgTRes("i_body_pos"), color=colors.getVal("i_text"))
+body = comp.createText(name='body', text=guid.instructionsText[0], pos=guid.cfgTRes("i_body_pos"),
+                       color=colors.getVal("i_text"), height=40)
 continueText = comp.createText(name='continueText', text=guid.continueText, pos=guid.cfgTRes("i_continue_pos"), color=colors.getVal("i_text"))
 # set word wrap width
 body.wrapWidth = guid.cfgTRes("i_wrap")[0]
@@ -212,8 +213,7 @@ routineTimer.reset()
 # ===================== Prepare Practice ===================================
 # ==========================================================================
 from Phases import Practice as PracticeHandler
-phaseTimer = core.CountdownTimer(cfg.getVal("practice_time"))
-practiceHandler = PracticeHandler(cfg, phaseTimer)
+practiceHandler = PracticeHandler(cfg)
 # end phase variables
 continueRoutine = True
 # reset timers
@@ -269,7 +269,7 @@ while continueRoutine:
     if practiceHandler.currentPhase == 14:
         continueText.draw()
     # =================== key checks ===================
-    if practiceHandler.currentPhase == 14 and spaceKey.getKeyUp():
+    if practiceHandler.complete and spaceKey.getKeyUp():
         continueRoutine = False
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
@@ -297,13 +297,15 @@ thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
 if thisTrial != None:
     for paramName in thisTrial:
         exec('{} = thisTrial[paramName]'.format(paramName))
-
+# ==========================================================================
+# ========================== Trial Loop ====================================
+# ==========================================================================
 for thisTrial in range(2):
     currentLoop = trials
     # abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
-    if thisTrial != None:
-        for paramName in thisTrial:
-            exec('{} = thisTrial[paramName]'.format(paramName))
+    #if thisTrial != None:
+    #    for paramName in thisTrial:
+    #        exec('{} = thisTrial[paramName]'.format(paramName))
     # ==========================================================================
     # ============================ Prepare Trial ===============================
     # ==========================================================================

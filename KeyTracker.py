@@ -19,7 +19,7 @@ class KeyTracker:
         self.keyUp = self.keyPressed and not current
         self.keyPressed = current
         if self.getKeyDown():
-            logging.data(f"Key down: {self.keyCode}")
+            logging.data(f"KeyDown: {self.keyCode}")
 
     def getKeyState(self):
         return self.defaultKeyboard.getKeys(self.keyCode)
