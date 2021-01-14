@@ -288,18 +288,6 @@ while continueRoutine:
 # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 thisExp.nextEntry()
-# completed 5 repeats of 'practices'
-# set up handler to look after randomisation of conditions etc
-trials = data.TrialHandler(nReps=5, method='random', 
-    extraInfo=expInfo, originPath=-1,
-    trialList=[None],
-    seed=None, name='trials')
-thisExp.addLoop(trials)  # add the loop to the experiment
-thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
-# abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
-if thisTrial != None:
-    for paramName in thisTrial:
-        exec('{} = thisTrial[paramName]'.format(paramName))
 # ==========================================================================
 # ===================== Prepare Training ===================================
 # ==========================================================================
@@ -358,6 +346,8 @@ while continueRoutine:
     for t in pBoxText:
         t.draw()
     # =================== key checks ===================
+    if trainingHandler.complete and spaceKey.getKeyUp():
+        continueRoutine = False
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         core.quit()
     # check if all components have finished
@@ -372,28 +362,11 @@ while continueRoutine:
 # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 thisExp.nextEntry()
-# completed 5 repeats of 'practices'
-# set up handler to look after randomisation of conditions etc
-trials = data.TrialHandler(nReps=5, method='random',
-    extraInfo=expInfo, originPath=-1,
-    trialList=[None],
-    seed=None, name='trials')
-thisExp.addLoop(trials)  # add the loop to the experiment
-thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
-# abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
-if thisTrial != None:
-    for paramName in thisTrial:
-        exec('{} = thisTrial[paramName]'.format(paramName))
-
 # ==========================================================================
 # ========================== Trial Loop ====================================
 # ==========================================================================
-for thisTrial in range(2):
-    currentLoop = trials
-    # abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
-    #if thisTrial != None:
-    #    for paramName in thisTrial:
-    #        exec('{} = thisTrial[paramName]'.format(paramName))
+for thisTrial in range(cfg.getVal("trial_exp_blocks")):
+    logging.exp(f"Trial new block: {thisTrial}")
     # ==========================================================================
     # ============================ Prepare Trial ===============================
     # ==========================================================================
@@ -401,7 +374,7 @@ for thisTrial in range(2):
     # update component parameters for each repeat
     tsound.setSound('A', hamming=True)
     tsound.setVolume(1, log=False)
-    TrialComponents = [tbeep, tsound, boxes[0], boxes[1], boxes[2], boxes[3], boxes[4], boxes[5]]
+    TrialComponents = [tsound]
     for thisComponent in TrialComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -418,20 +391,49 @@ for thisTrial in range(2):
     # ============================= Run Trial ==================================
     # ==========================================================================
     while continueRoutine:
-        # get current time
+        # -----------get current time------------
         t = TrialClock.getTime()
         tThisFlip = win.getFutureFlipTime(clock=TrialClock)
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-        # update/draw components on each frame
-        # start/stop tsound
+        # ---------------sound-------------------
         if tsound.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
             # keep track of start time/frame for later
             tsound.frameNStart = frameN  # exact frame index
             tsound.tStart = t  # local t and not account for scr refresh
             tsound.tStartRefresh = tThisFlipGlobal  # on global time
             tsound.play(when=win)  # sync with win flip
-
+        # --------------updates--------------------
+        uKey.update()
+        iKey.update()
+        spaceKey.update()
+        trainingHandler.update(uKey, iKey, spaceKey, sm)
+        body.setText(trainingHandler.getPhaseText(sm))
+        if uKey.getKeyUp():
+            sm.moveCircle()
+        if iKey.getKeyUp():
+            sm.moveAcross()
+        # -------------prepare draw -----------------
+        for box in boxes:
+            box.setFillColor(guid.c("box"))
+            box.setLineColor(guid.c("box_line"))
+        boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+        if trainingHandler.isPhase("phaseOne") or trainingHandler.isPhase("phaseTwo"):
+            boxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
+        # ----------------draw-----------------------
+        uBox.draw()
+        iBox.draw()
+        iText.draw()
+        uText.draw()
+        body.draw()
+        header.draw()
+        for box in boxes:
+            box.draw()
+        for t in pBoxText:
+            t.draw()
+        # --------------key checks-----------------------
+        if trainingHandler.complete and spaceKey.getKeyUp():
+            continueRoutine = False
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
@@ -487,9 +489,6 @@ while continueRoutine:
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
-    
-
-    
     # *econfirm* updates
     waitOnFlip = False
     if econfirm.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
@@ -546,7 +545,6 @@ routineTimer.reset()
 # Flip one final time so any remaining win.callOnFlip() 
 # and win.timeOnFlip() tasks get executed before quitting
 win.flip()
-
 # these shouldn't be strictly necessary (should auto-save)
 thisExp.saveAsWideText(filename+'.csv', delim='auto')
 thisExp.saveAsPickle(filename)

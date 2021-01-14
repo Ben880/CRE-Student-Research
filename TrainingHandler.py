@@ -83,7 +83,9 @@ class TrainingHandler:
         # ======================================================================
         # ===================== phase changing =================================
         # ======================================================================
-
+        if self.currentPhase != newPhase:
+            logging.exp(f"Debug mode override new Practice Phase: {newPhase}")
+            print(f"Debug mode override new Practice Phase: {newPhase}")
         self.currentPhase = newPhase
         # ======================================================================
         # ===================conditional update checks==========================
