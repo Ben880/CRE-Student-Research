@@ -23,6 +23,7 @@ class TrialHandler:
     firstFrame = True
     welcomedMsg = False
     endEpisode = False
+    complete = False
 
 
 
@@ -52,7 +53,7 @@ class TrialHandler:
             self.welcomedMsg = True
             self.resetSM(sm)
             sm.unlock()
-            sm.drawSM()
+            sm.doDrawSM()
         if self.welcomedMsg and not self.endEpisode:
             if sm.movesLeft == 0:
                 logging.exp(f"Trial user finished episode")
@@ -60,11 +61,12 @@ class TrialHandler:
                 sm.dontDrawSM()
                 sm.lock()
         if self.endEpisode and spaceKey.getKeyUp():
+            self.endEpisode = False
             self.episodeNum += 1
             logging.exp(f"Trial user confirmed end episode, begin episode: {self.episodeNum}")
             self.resetSM(sm)
             sm.unlock()
-            sm.drawSM()
+            sm.doDrawSM()
 
     def getPhaseText(self, sm: StateMachine):
         if not self.welcomedMsg:

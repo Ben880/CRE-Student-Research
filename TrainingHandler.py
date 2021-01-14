@@ -30,7 +30,7 @@ class TrainingHandler:
 
     skipOne = False
     skipTwo = False
-    trainingComplete = False
+    complete = False
     correct = 0
     attempts = 0
     waitForSpace = False
@@ -79,7 +79,7 @@ class TrainingHandler:
             newPhase = phases["done"]
         if self.isPhase("done") and spaceKey.getKeyUp():
             newPhase = phases["final"]
-            self.trainingComplete = True
+            self.complete = True
         # ======================================================================
         # ===================== phase changing =================================
         # ======================================================================

@@ -21,7 +21,7 @@
     "trial_header_show_block": 1,
     "trial_header_block": "Block:",
     "trial_exp_blocks": 2,
-    "trial_exp_episodes:": 24,
+    "trial_exp_episodes": 24,
     "trial_sm_moves": [2,8],
     "training_moves": [1, 4],
     "training_trials": 40,

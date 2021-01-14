@@ -409,8 +409,8 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         uKey.update()
         iKey.update()
         spaceKey.update()
-        trainingHandler.update(uKey, iKey, spaceKey, sm)
-        body.setText(trainingHandler.getPhaseText(sm))
+        trialHandler.update(uKey, iKey, spaceKey, sm)
+        body.setText(trialHandler.getPhaseText(sm))
         if uKey.getKeyUp():
             sm.moveCircle()
         if iKey.getKeyUp():
@@ -420,8 +420,6 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
             box.setFillColor(guid.c("box"))
             box.setLineColor(guid.c("box_line"))
         boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
-        if trainingHandler.isPhase("phaseOne") or trainingHandler.isPhase("phaseTwo"):
-            boxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
         # ----------------draw-----------------------
         uBox.draw()
         iBox.draw()
@@ -430,11 +428,13 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         body.draw()
         header.draw()
         for box in boxes:
-            box.draw()
+            if sm.drawSM:
+                box.draw()
         for t in pBoxText:
-            t.draw()
+            if sm.drawSM:
+                t.draw()
         # --------------key checks-----------------------
-        if trainingHandler.complete and spaceKey.getKeyUp():
+        if trialHandler.complete and spaceKey.getKeyUp():
             continueRoutine = False
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):

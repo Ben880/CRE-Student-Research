@@ -69,7 +69,7 @@ class StateMachine:
     def unlock(self):
         self.canMove = True
 
-    def drawSM(self):
+    def doDrawSM(self):
         self.drawSM = True
 
     def dontDrawSM(self):
