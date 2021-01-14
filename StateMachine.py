@@ -10,6 +10,7 @@ class StateMachine:
     totalScore = 0
     movesLeft = 0
     canMove = True
+    drawSM = True
     # static
     negativeIndex = 0
     negativeScores= (-70, -100, -140)
@@ -67,6 +68,12 @@ class StateMachine:
 
     def unlock(self):
         self.canMove = True
+
+    def drawSM(self):
+        self.drawSM = True
+
+    def dontDrawSM(self):
+        self.drawSM = False
 
     def getCurrentState(self):
         return self.currentState
