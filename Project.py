@@ -168,6 +168,8 @@ frameN = -1
 # ========================= Run Instructions ===============================
 # ==========================================================================
 while continueRoutine:
+    if cfg.getVal("skip_instructions"):
+        continueRoutine = False;
     # -------------get current time---------------
     t = InstructionsClock.getTime()
     tThisFlip = win.getFutureFlipTime(clock=InstructionsClock)
@@ -212,7 +214,7 @@ routineTimer.reset()
 # ==========================================================================
 # ===================== Prepare Practice ===================================
 # ==========================================================================
-from Phases import Practice as PracticeHandler
+from PracticeHandler import PracticeHandler as PracticeHandler
 practiceHandler = PracticeHandler(cfg)
 # end phase variables
 continueRoutine = True
@@ -234,6 +236,8 @@ body.setColor(guid.c("general_text"))
 # ===================== Run Practice =======================================
 # ==========================================================================
 while continueRoutine:
+    if cfg.getVal("skip_practice"):
+        continueRoutine = False
     # -----------get current time------------
     t = PracticeClock.getTime()
     tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
@@ -252,9 +256,10 @@ while continueRoutine:
     # -------------prepare draw -----------------
     for box in boxes:
         box.setFillColor(guid.c("box"))
+        box.setLineColor(guid.c("box_line"))
     boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
     if practiceHandler.isPhases(["1moves", "2moves"]):
-        boxes[sm.practiceTargetState].setFillColor(guid.c("box_target"))
+        boxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
     # ----------------draw-----------------------
     uBox.draw()
     iBox.draw()
@@ -266,8 +271,6 @@ while continueRoutine:
         box.draw()
     for t in pBoxText:
         t.draw()
-    if practiceHandler.currentPhase == 14:
-        continueText.draw()
     # =================== key checks ===================
     if practiceHandler.complete and spaceKey.getKeyUp():
         continueRoutine = False
@@ -298,6 +301,91 @@ if thisTrial != None:
     for paramName in thisTrial:
         exec('{} = thisTrial[paramName]'.format(paramName))
 # ==========================================================================
+# ===================== Prepare Training ===================================
+# ==========================================================================
+from TrainingHandler import TrainingHandler as TrainingHandler
+trainingHandler = TrainingHandler(cfg)
+# end phase variables
+continueRoutine = True
+# reset timers
+t = 0
+_timeToFirstFrame = win.getFutureFlipTime(clock="now")
+PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
+frameN = -1
+# set up state machine
+smState = sm.getCurrentState()
+boxes[smState].setFillColor((guid.c("box_selected")))
+# set up text
+header.setText('Training')
+body.setText(cfg.getVal("practice_text")[0])
+header.setColor(guid.c("general_text"))
+body.setColor(guid.c("general_text"))
+# ==========================================================================
+# ===================== Run Training =======================================
+# ==========================================================================
+while continueRoutine:
+    # -----------get current time------------
+    t = PracticeClock.getTime()
+    tThisFlip = win.getFutureFlipTime(clock=PracticeClock)
+    tThisFlipGlobal = win.getFutureFlipTime(clock=None)
+    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+    # --------------updates--------------------
+    uKey.update()
+    iKey.update()
+    spaceKey.update()
+    trainingHandler.update(uKey, iKey, spaceKey, sm)
+    body.setText(trainingHandler.getPhaseText(sm))
+    if uKey.getKeyUp():
+        sm.moveCircle()
+    if iKey.getKeyUp():
+        sm.moveAcross()
+    # -------------prepare draw -----------------
+    for box in boxes:
+        box.setFillColor(guid.c("box"))
+        box.setLineColor(guid.c("box_line"))
+    boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+    if trainingHandler.isPhase("phaseOne") or trainingHandler.isPhase("phaseTwo"):
+        boxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
+    # ----------------draw-----------------------
+    uBox.draw()
+    iBox.draw()
+    iText.draw()
+    uText.draw()
+    body.draw()
+    header.draw()
+    for box in boxes:
+        box.draw()
+    for t in pBoxText:
+        t.draw()
+    # =================== key checks ===================
+    if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+        core.quit()
+    # check if all components have finished
+    if not continueRoutine:  # a component has requested a forced-end of Routine
+        break
+    # refresh the screen
+    if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
+        win.flip()
+# ==========================================================================
+# ========================== End Training ==================================
+# ==========================================================================
+# the Routine "Practice" was not non-slip safe, so reset the non-slip timer
+routineTimer.reset()
+thisExp.nextEntry()
+# completed 5 repeats of 'practices'
+# set up handler to look after randomisation of conditions etc
+trials = data.TrialHandler(nReps=5, method='random',
+    extraInfo=expInfo, originPath=-1,
+    trialList=[None],
+    seed=None, name='trials')
+thisExp.addLoop(trials)  # add the loop to the experiment
+thisTrial = trials.trialList[0]  # so we can initialise stimuli with some values
+# abbreviate parameter names if possible (e.g. rgb = thisTrial.rgb)
+if thisTrial != None:
+    for paramName in thisTrial:
+        exec('{} = thisTrial[paramName]'.format(paramName))
+
+# ==========================================================================
 # ========================== Trial Loop ====================================
 # ==========================================================================
 for thisTrial in range(2):
@@ -313,8 +401,6 @@ for thisTrial in range(2):
     # update component parameters for each repeat
     tsound.setSound('A', hamming=True)
     tsound.setVolume(1, log=False)
-    tbeep.setSound('A', hamming=True)
-    tbeep.setVolume(1, log=False)
     TrialComponents = [tbeep, tsound, boxes[0], boxes[1], boxes[2], boxes[3], boxes[4], boxes[5]]
     for thisComponent in TrialComponents:
         thisComponent.tStart = None
@@ -346,31 +432,15 @@ for thisTrial in range(2):
             tsound.tStartRefresh = tThisFlipGlobal  # on global time
             tsound.play(when=win)  # sync with win flip
 
-        if tbeep.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            tbeep.frameNStart = frameN  # exact frame index
-            tbeep.tStart = t  # local t and not account for scr refresh
-            tbeep.tStartRefresh = tThisFlipGlobal  # on global time
-            tbeep.play(when=win)  # sync with win flip
-
-
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
-        
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
-        continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in TrialComponents:
-            if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-                continueRoutine = True
-                break  # at least one component has not yet finished
-        
         # refresh the screen
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-
     # ==========================================================================
     # ============================= End Trial ==================================
     # ==========================================================================

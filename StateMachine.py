@@ -11,7 +11,7 @@ class StateMachine:
     movesLeft = 0
     canMove = True
     # static
-    states = 6
+    negativeIndex = 0
     negativeScores= (-70, -100, -140)
     stateMachineDeffinition = [[(1, 140), (3, 20)],
                                [(2, -20), (4, 0)],
@@ -52,6 +52,15 @@ class StateMachine:
         self.movesLeft = moves
         self.practiceTargetState = 0
         logging.exp(f"SM-Reset (State:{self.currentState}, Moves:{moves})")
+
+
+    def moveTarget(self, count: int):
+        self.practiceTargetState = self.currentState
+        for i in range(count):
+            if random.randint(0,1):
+                self.practiceTargetState = self.stateMachineDeffinition[self.practiceTargetState][0][0]
+            else:
+                self.practiceTargetState = self.stateMachineDeffinition[self.practiceTargetState][1][0]
 
     def lock(self):
         self.canMove = False

@@ -3,7 +3,8 @@ import KeyTracker
 from StateMachine import StateMachine as StateMachine
 from psychopy import logging, core
 
-class Practice:
+
+class PracticeHandler:
     cfg = None
     currentPhase = 0
     practiceText = None
@@ -294,4 +295,5 @@ class Practice:
         if self.currentPhase in self.displayLast:
             text = text + f"\nyou scored: {sm.lastScore}"
         return text
+
 
