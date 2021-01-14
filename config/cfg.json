@@ -2,10 +2,12 @@
     "projectName": "Pruning Strategies",
     "assetDir": "D://Dev//Python//CRE Student Research//Assets",
     "devMode": 1,
-    "skip_instructions": 1,
-    "skip_practice": 1,
-    "skip_training1": 1,
-    "skip_training2": 1,
+    "skip_instructions": 0,
+    "skip_practice": 0,
+    "skip_training1": 0,
+    "skip_training2": 0,
+    "skip_trial": 0,
+    "skip_exit": 0,
     "music": [
         ["None", "SoundStim//None"],
         ["Relax", "SoundStim//Relax"],
@@ -73,5 +75,7 @@
     "successful_timed": 10,
     "think_timer": 9,
     "move_timer": 2.5,
-    "practice_timer": 10
+    "practice_timer": 10,
+    "exit_header": "Exit",
+    "exit_body": ["You have finished the trial", "Thank you for participating"]
 }

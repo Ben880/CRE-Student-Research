@@ -10,6 +10,7 @@ class GUIDraw:
     boxPos = None
     instructionsText = ("intruction set 1", "intruction set 2", "intruction set 3")
     continueText = "press space to continue"
+    exitText = ("exitText set 1", "exitText set 2", "exitText set 3")
 
     def __init__(self, pos: Config, color: Config, cfg: Config):
         self.pos = pos
@@ -18,6 +19,7 @@ class GUIDraw:
         self.instructionsText = cfg.getVal("instructions_text")
         self.continueText = cfg.getVal("continue_text")
         self.boxPos = pos.getVal("box_pos")
+        self.exitText = cfg.getVal("exit_body")
 
     def getBoxPos(self, buttonNum):
         return self.scaleToRes(self.boxPos[buttonNum])
