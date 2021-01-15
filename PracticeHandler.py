@@ -5,16 +5,17 @@ from psychopy import logging, core
 
 
 class PracticeHandler:
+    #cfg
     cfg = None
-    currentPhase = 0
     practiceText = None
     twoMovesArr = None
     oneMovesArr = None
     displayLast = None
-    complete = False
-    startedRound = False
-    roundFinished = False
-    scoredRound = False
+    targetPresses = 0
+    targetPresses2 = 0
+    pointRequirement = 0
+    successful2moves = 0
+    successfulTime = 0
     phase = {
         "start": 0,
         "pressU": 1,
@@ -36,20 +37,22 @@ class PracticeHandler:
         "time": 17,
         "complete": 18
     }
-    movesPos = 0
-    # count number of presses of [U,I]
-    buttonPresses = [0, 0]
-    targetPresses = 0
-    targetPresses2 = 0
-    pointRequirement = 0
-    successful2moves = 0
-    successfulTime = 0
-    successes = 0
+    # timers
     thinkTimer = None
     moveTimer = None
     practiceTimer = None
+    # dev mode
     devModeOn = False
     deveModePhase = 0
+    # phase vars
+    buttonPresses = [0, 0]
+    complete = False
+    startedRound = False
+    roundFinished = False
+    scoredRound = False
+    successes = 0
+    currentPhase = 0
+    movesPos = 0
 
     def __init__(self, cfg: Config):
         self.cfg = cfg

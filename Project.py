@@ -20,6 +20,7 @@ from UISettings import UIComponents as UIComponents
 from PracticeHandler import PracticeHandler as PracticeHandler
 from TrainingHandler import TrainingHandler as TrainingHandler
 from TrialHandler import TrialHandler as TrialHandler
+from LatinSquare import LatinSquareGenerator as LatinSquareGenerator
 # ==========================================================================
 # ============================= Config Files ===============================
 # ==========================================================================
@@ -47,6 +48,17 @@ if dlg.OK == False:
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
 expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
+# ==========================================================================
+# ============================= Sound ======================================
+# ==========================================================================
+assetDir = os.path.join(os.getcwd(), cfg.getVal("dir_assets"))
+soundStimDir = os.path.join(assetDir, cfg.getVal("dir_sound"))
+musicArr = cfg.getVal("dir_music")
+squareRes = LatinSquareGenerator(len(musicArr), int(expInfo["participant"]))
+logging.exp(f"Selected music type {musicArr[squareRes]}")
+print(f"Selected music type {musicArr[squareRes]}")
+musicStimDir = os.path.join(soundStimDir, musicArr[squareRes])
+musicStimFiles = os.listdir(musicStimDir)
 # ==========================================================================
 # ============================= Data =======================================
 # ==========================================================================
@@ -340,15 +352,18 @@ thisExp.nextEntry()
 # ==========================================================================
 # ========================== Trial Loop ====================================
 # ==========================================================================
+musicIndex = 0
 for thisTrial in range(cfg.getVal("trial_exp_blocks")):
     logging.exp(f"Trial new block: {thisTrial}")
     trialHandler = TrialHandler(cfg, thisTrial)
+    header.setText(trialHandler.getPhaseHeadder())
     # ==========================================================================
     # ============================ Prepare Trial ===============================
     # ==========================================================================
     continueRoutine = not cfg.getVal("skip_trial")
     # update component parameters for each repeat
-    tsound.setSound('A', hamming=True)
+    soundDir = os.path.join(musicStimDir, musicStimFiles[musicIndex])
+    tsound.setSound(soundDir, hamming=True)
     tsound.setVolume(1, log=False)
     TrialComponents = [tsound]
     for thisComponent in TrialComponents:
@@ -385,6 +400,7 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         spaceKey.update()
         trialHandler.update(uKey, iKey, spaceKey, sm)
         body.setText(trialHandler.getPhaseText(sm))
+        header.setText(trialHandler.getPhaseHeadder())
         if uKey.getKeyUp():
             sm.moveCircle()
         if iKey.getKeyUp():

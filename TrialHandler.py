@@ -11,11 +11,13 @@ class TrialHandler:
     instructionsBlock = ""
     musicInBlock = [1, 2]
     instructionsHeader = ""
+    header = ""
     showBlock = True
     episodes = 25
     smMoves = [2, 8]
     episodeEndStr = ""
     movesLeftStr = ""
+    blocks = 2
     # other cfg
     trialNum = 0
     episodeNum = 0
@@ -25,8 +27,6 @@ class TrialHandler:
     endEpisode = False
     complete = False
 
-
-
     def __init__(self, cfg: Config, trialNum: int):
         self.trialNum  = trialNum
         print(f"Trial init called phase{self.trialNum}")
@@ -35,11 +35,14 @@ class TrialHandler:
         self.instructionsBlock = cfg.getVal("trial_instructions_block")
         self.musicInBlock = cfg.getVal("trial_music_in_block")
         self.instructionsHeader = cfg.getVal("trial_header_instructions")
+        self.header = cfg.getVal("trial_header")
         self.showBlock = cfg.getVal("trial_header_show_block")
+        self.headerBlock = cfg.getVal("trial_header_block")
         self.episodes = cfg.getVal("trial_exp_episodes")
         self.smMoves = cfg.getVal("trial_sm_moves")
         self.episodeEndStr = cfg.getVal("trial_episode_end")
         self.movesLeftStr = cfg.getVal("trial_moves_left")
+        self.blocks = cfg.getVal("trial_exp_blocks")
         logging.exp(f"Trial cfg loaded")
 
     def update(self, uKey: KeyTracker, iKey: KeyTracker, spaceKey: KeyTracker, sm: StateMachine):
@@ -77,6 +80,13 @@ class TrialHandler:
         if self.endEpisode:
             return str(self.episodeEndStr).format(episode=self.episodeNum + 1, totalEpisode=self.episodes, score=sm.totalScore)
         return str(self.movesLeftStr).format(movesLeft=sm.movesLeft)
+
+    def getPhaseHeadder(self):
+        if not self.welcomedMsg and self.trialNum == 0:
+            return self.instructionsHeader
+        if self.showBlock:
+            return str(self.header) + str(self.headerBlock).format(blockNum=self.trialNum, totalBlocks=self.blocks)
+        return self.header
 
     def resetSM(self, sm: StateMachine):
         sm.reset(moves=random.randrange(self.smMoves[0], self.smMoves[1]+1), canMove=True)
