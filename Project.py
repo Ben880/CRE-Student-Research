@@ -9,6 +9,7 @@ from psychopy import sound, gui, visual, core, data, event, logging
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 import os  # handy system and path functions
 from psychopy.hardware import keyboard
+from psychopy.sound.backend_pygame import SoundPygame
 # ==========================================================================
 # ============================= Imports ====================================
 # ==========================================================================
@@ -147,6 +148,7 @@ TrialClock = core.Clock()
 # temporary sound 'A'
 tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
 tbeep = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tbeep')
+pyGamSound = SoundPygame(value='A')
 tsound.setVolume(1)
 tbeep.setVolume(1)
 # ==========================================================================
@@ -381,6 +383,11 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
     # ==========================================================================
     # ============================= Run Trial ==================================
     # ==========================================================================
+    # sound setup
+    soundDir = os.path.join(musicStimDir, musicStimFiles[musicIndex])
+    pyGamSound = SoundPygame(value=soundDir)
+    songTimer = core.CountdownTimer(pyGamSound.getDuration())
+    pyGamSound.play()
     while continueRoutine:
         # -----------get current time------------
         t = TrialClock.getTime()
@@ -388,12 +395,15 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # ---------------sound-------------------
-        if tsound.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
-            # keep track of start time/frame for later
-            tsound.frameNStart = frameN  # exact frame index
-            tsound.tStart = t  # local t and not account for scr refresh
-            tsound.tStartRefresh = tThisFlipGlobal  # on global time
-            tsound.play(when=win)  # sync with win flip
+        if songTimer.getTime() <= 0:
+            musicIndex += 1
+            if musicIndex >= len(musicStimFiles):
+                musicIndex = 0
+            soundDir = os.path.join(musicStimDir, musicStimFiles[musicIndex])
+            pyGamSound.stop()
+            pyGamSound = SoundPygame(value=soundDir)
+            songTimer = core.CountdownTimer(pyGamSound.getDuration())
+            pyGamSound.play()
         # --------------updates--------------------
         uKey.update()
         iKey.update()
