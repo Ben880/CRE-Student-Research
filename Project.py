@@ -43,9 +43,12 @@ os.chdir(_thisDir)
 psychopyVersion = '2020.2.5'
 expName = cfg.getVal("projectName")
 expInfo = {'participant': '', 'session': '001'}
-dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
-if dlg.OK == False:
-    core.quit()  # user pressed cancel
+if cfg.getVal("devMode"):
+    expInfo = {'participant': '001', 'session': '001'}
+else:
+    dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
+    if not dlg.OK:
+        core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
 expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
