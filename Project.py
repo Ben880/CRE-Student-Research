@@ -102,7 +102,7 @@ comp = UIComponents(win, cfg.getVal("winRes"))
 # ==========================================================================
 InstructionsClock = core.Clock()
 # create components
-header = comp.createText(name='header', text='Instructions', pos=guid.cfgTRes("i_header_pos"), height=100, color=colors.getVal("i_text"))
+header = comp.createText(name='header', text='Instructions', pos=guid.cfgTRes("i_header_pos"), height=80, color=colors.getVal("i_text"))
 body = comp.createText(name='body', text=guid.instructionsText[0], pos=guid.cfgTRes("i_body_pos"),
                        color=colors.getVal("i_text"), height=40)
 continueText = comp.createText(name='continueText', text=guid.continueText, pos=guid.cfgTRes("i_continue_pos"), color=colors.getVal("i_text"))
@@ -111,6 +111,7 @@ body.wrapWidth = guid.cfgTRes("i_wrap")[0]
 continueText.wrapWidth = guid.cfgTRes("i_wrap")[0]
 # turn off auto draw
 header.setAutoDraw(False)
+header.wrapWidth = 1000
 body.setAutoDraw(False)
 body.setAutoLog(False)
 continueText.setAutoDraw(False)
