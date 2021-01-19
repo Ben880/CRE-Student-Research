@@ -135,6 +135,9 @@ class TrainingHandler:
                 sm.unlock()
 
 
+    def end(self):
+        logging.exp(f"Traininghndler end called use on attempt: {self.attempts} (zero is first)")
+
 
     def getPhaseText(self, sm: StateMachine):
         if self.isPhase("phaseOneI"):

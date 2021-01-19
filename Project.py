@@ -350,6 +350,7 @@ while continueRoutine:
 # ========================== End Training ==================================
 # ==========================================================================
 # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
+trainingHandler.end()
 routineTimer.reset()
 thisExp.nextEntry()
 # ==========================================================================
