@@ -70,6 +70,8 @@ class TrialHandler:
             self.resetSM(sm)
             sm.unlock()
             sm.doDrawSM()
+        if not self.complete and self.episodes <= self.episodeNum:
+            self.complete = True
 
     def getPhaseText(self, sm: StateMachine):
         if not self.welcomedMsg:
@@ -85,7 +87,7 @@ class TrialHandler:
         if not self.welcomedMsg and self.trialNum == 0:
             return self.instructionsHeader
         if self.showBlock:
-            return str(self.header) + str(self.headerBlock).format(blockNum=self.trialNum, totalBlocks=self.blocks)
+            return str(self.header) + str(self.headerBlock).format(blockNum=self.trialNum+1, totalBlocks=self.blocks)
         return self.header
 
     def resetSM(self, sm: StateMachine):

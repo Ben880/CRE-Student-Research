@@ -59,6 +59,8 @@ class TrainingHandler:
         if self.isPhase("init"):
             if self.skipOne:
                 newPhase = phases["phaseTwoI"]
+                logging.exp(f"Debug skip training phase 1")
+                print(f"Debug skip training phase 1")
             else:
                 newPhase = phases["phaseOneI"]
             sm.lock()
@@ -84,8 +86,8 @@ class TrainingHandler:
         # ===================== phase changing =================================
         # ======================================================================
         if self.currentPhase != newPhase:
-            logging.exp(f"Debug mode override new Practice Phase: {newPhase}")
-            print(f"Debug mode override new Practice Phase: {newPhase}")
+            logging.exp(f"New training Phase: {newPhase}")
+            print(f"New training Phase: {newPhase}")
         self.currentPhase = newPhase
         # ======================================================================
         # ===================conditional update checks==========================

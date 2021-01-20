@@ -5,7 +5,7 @@ from psychopy import logging, core
 
 
 class PracticeHandler:
-    #cfg
+    # cfg
     cfg = None
     practiceText = None
     twoMovesArr = None
@@ -152,11 +152,13 @@ class PracticeHandler:
             newPhase = phases["timeI"]
             self.successes = 0
             sm.lock()
+            sm.dontDrawSM()
         # === 16->17 ===========================================================
         if self.isPhase("timeI") and spaceKey.getKeyUp():
             newPhase = phases["time"]
             sm.reset()
             sm.unlock()
+            sm.doDrawSM()
             self.moveTimer.reset()
             self.thinkTimer.reset()
         # === 17->complete ===========================================================
@@ -193,11 +195,7 @@ class PracticeHandler:
             if sm.movesLeft == 0:
                 sm.lock()
                 if spaceKey.getKeyUp():
-                    if sm.totalScore >= 0:
-                        self.successes += 1
-                        logging.exp(f"pp: {newPhase} succeed timed practice")
-                    else:
-                        logging.exp(f"pp: {newPhase} failed timed practice")
+                    self.successes += 1
                     sm.reset()
         if self.isPhase("time"):
             if spaceKey.getKeyUp() and self.roundFinished:
@@ -237,8 +235,6 @@ class PracticeHandler:
             sm.currentState = self.oneMovesArr[self.movesPos][0]
             sm.practiceTargetState = self.oneMovesArr[self.movesPos][1]
 
-
-
     def isTimerUp(self, timer: str):
         if timer == "practice":
             return self.practiceTimer.getTime() <= 0
@@ -269,34 +265,39 @@ class PracticeHandler:
         return False
 
     def getPhaseText(self, sm: StateMachine):
-        text = ""
         if self.isPhase("timed"):
-            text = text + f"move around for {round(self.practiceTimer.getTime() * 10) / 10}s"
+            text = str(self.cfg.getVal("practice_string_timed")).format(seconds=(round(self.practiceTimer.getTime()*10))/10)
         elif self.isPhases(["2moves", "1moves"]):
-            text = text + self.cfg.getVal("practice_text")[self.currentPhase] + f"\n(moves left: {sm.movesLeft})"
+            text = str(self.cfg.getVal("practice_text")[self.currentPhase]).format(movesLeft=sm.movesLeft)
         else:
-            text = text +self.cfg.getVal("practice_text")[self.currentPhase]
-        if self.isPhase("grab"):
-            text = text + f"\nyou scored: {sm.totalScore}"
+            text = self.cfg.getVal("practice_text")[self.currentPhase]
         if self.isPhase("grab2moves"):
             if sm.movesLeft == 0:
-                text = f"You scored: {sm.getCurrentScore()}\n({self.successes}/{self.successful2moves})\npress space to start new round"
+                text = str(self.cfg.getVal("practice_string_grab2")).format(current=sm.getCurrentScore(),
+                                                                            round=self.successes,
+                                                                            rounds=self.successful2moves)
             else:
-                text = text + f"moves left: {sm.movesLeft}"
+                text = text + str(self.cfg.getVal("sm_string_left")).format(movesLeft=sm.movesLeft)
+        # ================== time phase ===========================================
         if self.isPhase("time"):
             if not self.startedRound:
-                text = f"think time {round(self.thinkTimer.getTime() * 10) / 10}s"
+                text = str(self.cfg.getVal("practice_string_time_ns")).format(time=round(self.thinkTimer.getTime() * 10) / 10)
             elif self.isTimerUp("move") and sm.movesLeft > 0:
-                text = f"You ran out of time\npress space to start new round"
+                text = str(self.cfg.getVal("practice_string_time_notime"))
             elif sm.movesLeft == 0:
-                text = f"You scored {sm.getCurrentScore()}\n({self.successes}/{self.successfulTime})\npress space to start new round"
+                text = str(self.cfg.getVal("practice_string_time_nomoves")).format(currentScore=sm.getCurrentScore(),
+                                                                                   successes=self.successes,
+                                                                                   successfulTime=self.successfulTime)
             elif self.startedRound and not self.isTimerUp("move"):
-                text = f"time left {round(self.moveTimer.getTime() * 10) / 10}s"
+                text = str(self.cfg.getVal("practice_string_time_started")).format(time=round(self.moveTimer.getTime() * 10) / 10)
+        # ================== complete phase ===========================================
         if self.isPhase("complete"):
-            text = f"practice complete\npress space to continue"
+            text = str(self.cfg.getVal("practice_string_complete"))
         # ================== appending ===========================================
         if self.currentPhase in self.displayLast:
-            text = text + f"\nyou scored: {sm.lastScore}"
+            text = text + "\n" + str(self.cfg.getVal("sm_string_last")).format(lastScore=sm.lastScore)
+        if self.isPhase("grab"):
+            text = text + "\n" + str(self.cfg.getVal("sm_string_total")).format(totalScore=sm.totalScore)
         return text
 
 

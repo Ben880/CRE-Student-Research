@@ -286,7 +286,7 @@ thisExp.nextEntry()
 # ===================== Prepare Training ===================================
 # ==========================================================================
 trainingHandler = TrainingHandler(cfg)
-continueRoutine = not cfg.getVal("skip_practice")
+continueRoutine = not (cfg.getVal("skip_training1") and cfg.getVal("skip_training2"))
 # reset timers
 t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
@@ -368,18 +368,6 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
     # ============================ Prepare Trial ===============================
     # ==========================================================================
     continueRoutine = not cfg.getVal("skip_trial")
-    # update component parameters for each repeat
-    soundDir = os.path.join(musicStimDir, musicStimFiles[musicIndex])
-    tsound.setSound(soundDir, hamming=True)
-    tsound.setVolume(1, log=False)
-    TrialComponents = [tsound]
-    for thisComponent in TrialComponents:
-        thisComponent.tStart = None
-        thisComponent.tStop = None
-        thisComponent.tStartRefresh = None
-        thisComponent.tStopRefresh = None
-        if hasattr(thisComponent, 'status'):
-            thisComponent.status = NOT_STARTED
     # reset timers
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
@@ -392,7 +380,7 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
     soundDir = os.path.join(musicStimDir, musicStimFiles[musicIndex])
     pyGamSound = SoundPygame(value=soundDir)
     songTimer = core.CountdownTimer(pyGamSound.getDuration())
-    pyGamSound.play()
+    musicPlaying = False
     while continueRoutine:
         # -----------get current time------------
         t = TrialClock.getTime()
@@ -400,6 +388,12 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # ---------------sound-------------------
+        if trialHandler.welcomedMsg and not musicPlaying:
+            pyGamSound.play()
+            musicPlaying = True
+        if musicPlaying and trialHandler.complete:
+            pyGamSound.stop()
+            musicPlaying = False
         if songTimer.getTime() <= 0:
             musicIndex += 1
             if musicIndex >= len(musicStimFiles):
@@ -438,8 +432,9 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
             for t in pBoxText:
                 t.draw()
         # --------------key checks-----------------------
-        if trialHandler.complete and spaceKey.getKeyUp():
+        if trialHandler.complete:
             continueRoutine = False
+            pyGamSound.stop()
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()
         if not continueRoutine:  # a component has requested a forced-end of Routine
@@ -449,9 +444,6 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
     # ==========================================================================
     # ============================= End Trial ==================================
     # ==========================================================================
-    for thisComponent in TrialComponents:
-        if hasattr(thisComponent, "setAutoDraw"):
-            thisComponent.setAutoDraw(False)
     tsound.stop()  # ensure sound has stopped at end of routine
     # the Routine "Trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
