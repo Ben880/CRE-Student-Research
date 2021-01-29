@@ -1,3 +1,10 @@
+# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
+# ==========================================================================
+# Description:
+# Handles tracking and logging of keys
+# ==========================================================================
 from psychopy.hardware import keyboard
 from psychopy import logging
 

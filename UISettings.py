@@ -1,3 +1,10 @@
+# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
+# ==========================================================================
+# Description:
+# Handles helper methods for converting data and loading from config for ui
+# ==========================================================================
 from psychopy import visual
 from Config import Config as Config
 

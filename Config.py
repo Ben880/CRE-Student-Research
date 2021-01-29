@@ -1,5 +1,14 @@
+# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
+# ==========================================================================
+# Description:
+# Handles loading json files into a key-pair dictionary and stores for access
+# Can add vals and write but does not do so in this project
+# ==========================================================================
 import json
 import os
+
 
 class Config:
 
@@ -44,12 +53,3 @@ class Config:
 
     def addVal(self, key, value):
         self.data[key] = value
-
-
-'''
-x = Config
-x.load(x)
-x.addVal(x, "tval", "D://Dev//Python//CRE Student Research//Assets")
-x.write(x)
-'''
-

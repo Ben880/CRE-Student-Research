@@ -1,3 +1,10 @@
+# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
+# ==========================================================================
+# Description:
+# Handles execution of logic for the trial phase
+# ==========================================================================
 import Config as Config
 import KeyTracker
 from StateMachine import StateMachine as StateMachine
@@ -27,6 +34,9 @@ class TrialHandler:
     endEpisode = False
     complete = False
 
+    # =====================================================================================
+    # init: load cfg values
+    # =====================================================================================
     def __init__(self, cfg: Config, trialNum: int):
         self.trialNum  = trialNum
         print(f"Trial init called phase{self.trialNum}")
@@ -45,6 +55,9 @@ class TrialHandler:
         self.blocks = cfg.getVal("trial_exp_blocks")
         logging.exp(f"Trial cfg loaded")
 
+    # =====================================================================================
+    # update: called in main loop once per frame, handles updating of logic
+    # =====================================================================================
     def update(self, uKey: KeyTracker, iKey: KeyTracker, spaceKey: KeyTracker, sm: StateMachine):
         if self.firstFrame:
             logging.exp(f"Trial first frame")
@@ -73,6 +86,9 @@ class TrialHandler:
         if not self.complete and self.episodes <= self.episodeNum:
             self.complete = True
 
+    # =====================================================================================
+    # getPhaseText: returns proper body for current phase
+    # =====================================================================================
     def getPhaseText(self, sm: StateMachine):
         if not self.welcomedMsg:
             if self.trialNum == 0:
@@ -83,13 +99,19 @@ class TrialHandler:
             return str(self.episodeEndStr).format(episode=self.episodeNum + 1, totalEpisode=self.episodes, score=sm.totalScore)
         return str(self.movesLeftStr).format(movesLeft=sm.movesLeft)
 
-    def getPhaseHeadder(self):
+    # =====================================================================================
+    # getPhaseHeader: returns proper header for current phase
+    # =====================================================================================
+    def getPhaseHeader(self):
         if not self.welcomedMsg and self.trialNum == 0:
             return self.instructionsHeader
         if self.showBlock:
             return str(self.header) + str(self.headerBlock).format(blockNum=self.trialNum+1, totalBlocks=self.blocks)
         return self.header
 
+    # =====================================================================================
+    # resetSM: called to reset state machine with needed values
+    # =====================================================================================
     def resetSM(self, sm: StateMachine):
         sm.reset(moves=random.randrange(self.smMoves[0], self.smMoves[1]+1), canMove=True)
         logging.exp(f"Trial SM reset")

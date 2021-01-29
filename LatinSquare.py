@@ -1,3 +1,10 @@
+# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
+# ==========================================================================
+# Description:
+# Handles returning an index of a latin square based off of a size and input
+# ==========================================================================
 
 def LatinSquareGenerator(size, index):
     mod = index % size  # gets column and remainder

@@ -1,3 +1,10 @@
+# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
+# ==========================================================================
+# Description:
+# Handles execution of logic for the practice phase
+# ==========================================================================
 import Config as Config
 import KeyTracker
 from StateMachine import StateMachine as StateMachine
@@ -54,6 +61,9 @@ class PracticeHandler:
     currentPhase = 0
     movesPos = 0
 
+    # =====================================================================================
+    # init: load cfg values
+    # =====================================================================================
     def __init__(self, cfg: Config):
         self.cfg = cfg
         self.targetPresses = cfg.getVal("practice_key_requirement")
@@ -73,6 +83,9 @@ class PracticeHandler:
             print("Phases dev mode set")
             logging.exp("Phases dev mode set")
 
+    # =====================================================================================
+    # update: called in main loop once per frame, handles updating of logic
+    # =====================================================================================
     def update(self, uKey: KeyTracker, iKey: KeyTracker, spaceKey: KeyTracker, sm: StateMachine):
         phases = self.phase
         newPhase = self.currentPhase
@@ -81,7 +94,7 @@ class PracticeHandler:
         if iKey.getKeyUp():
             self.buttonPresses[1] += 1
         # ======================================================================
-        # ===================== phase change logic =============================
+        # phase change logic: handles logic for transitions between phases
         # ======================================================================
         # === 0->2 =============================================================
         if self.isPhase("start") and self.uGthan(0):
@@ -166,7 +179,7 @@ class PracticeHandler:
             newPhase = phases["complete"]
             sm.unlock()
         # ======================================================================
-        # ===================== phase changing =================================
+        # phase changing: handles when phases change
         # ======================================================================
         phaseChanged = not self.currentPhase == newPhase
         if self.devModeOn:
@@ -183,7 +196,7 @@ class PracticeHandler:
             logging.exp(f"New Practice Phase: {newPhase}")
         self.currentPhase = newPhase
         # ======================================================================
-        # ===================conditional update checks==========================
+        # conditional update checks: handles specific phase logic
         # ======================================================================
         if self.isPhases(["2moves", "1moves"]):
             if phaseChanged:
@@ -219,12 +232,15 @@ class PracticeHandler:
                 else:
                     logging.exp(f"pp: {newPhase} failed timed practice")
         # ======================================================================
-        # ===================== complete condition =============================
+        #  complete condition: checks if complete
         # ======================================================================
         if self.isPhase("complete") and not self.complete:
             self.complete = True
             logging.exp(f"Practice complete")
 
+    # =====================================================================================
+    # resetSM: called to reset state machine with needed values
+    # =====================================================================================
     def resetSM(self, sm: StateMachine):
         if self.isPhase("2moves"):
             sm.movesLeft = 2
@@ -235,6 +251,9 @@ class PracticeHandler:
             sm.currentState = self.oneMovesArr[self.movesPos][0]
             sm.practiceTargetState = self.oneMovesArr[self.movesPos][1]
 
+    # =====================================================================================
+    # other functions: some helper functions to keep code clean,
+    # =====================================================================================
     def isTimerUp(self, timer: str):
         if timer == "practice":
             return self.practiceTimer.getTime() <= 0
@@ -264,6 +283,9 @@ class PracticeHandler:
                 return True
         return False
 
+    # =====================================================================================
+    # getPhaseText: returns proper body for current phase
+    # =====================================================================================
     def getPhaseText(self, sm: StateMachine):
         if self.isPhase("timed"):
             text = str(self.cfg.getVal("practice_string_timed")).format(seconds=(round(self.practiceTimer.getTime()*10))/10)

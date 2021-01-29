@@ -1,3 +1,10 @@
+# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
+# ==========================================================================
+# Description:
+# Handles execution of logic for the training phase
+# ==========================================================================
 import Config as Config
 import KeyTracker
 from StateMachine import StateMachine as StateMachine
@@ -7,7 +14,7 @@ import random
 
 class TrainingHandler:
 
-    trainingMoves = [1,4];
+    trainingMoves = [1,4]
     trainingTrials = 40
     trainingRequirementSize = 10
     trainingRequirementCorrect = 9
@@ -15,8 +22,6 @@ class TrainingHandler:
     instructionsStrTwo = ""
     correctStr = ""
     incorrectStr = ""
-
-
     currentPhase = 0
     phase = {
         "init": 0,
@@ -27,7 +32,6 @@ class TrainingHandler:
         "done": 5,
         "final": 6
     }
-
     skipOne = False
     skipTwo = False
     complete = False
@@ -37,7 +41,9 @@ class TrainingHandler:
     partTwoAttempts = 0
     partTwoFailed = False
 
-
+    # =====================================================================================
+    # init: load cfg values
+    # =====================================================================================
     def __init__(self, cfg: Config):
         self.trainingMoves = cfg.getVal("training_moves")
         self.trainingTrials = cfg.getVal("training_trials")
@@ -50,11 +56,14 @@ class TrainingHandler:
         self.skipOne = cfg.getVal("skip_training1")
         self.skipTwo = cfg.getVal("skip_training2")
 
+    # =====================================================================================
+    # update: called in main loop once per frame, handles updating of logic
+    # =====================================================================================
     def update(self, uKey: KeyTracker, iKey: KeyTracker, spaceKey: KeyTracker, sm: StateMachine):
         phases = self.phase
         newPhase = self.currentPhase
         # ======================================================================
-        # ===================== phase changing =================================
+        # phase change logic: handles logic for transitions between phases
         # ======================================================================
         if self.isPhase("init"):
             if self.skipOne:
@@ -83,14 +92,14 @@ class TrainingHandler:
             newPhase = phases["final"]
             self.complete = True
         # ======================================================================
-        # ===================== phase changing =================================
+        # phase changing: handles when phases change
         # ======================================================================
         if self.currentPhase != newPhase:
             logging.exp(f"New training Phase: {newPhase}")
             print(f"New training Phase: {newPhase}")
         self.currentPhase = newPhase
         # ======================================================================
-        # ===================conditional update checks==========================
+        # conditional update checks: handles specific phase logic
         # ======================================================================
         if self.isPhase("phaseOne"):
             if sm.movesLeft == 0 and not self.waitForSpace:
@@ -140,7 +149,9 @@ class TrainingHandler:
     def end(self):
         logging.exp(f"Traininghndler end called use on attempt: {self.attempts} (zero is first)")
 
-
+    # =====================================================================================
+    # getPhaseText: returns proper body for current phase
+    # =====================================================================================
     def getPhaseText(self, sm: StateMachine):
         if self.isPhase("phaseOneI"):
             return self.instructionsStr;
@@ -168,6 +179,9 @@ class TrainingHandler:
     def isPhase(self, phase):
         return self.currentPhase == self.phase[phase]
 
+    # =====================================================================================
+    # resetSM: called to reset state machine with needed values
+    # =====================================================================================
     def resetSM(self, sm: StateMachine):
         sm.reset(moves=random.randrange(self.trainingMoves[0], self.trainingMoves[1]+1), canMove=True)
         sm.moveTarget(sm.movesLeft)

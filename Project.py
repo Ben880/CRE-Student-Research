@@ -1,18 +1,23 @@
-﻿#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# https://run.pavlovia.org/fdelogu/covid_game/html/?fbclid=IwAR0NzZPE0JAG2ROZsL8yE1dIFH2Glm7-sMfZWgmVRpgUdDxirExBeZQ-Y_c
+﻿# ==========================================================================
+# By: Benjamin Wilcox (bwilcox@ltu.edu),
+# CRE Student Research Project- 1/29/2021
 # ==========================================================================
-# =====================Psychopy Imports ====================================
+# Description:
+# Handles primary execution of experiment and base logic for phases and
+# creation for ui and other project components
 # ==========================================================================
+# ==============================================================================================
+# Psychopy Imports: Psychopy generated imports
+# ==============================================================================================
 from __future__ import absolute_import, division
 from psychopy import sound, gui, visual, core, data, event, logging
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 import os  # handy system and path functions
 from psychopy.hardware import keyboard
 from psychopy.sound.backend_pygame import SoundPygame
-# ==========================================================================
-# ============================= Imports ====================================
-# ==========================================================================
+# ==============================================================================================
+# Imports: custom imports
+# ==============================================================================================
 from Config import Config as Config
 from StateMachine import StateMachine as StateMachine
 from UISettings import GUIDraw as GUIDraw
@@ -22,9 +27,9 @@ from PracticeHandler import PracticeHandler as PracticeHandler
 from TrainingHandler import TrainingHandler as TrainingHandler
 from TrialHandler import TrialHandler as TrialHandler
 from LatinSquare import LatinSquareGenerator as LatinSquareGenerator
-# ==========================================================================
-# ============================= Config Files ===============================
-# ==========================================================================
+# ==============================================================================================
+# Config Files: load config files and helper classes
+# ==============================================================================================
 cfg = Config(configFile="cfg.json")
 cfg.load()
 pos = Config(configFile="positions.json")
@@ -33,9 +38,9 @@ colors = Config(configFile="colors.json")
 colors.load()
 sm = StateMachine()
 guid = GUIDraw(pos, colors, cfg)
-# ==========================================================================
-# ==========================Project Config =================================
-# ==========================================================================
+# ==============================================================================================
+# Project Config: Psychopy generated config
+# ==============================================================================================
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
@@ -52,9 +57,9 @@ else:
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
 expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
-# ==========================================================================
-# ============================= Sound ======================================
-# ==========================================================================
+# ==============================================================================================
+# Sound: Selecting sound type and getting dir and file list
+# ==============================================================================================
 assetDir = os.path.join(os.getcwd(), cfg.getVal("dir_assets"))
 soundStimDir = os.path.join(assetDir, cfg.getVal("dir_sound"))
 musicArr = cfg.getVal("dir_music")
@@ -63,9 +68,9 @@ logging.exp(f"Selected music type {musicArr[squareRes]}")
 print(f"Selected music type {musicArr[squareRes]}")
 musicStimDir = os.path.join(soundStimDir, musicArr[squareRes])
 musicStimFiles = os.listdir(musicStimDir)
-# ==========================================================================
-# ============================= Data =======================================
-# ==========================================================================
+# ==============================================================================================
+# Data: Psychopy generated for creating data files
+# ==============================================================================================
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
 # An ExperimentHandler isn't essential but helps with data saving
@@ -79,9 +84,9 @@ logFile = logging.LogFile(filename+'.log', level=logging.EXP)
 logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 frameTolerance = 0.001  # how close to onset before 'same' frame
-# ==========================================================================
-# ============================= Window =====================================
-# ==========================================================================
+# ==============================================================================================
+# Window: Psychopy generated for creating window
+# ==============================================================================================
 win = visual.Window(size=cfg.getVal("winRes"), fullscr=True, screen=0, winType='pyglet', allowGUI=False,
                     allowStencil=False,monitor='testMonitor', color=[0,0,0], colorSpace='rgb', blendMode='avg',
                     useFBO=True, units='height')
@@ -91,21 +96,21 @@ if expInfo['frameRate'] != None:
     frameDur = 1.0 / round(expInfo['frameRate'])
 else:
     frameDur = 1.0 / 60.0  # could not measure, so guess
-# ==========================================================================
-# =============================== Config 2 =================================
-# ==========================================================================
-# create a default keyboard (e.g. to check for escape)
+# ==============================================================================================
+# Config 2: set up keys and other components
+# ==============================================================================================
 defaultKeyboard = keyboard.Keyboard()
 spaceKey = KeyTracker("space", defaultKeyboard)
 uKey = KeyTracker("u", defaultKeyboard)
 iKey = KeyTracker("i", defaultKeyboard)
 comp = UIComponents(win, cfg.getVal("winRes"))
-# ==========================================================================
-# =========================== Instruction Objs =============================
-# ==========================================================================
+# ==============================================================================================
+# Instruction Objects: Creation of Instruction Objects and general use Header, Body
+# ==============================================================================================
 InstructionsClock = core.Clock()
 # create components
 header = comp.createText(name='header', text='Instructions', pos=guid.cfgTRes("i_header_pos"), height=80, color=colors.getVal("i_text"))
+header.wrapWidth = 1000
 body = comp.createText(name='body', text=guid.instructionsText[0], pos=guid.cfgTRes("i_body_pos"),
                        color=colors.getVal("i_text"), height=40)
 continueText = comp.createText(name='continueText', text=guid.continueText, pos=guid.cfgTRes("i_continue_pos"), color=colors.getVal("i_text"))
@@ -114,26 +119,25 @@ body.wrapWidth = guid.cfgTRes("i_wrap")[0]
 continueText.wrapWidth = guid.cfgTRes("i_wrap")[0]
 # turn off auto draw
 header.setAutoDraw(False)
-header.wrapWidth = 1000
 body.setAutoDraw(False)
 body.setAutoLog(False)
 continueText.setAutoDraw(False)
-# ==========================================================================
-# ============================== Practice Objs =============================
-# ==========================================================================
+# ==============================================================================================
+# Practice Objects: Creation of Practice Objects and general use mini-game ui components
+# ==============================================================================================
 PracticeClock = core.Clock()
 numBoxes = 6
-boxes = []
-pBoxText = []
+smBoxes = []
+smBoxText = []
 # create ui components
 for i in range(numBoxes):
-    boxes.append(comp.createBox(name="pbox" + str(i), size=guid.cfgTRes("box_size"), pos=guid.getBoxPos(i),
-                                lcolor=guid.c("box_line"), fcolor=guid.c("box")))
-    pBoxText.append(comp.createText(name='pBoxText', text=guid.stateMoves[i], pos=guid.getMovePos(guid.getBoxPos(i)),
-                                    color=guid.c("control_text"), height=25))
-    boxes[i].setAutoDraw(False)
-    pBoxText[i].setAutoDraw(False)
-    boxes[i].setAutoLog(False)
+    smBoxes.append(comp.createBox(name="pbox" + str(i), size=guid.cfgTRes("box_size"), pos=guid.getBoxPos(i),
+                                  lcolor=guid.c("box_line"), fcolor=guid.c("box")))
+    smBoxText.append(comp.createText(name='smBoxText', text=guid.stateMoves[i], pos=guid.getMovePos(guid.getBoxPos(i)),
+                                     color=guid.c("control_text"), height=25))
+    smBoxes[i].setAutoDraw(False)
+    smBoxText[i].setAutoDraw(False)
+    smBoxes[i].setAutoLog(False)
 uBox = comp.createBox(name='ubox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(-1),
                       lcolor=guid.c("control_line"), fcolor=guid.c("control_box"))
 iBox = comp.createBox(name='ibox', size=guid.cfgTRes("control_size"), pos=guid.getControlPos(+1),
@@ -145,28 +149,23 @@ uBox.setAutoDraw(False)
 iBox.setAutoDraw(False)
 uText.setAutoDraw(False)
 iText.setAutoDraw(False)
-# ==========================================================================
-# ================================ Trial Objs ==============================
-# ==========================================================================
+# ==============================================================================================
+# Trial Objects: Creation of Trail Objects and sounds
+# ==============================================================================================
 TrialClock = core.Clock()
-# temporary sound 'A'
-tsound = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tsound')
-tbeep = sound.Sound('A', secs=-1, stereo=True, hamming=True, name='tbeep')
 pyGamSound = SoundPygame(value='A')
-tsound.setVolume(1)
-tbeep.setVolume(1)
-# ==========================================================================
-# ================================ Exit Objs ===============================
-# ==========================================================================
+# ==============================================================================================
+# Exit Objects: Creation of Exit Objects
+# ==============================================================================================
 ExitClock = core.Clock()
-# ==========================================================================
-# =======================Create some handy timers==========================
-# ==========================================================================
+# ==============================================================================================
+# Timers: Create some handy timers
+# ==============================================================================================
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
-# ==========================================================================
-# ===================== Prepare Instructions ===============================
-# ==========================================================================
+# ==============================================================================================
+# Prepare Instructions: Set up Instructions
+# ==============================================================================================
 instructionsIndex = 0
 continueRoutine = not cfg.getVal("skip_instructions")
 # reset timers
@@ -174,9 +173,13 @@ t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
 InstructionsClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
-# ==========================================================================
-# ========================= Run Instructions ===============================
-# ==========================================================================
+# config ui elements
+header.setText(cfg.getVal("instructions_header"))
+header.setColor(guid.c("general_text"))
+body.setColor(guid.c("general_text"))
+# ==============================================================================================
+# Run Instructions: Loop for running instructions phase
+# ==============================================================================================
 while continueRoutine:
     # -------------get current time---------------
     t = InstructionsClock.getTime()
@@ -204,17 +207,17 @@ while continueRoutine:
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
-# ==========================================================================
-# ========================= End Instructions ===============================
-# ==========================================================================
+# ==============================================================================================
+# End Instructions: Wrap up and add some data
+# ==============================================================================================
 thisExp.addData('Iphase end', globalClock.getTime())
 # check responses
 thisExp.nextEntry()
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
-# ==========================================================================
-# ===================== Prepare Practice ===================================
-# ==========================================================================
+# ==============================================================================================
+# Prepare Practice: Set up variables for practice phase
+# ==============================================================================================
 practiceHandler = PracticeHandler(cfg)
 continueRoutine = not cfg.getVal("skip_practice")
 # reset timers
@@ -223,13 +226,11 @@ _timeToFirstFrame = win.getFutureFlipTime(clock="now")
 PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
 # set up text
-header.setText('Practice')
+header.setText(cfg.getVal("practice_header"))
 body.setText(cfg.getVal("practice_text")[0])
-header.setColor(guid.c("general_text"))
-body.setColor(guid.c("general_text"))
-# ==========================================================================
-# ===================== Run Practice =======================================
-# ==========================================================================
+# ==============================================================================================
+# Run Practice: Loop for practice logic and rendering, uses PracticeHandler for assistance with logic
+# ==============================================================================================
 while continueRoutine:
     # -----------get current time------------
     t = PracticeClock.getTime()
@@ -247,12 +248,12 @@ while continueRoutine:
     if iKey.getKeyUp():
         sm.moveAcross()
     # -------------prepare draw -----------------
-    for box in boxes:
+    for box in smBoxes:
         box.setFillColor(guid.c("box"))
         box.setLineColor(guid.c("box_line"))
-    boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+    smBoxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
     if practiceHandler.isPhases(["1moves", "2moves"]):
-        boxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
+        smBoxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
     # ----------------draw-----------------------
     uBox.draw()
     iBox.draw()
@@ -261,11 +262,11 @@ while continueRoutine:
     body.draw()
     header.draw()
     if sm.drawSM:
-        for box in boxes:
+        for box in smBoxes:
             box.draw()
-        for t in pBoxText:
+        for t in smBoxText:
             t.draw()
-    # =================== key checks ===================
+    # ---------------- checks ----------------
     if practiceHandler.complete and spaceKey.getKeyUp():
         continueRoutine = False
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -276,15 +277,15 @@ while continueRoutine:
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
-# ==========================================================================
-# ========================== End Practice ==================================
-# ==========================================================================
+# ==============================================================================================
+# End Practice: Wrap up
+# ==============================================================================================
 # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 thisExp.nextEntry()
-# ==========================================================================
-# ===================== Prepare Training ===================================
-# ==========================================================================
+# ==============================================================================================
+# Prepare Training: Set up training phase
+# ==============================================================================================
 trainingHandler = TrainingHandler(cfg)
 continueRoutine = not (cfg.getVal("skip_training1") and cfg.getVal("skip_training2"))
 # reset timers
@@ -294,15 +295,13 @@ PracticeClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
 # set up state machine
 smState = sm.getCurrentState()
-boxes[smState].setFillColor((guid.c("box_selected")))
+smBoxes[smState].setFillColor((guid.c("box_selected")))
 # set up text
-header.setText('Training')
+header.setText(cfg.getVal("training_header"))
 body.setText(cfg.getVal("practice_text")[0])
-header.setColor(guid.c("general_text"))
-body.setColor(guid.c("general_text"))
-# ==========================================================================
-# ===================== Run Training =======================================
-# ==========================================================================
+# ==============================================================================================
+# Run Training: loop for training logic and rendering, uses TrainingHandler for assistance with logic
+# ==============================================================================================
 while continueRoutine:
     # -----------get current time------------
     t = PracticeClock.getTime()
@@ -320,12 +319,12 @@ while continueRoutine:
     if iKey.getKeyUp():
         sm.moveAcross()
     # -------------prepare draw -----------------
-    for box in boxes:
+    for box in smBoxes:
         box.setFillColor(guid.c("box"))
         box.setLineColor(guid.c("box_line"))
-    boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+    smBoxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
     if trainingHandler.isPhase("phaseOne") or trainingHandler.isPhase("phaseTwo"):
-        boxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
+        smBoxes[sm.practiceTargetState].setLineColor(guid.c("box_target"))
     # ----------------draw-----------------------
     uBox.draw()
     iBox.draw()
@@ -334,11 +333,11 @@ while continueRoutine:
     body.draw()
     header.draw()
     if sm.drawSM:
-        for box in boxes:
+        for box in smBoxes:
             box.draw()
-        for t in pBoxText:
+        for t in smBoxText:
             t.draw()
-    # =================== key checks ===================
+    # ---------------- checks ----------------
     if trainingHandler.complete and spaceKey.getKeyUp():
         continueRoutine = False
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -349,38 +348,39 @@ while continueRoutine:
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
-# ==========================================================================
-# ========================== End Training ==================================
-# ==========================================================================
+# ==============================================================================================
+# End Training: wrap up training
+# ==============================================================================================
 # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
 trainingHandler.end()
 routineTimer.reset()
 thisExp.nextEntry()
-# ==========================================================================
-# ========================== Trial Loop ====================================
-# ==========================================================================
+# ==============================================================================================
+# Trial Loop: trial has multiple phases and needs to fully reset between phases which requires
+# running the setup and end portions multiple times, uses TrialHandler for assistance with logic
+# ==============================================================================================
 musicIndex = 0
 for thisTrial in range(cfg.getVal("trial_exp_blocks")):
+    # ==============================================================================================
+    # Prepare Trial: setup trial
+    # ==============================================================================================
     logging.exp(f"Trial new block: {thisTrial}")
     trialHandler = TrialHandler(cfg, thisTrial)
-    header.setText(trialHandler.getPhaseHeadder())
-    # ==========================================================================
-    # ============================ Prepare Trial ===============================
-    # ==========================================================================
+    header.setText(trialHandler.getPhaseHeader())
     continueRoutine = not cfg.getVal("skip_trial")
     # reset timers
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     TrialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
-    # ==========================================================================
-    # ============================= Run Trial ==================================
-    # ==========================================================================
     # sound setup
     soundDir = os.path.join(musicStimDir, musicStimFiles[musicIndex])
     pyGamSound = SoundPygame(value=soundDir)
     songTimer = core.CountdownTimer(pyGamSound.getDuration())
     musicPlaying = False
+    # ==============================================================================================
+    # Run Trial: loop for trial logic and rendering
+    # ==============================================================================================
     while continueRoutine:
         # -----------get current time------------
         t = TrialClock.getTime()
@@ -409,16 +409,16 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         spaceKey.update()
         trialHandler.update(uKey, iKey, spaceKey, sm)
         body.setText(trialHandler.getPhaseText(sm))
-        header.setText(trialHandler.getPhaseHeadder())
+        header.setText(trialHandler.getPhaseHeader())
         if uKey.getKeyUp():
             sm.moveCircle()
         if iKey.getKeyUp():
             sm.moveAcross()
         # -------------prepare draw -----------------
-        for box in boxes:
+        for box in smBoxes:
             box.setFillColor(guid.c("box"))
             box.setLineColor(guid.c("box_line"))
-        boxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
+        smBoxes[sm.getCurrentState()].setFillColor(guid.c("box_selected"))
         # ----------------draw-----------------------
         uBox.draw()
         iBox.draw()
@@ -427,11 +427,11 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         body.draw()
         header.draw()
         if sm.drawSM:
-            for box in boxes:
+            for box in smBoxes:
                 box.draw()
-            for t in pBoxText:
+            for t in smBoxText:
                 t.draw()
-        # --------------key checks-----------------------
+        # --------------checks-----------------------
         if trialHandler.complete:
             continueRoutine = False
             pyGamSound.stop()
@@ -441,16 +441,17 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
             break
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
-    # ==========================================================================
-    # ============================= End Trial ==================================
-    # ==========================================================================
-    tsound.stop()  # ensure sound has stopped at end of routine
+    # ==============================================================================================
+    # End Trial: wrap up trial phase and prepare for next trial or end phase
+    # ==============================================================================================
+    pyGamSound.stop()
+    musicPlaying = False  # ensure sound has stopped at end of routine
     # the Routine "Trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
-# ==========================================================================
-# =========================== Prepare Exit =================================
-# ==========================================================================
+# ==============================================================================================
+# Prepare Exit: set up exit phase, very similar to instructions phase
+# ==============================================================================================
 continueRoutine = not cfg.getVal("skip_exit")
 # reset timers
 t = 0
@@ -460,9 +461,9 @@ frameN = -1
 # set stuff
 header.setText(cfg.getVal("exit_header"))
 exitIndex = 0
-# ==========================================================================
-# ============================== Run Exit ==================================
-# ==========================================================================
+# ==============================================================================================
+# Run Exit: run exit phase, very similar to instructions phase
+# ==============================================================================================
 while continueRoutine:
     # ----------- get current time----------------
     t = ExitClock.getTime()
@@ -489,15 +490,15 @@ while continueRoutine:
     # refresh the screen
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
-# ==========================================================================
-# ============================= End Exit ===================================
-# ==========================================================================
+# ==============================================================================================
+# End Exit: finish up phase
+# ==============================================================================================
 thisExp.nextEntry()
 # the Routine "Exit" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
-# ==========================================================================
-# ============================ End Program =================================
-# ==========================================================================
+# ==============================================================================================
+# End Program: wrap up the entire program
+# ==============================================================================================
 # Flip one final time so any remaining win.callOnFlip() and win.timeOnFlip() tasks get executed before quitting
 win.flip()
 # these shouldn't be strictly necessary (should auto-save)
