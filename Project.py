@@ -119,6 +119,7 @@ body.wrapWidth = guid.cfgTRes("i_wrap")[0]
 continueText.wrapWidth = guid.cfgTRes("i_wrap")[0]
 # turn off auto draw
 header.setAutoDraw(False)
+header.setAutoLog(False)
 body.setAutoDraw(False)
 body.setAutoLog(False)
 continueText.setAutoDraw(False)
