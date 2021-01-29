@@ -150,7 +150,7 @@ class TrainingHandler:
         logging.exp(f"Traininghndler end called use on attempt: {self.attempts} (zero is first)")
 
     # =====================================================================================
-    # getPhaseText: returns proper body for current phase
+    # getPhaseText: returns proper body for current phase, TODO: moves ui strings to cfg file
     # =====================================================================================
     def getPhaseText(self, sm: StateMachine):
         if self.isPhase("phaseOneI"):

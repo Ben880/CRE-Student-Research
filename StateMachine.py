@@ -22,6 +22,7 @@ class StateMachine:
     canMove = True
     drawSM = True
     # negativeIndex should be set per user to determine ho much their negative score is
+    # TODO: this needs to be set using a latin square based on size of negativeScores and participant id
     negativeIndex = 0
     # static vars
     negativeScores = (-70, -100, -140)
