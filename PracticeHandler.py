@@ -56,6 +56,7 @@ class PracticeHandler:
     complete = False
     startedRound = False
     roundFinished = False
+    roundFinishedLog = False
     scoredRound = False
     successes = 0
     currentPhase = 0
@@ -224,13 +225,15 @@ class PracticeHandler:
                     self.moveTimer.reset()
             if self.startedRound and (sm.movesLeft == 0 or self.isTimerUp("move")):
                 sm.lock()
+                if not self.roundFinished:
+                    if sm.totalScore >= 0 and not self.scoredRound:
+                        self.successes +=1
+                        self.scoredRound = True
+                        logging.exp(f"pp: {newPhase} succeed timed practice")
+                    else:
+                        logging.exp(f"pp: {newPhase} failed timed practice")
                 self.roundFinished = True
-                if sm.totalScore >= 0 and not self.scoredRound:
-                    self.successes +=1
-                    self.scoredRound = True
-                    logging.exp(f"pp: {newPhase} succeed timed practice")
-                else:
-                    logging.exp(f"pp: {newPhase} failed timed practice")
+
         # ======================================================================
         #  complete condition: checks if complete
         # ======================================================================
