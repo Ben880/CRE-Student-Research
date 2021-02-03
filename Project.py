@@ -54,6 +54,8 @@ else:
     dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
     if not dlg.OK:
         core.quit()  # user pressed cancel
+if expInfo["participant"] == "":
+    expInfo["participant"] = 0
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
 expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
@@ -63,7 +65,7 @@ expInfo['psychopyVersion'] = psychopyVersion
 assetDir = os.path.join(os.getcwd(), cfg.getVal("dir_assets"))
 soundStimDir = os.path.join(assetDir, cfg.getVal("dir_sound"))
 musicArr = cfg.getVal("dir_music")
-squareRes = LatinSquareGenerator(len(musicArr), int(expInfo["participant"]))
+squareRes = int(LatinSquareGenerator(len(musicArr), int(expInfo["participant"])))
 logging.exp(f"Selected music type {musicArr[squareRes]}")
 print(f"Selected music type {musicArr[squareRes]}")
 musicStimDir = os.path.join(soundStimDir, musicArr[squareRes])
