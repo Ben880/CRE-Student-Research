@@ -3,7 +3,7 @@ By: Benjamin Wilcox (bwilcox@ltu.edu),
 Under direction of: Dan Shargel: Professor of Psychology at LTU,
 Description: Psychology experiment to study decision making and emotions caused by music
 
-Usage:
+Installation and Usage:
 * Download python (3.8+) use latest from https://www.python.org/downloads/
 * Downlaod and install PsychoPy https://www.psychopy.org/download.html
 * Download project repository as a zip and extract https://github.com/Ben880/CRE-Student-Research.git (green download/code button)
