@@ -5,6 +5,7 @@ Description: Psychology experiment to study decision making and emotions caused 
 
 Usage:
 * Download python (3.8+) use latest from https://www.python.org/downloads/
+* Downlaod and install PsychoPy https://www.psychopy.org/download.html
 * Download project repository as a zip and extract https://github.com/Ben880/CRE-Student-Research.git (green download/code button)
 * Navigate to project folder and run file for your OS: RunOnWindows.bat, RunOnLinux.sh, RunOnMacOS.command
 * Enter participant id: each participant should get a sequential unique id 
