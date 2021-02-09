@@ -71,6 +71,13 @@ print(f"Selected music type {musicArr[squareRes]}")
 musicStimDir = os.path.join(soundStimDir, musicArr[squareRes])
 musicStimFiles = os.listdir(musicStimDir)
 # ==============================================================================================
+# Negative Selection: Selecting negative amount in sm
+# ==============================================================================================
+squareNegRes = int(LatinSquareGenerator(len(sm.negativeScores), int(expInfo["participant"])))
+sm.negativeIndex = squareNegRes
+logging.exp(f"Selected negative amount {sm.negativeScores[squareNegRes]}")
+print(f"Selected negative amount {sm.negativeScores[squareNegRes]}")
+# ==============================================================================================
 # Data: Psychopy generated for creating data files
 # ==============================================================================================
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
@@ -86,6 +93,10 @@ logFile = logging.LogFile(filename+'.log', level=logging.EXP)
 logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 frameTolerance = 0.001  # how close to onset before 'same' frame
+thisExp.addData('date', expInfo['date'])
+thisExp.addData('participant', expInfo['participant'])
+thisExp.addData('negative', sm.negativeScores[squareNegRes])
+thisExp.addData('sound', musicArr[squareRes])
 # ==============================================================================================
 # Window: Psychopy generated for creating window
 # ==============================================================================================
@@ -214,6 +225,7 @@ while continueRoutine:
 # End Instructions: Wrap up and add some data
 # ==============================================================================================
 thisExp.addData('Iphase end', globalClock.getTime())
+logging.exp(f"Iphase end {globalClock.getTime()}")
 # check responses
 thisExp.nextEntry()
 # the Routine "Instructions" was not non-slip safe, so reset the non-slip timer
@@ -286,6 +298,8 @@ while continueRoutine:
 # the Routine "Practice" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
 thisExp.nextEntry()
+thisExp.addData('Practice end', globalClock.getTime())
+logging.exp(f"Practice end {globalClock.getTime()}")
 # ==============================================================================================
 # Prepare Training: Set up training phase
 # ==============================================================================================
@@ -358,6 +372,8 @@ while continueRoutine:
 trainingHandler.end()
 routineTimer.reset()
 thisExp.nextEntry()
+thisExp.addData('Training end', globalClock.getTime())
+logging.exp(f"Training end {globalClock.getTime()}")
 # ==============================================================================================
 # Trial Loop: trial has multiple phases and needs to fully reset between phases which requires
 # running the setup and end portions multiple times, uses TrialHandler for assistance with logic
@@ -410,7 +426,7 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
         uKey.update()
         iKey.update()
         spaceKey.update()
-        trialHandler.update(uKey, iKey, spaceKey, sm)
+        trialHandler.update(uKey, iKey, spaceKey, sm, thisExp)
         body.setText(trialHandler.getPhaseText(sm))
         header.setText(trialHandler.getPhaseHeader())
         if uKey.getKeyUp():
@@ -452,6 +468,8 @@ for thisTrial in range(cfg.getVal("trial_exp_blocks")):
     # the Routine "Trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     thisExp.nextEntry()
+    thisExp.addData('Trial end', globalClock.getTime())
+    logging.exp(f"Trial end {globalClock.getTime()}")
 # ==============================================================================================
 # Prepare Exit: set up exit phase, very similar to instructions phase
 # ==============================================================================================
@@ -499,6 +517,8 @@ while continueRoutine:
 thisExp.nextEntry()
 # the Routine "Exit" was not non-slip safe, so reset the non-slip timer
 routineTimer.reset()
+thisExp.addData('Exit end', globalClock.getTime())
+logging.exp(f"Exit end {globalClock.getTime()}")
 # ==============================================================================================
 # End Program: wrap up the entire program
 # ==============================================================================================

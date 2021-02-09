@@ -60,7 +60,7 @@ class StateMachine:
     # =====================================================================================
     def scoreMove(self, moveType):
         if self.stateMachineDeffinition[self.currentState][moveType][1] == 0:
-            self.lastScore = self.negativeScores[random.randrange(0, 3)]
+            self.lastScore = self.negativeScores[self.negativeIndex]
         else:
             self.lastScore = self.stateMachineDeffinition[self.currentState][moveType][1]
         self.totalScore += self.lastScore

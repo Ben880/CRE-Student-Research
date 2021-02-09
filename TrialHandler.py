@@ -5,6 +5,8 @@
 # Description:
 # Handles execution of logic for the trial phase
 # ==========================================================================
+from psychopy.data import ExperimentHandler
+
 import Config as Config
 import KeyTracker
 from StateMachine import StateMachine as StateMachine
@@ -33,6 +35,9 @@ class TrialHandler:
     welcomedMsg = False
     endEpisode = False
     complete = False
+    episodeTimer = None
+    TrialScores = []
+    TrialTimes = []
 
     # =====================================================================================
     # init: load cfg values
@@ -54,11 +59,13 @@ class TrialHandler:
         self.movesLeftStr = cfg.getVal("trial_moves_left")
         self.blocks = cfg.getVal("trial_exp_blocks")
         logging.exp(f"Trial cfg loaded")
+        self.TrialTimes = []
+        self.TrialScores = []
 
     # =====================================================================================
     # update: called in main loop once per frame, handles updating of logic
     # =====================================================================================
-    def update(self, uKey: KeyTracker, iKey: KeyTracker, spaceKey: KeyTracker, sm: StateMachine):
+    def update(self, uKey: KeyTracker, iKey: KeyTracker, spaceKey: KeyTracker, sm: StateMachine, thisExp: ExperimentHandler):
         if self.firstFrame:
             logging.exp(f"Trial first frame")
             sm.lock()
@@ -70,9 +77,12 @@ class TrialHandler:
             self.resetSM(sm)
             sm.unlock()
             sm.doDrawSM()
+            self.episodeTimer = core.Clock()
         if self.welcomedMsg and not self.endEpisode:
             if sm.movesLeft == 0:
                 logging.exp(f"Trial user finished episode")
+                self.TrialScores.append(sm.totalScore)
+                self.TrialTimes.append(self.episodeTimer.getTime())
                 self.endEpisode = True
                 sm.dontDrawSM()
                 sm.lock()
@@ -80,11 +90,16 @@ class TrialHandler:
             self.endEpisode = False
             self.episodeNum += 1
             logging.exp(f"Trial user confirmed end episode, begin episode: {self.episodeNum}")
+            self.episodeTimer = core.Clock()
             self.resetSM(sm)
             sm.unlock()
             sm.doDrawSM()
         if not self.complete and self.episodes <= self.episodeNum:
             self.complete = True
+            thisExp.addData('Trial Scores', self.TrialScores)
+            thisExp.addData('Trial Times', self.TrialTimes)
+            self.TrialTimes = []
+            self.TrialScores = []
 
     # =====================================================================================
     # getPhaseText: returns proper body for current phase
